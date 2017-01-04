@@ -2,8 +2,27 @@
 #import <CoreGraphics/CoreGraphics.h>
 
 #import "MGLFoundation.h"
+#import "MGLTypes.h"
 
 NS_ASSUME_NONNULL_BEGIN
+
+typedef NSString *MGLStyleFunctionOption NS_STRING_ENUM;
+
+extern MGL_EXPORT const MGLStyleFunctionOption MGLStyleFunctionOptionInterpolationBase;
+extern MGL_EXPORT const MGLStyleFunctionOption MGLStyleFunctionOptionDefaultValue;
+
+typedef NS_ENUM(NSUInteger, MGLStyleFunctionStopType) {
+    MGLStyleFunctionStopTypeExponential = 0,
+    MGLStyleFunctionStopTypeInterval,
+    MGLStyleFunctionStopTypeCategorical,
+    MGLStyleFunctionStopTypeIdentity
+};
+
+@protocol MGLStyleFunction <NSObject>
+
+@property (nonatomic, readonly) MGLStyleFunctionStopType stopType;
+
+@end
 
 /**
  An `MGLStyleValue` object is a generic container for a style attribute value.
@@ -41,6 +60,8 @@ MGL_EXPORT
  */
 + (instancetype)valueWithRawValue:(T)rawValue;
 
+#pragma mark Function values
+
 /**
  Creates and returns an `MGLStyleFunction` object representing a linear zoom
  level function with any number of stops.
@@ -48,7 +69,7 @@ MGL_EXPORT
  @param stops A dictionary associating zoom levels with style values.
  @return An `MGLStyleFunction` object with the given stops.
  */
-+ (instancetype)valueWithStops:(NSDictionary<NSNumber *, MGLStyleValue<T> *> *)stops;
++ (instancetype)valueWithStops:(NSDictionary<NSNumber *, MGLStyleValue<T> *> *)stops __attribute__((deprecated("Use +cameraFunctionValueWithStopType:stops:options:")));
 
 /**
  Creates and returns an `MGLStyleFunction` object representing a zoom level
@@ -58,7 +79,16 @@ MGL_EXPORT
  @param stops A dictionary associating zoom levels with style values.
  @return An `MGLStyleFunction` object with the given interpolation base and stops.
  */
-+ (instancetype)valueWithInterpolationBase:(CGFloat)interpolationBase stops:(NSDictionary<NSNumber *, MGLStyleValue<T> *> *)stops;
++ (instancetype)valueWithInterpolationBase:(CGFloat)interpolationBase stops:(NSDictionary<NSNumber *, MGLStyleValue<T> *> *)stops __attribute__((deprecated("Use +cameraFunctionValueWithStopType:stops:options:")));
+
+// TODO: API docs
++ (instancetype)cameraFunctionValueWithStopType:(MGLStyleFunctionStopType)stopType stops:(NS_DICTIONARY_OF(id, MGLStyleValue<T> *) *)stops options:(nullable NS_DICTIONARY_OF(MGLStyleFunctionOption, id) *)options;
+
+// TODO: API docs
++ (instancetype)sourceFunctionValueWithStopType:(MGLStyleFunctionStopType)stopType stops:(nullable NS_DICTIONARY_OF(id, MGLStyleValue<T> *) *)stops attributeName:(NSString *)attributeName options:(nullable NS_DICTIONARY_OF(MGLStyleFunctionOption, id) *)options;
+
+// TODO: API docs
++ (instancetype)compositeFunctionValueWithStopType:(MGLStyleFunctionStopType)stopType stops:(NS_DICTIONARY_OF(NSNumber *, NS_DICTIONARY_OF(id, MGLStyleValue<T> *) *) *)stops attributeName:(NSString *)attributeName options:(nullable NS_DICTIONARY_OF(MGLStyleFunctionOption, id) *)options;
 
 @end
 
@@ -106,75 +136,65 @@ MGL_EXPORT
 
 @end
 
-/**
- An `MGLStyleFunction` is a value function defining a style value that changes
- as the zoom level changes. The layout and paint attribute properties of an
- `MGLStyleLayer` object can be set to `MGLStyleFunction` objects. Use a zoom
- level function to create the illusion of depth and control data density.
-
- The `MGLStyleFunction` class takes a generic parameter `T` that indicates the
- Foundation class being wrapped by this class.
- */
 MGL_EXPORT
-@interface MGLStyleFunction<T> : MGLStyleValue<T>
+@interface MGLCameraStyleFunction<T> : MGLStyleValue<MGLStyleFunction>
 
-#pragma mark Creating a Style Function
+// TODO: API docs
++ (instancetype)functionWithStopType:(MGLStyleFunctionStopType)stopType stops:(NS_DICTIONARY_OF(id, MGLStyleValue<T> *) *)stops options:(nullable NS_DICTIONARY_OF(MGLStyleFunctionOption, id) *)options;
 
-/**
- Creates and returns an `MGLStyleFunction` object representing a linear zoom
- level function with any number of stops.
+// TODO: API docs
+- (instancetype)initWithStopType:(MGLStyleFunctionStopType)stopType stops:(NS_DICTIONARY_OF(id, MGLStyleValue<T> *) *)stops options:(nullable NS_DICTIONARY_OF(MGLStyleFunctionOption, id) *)options NS_DESIGNATED_INITIALIZER;
 
- @param stops A dictionary associating zoom levels with style values.
- @return An `MGLStyleFunction` object with the given stops.
- */
-+ (instancetype)functionWithStops:(NSDictionary<NSNumber *, MGLStyleValue<T> *> *)stops;
+// TODO: API docs
+@property (nonatomic, copy) NS_DICTIONARY_OF(id, MGLStyleValue<T> *) *stops;
 
-/**
- Creates and returns an `MGLStyleFunction` object representing a zoom level
- function with an exponential interpolation base and any number of stops.
-
- @param interpolationBase The exponential base of the interpolation curve.
- @param stops A dictionary associating zoom levels with style values.
- @return An `MGLStyleFunction` object with the given interpolation base and stops.
- */
-+ (instancetype)functionWithInterpolationBase:(CGFloat)interpolationBase stops:(NSDictionary<NSNumber *, MGLStyleValue<T> *> *)stops;
-
-#pragma mark Initializing a Style Function
-
-/**
- Returns an `MGLStyleFunction` object representing a zoom level function with an
- exponential interpolation base and any number of stops.
-
- @param interpolationBase The exponential base of the interpolation curve.
- @param stops A dictionary associating zoom levels with style values.
- @return An `MGLStyleFunction` object with the given interpolation base and stops.
- */
-- (instancetype)initWithInterpolationBase:(CGFloat)interpolationBase stops:(NSDictionary<NSNumber *, MGLStyleValue<T> *> *)stops NS_DESIGNATED_INITIALIZER;
-
-#pragma mark Accessing the Parameters of a Function
-
-/**
- The exponential interpolation base of the function’s interpolation curve.
-
- The exponential interpolation base controls the rate at which the function’s output values
- increase. A value of 1 causes the function to increase linearly by zoom level.
- A higher exponential interpolation base causes the function’s output values to vary
- exponentially, increasing more rapidly towards the high end of the function’s
- range. The default value of this property is 1, for a linear curve.
- */
+// TODO: API docs
 @property (nonatomic) CGFloat interpolationBase;
 
-/**
- A dictionary associating zoom levels with style values.
+@end
 
- Each of the function’s stops is represented by one key-value pair in the
- dictionary. Each key in the dictionary is an `NSNumber` object containing a
- floating-point zoom level. Each value in the dictionary is an `MGLStyleValue`
- object containing the value of the style attribute when the map is at the
- associated zoom level. An `MGLStyleFunction` object may not be used recursively
- as a stop value.
- */
-@property (nonatomic, copy) NSDictionary<NSNumber *, MGLStyleValue<T> *> *stops;
+MGL_EXPORT
+@interface MGLSourceStyleFunction<T> : MGLStyleValue<MGLStyleFunction>
+
+// TODO: API docs
++ (instancetype)functionWithStopType:(MGLStyleFunctionStopType)stopType stops:(nullable NS_DICTIONARY_OF(id, MGLStyleValue<T> *) *)stops attributeName:(NSString *)attributeName options:(nullable NS_DICTIONARY_OF(MGLStyleFunctionOption, id) *)options;
+
+// TODO: API docs
+- (instancetype)initWithStopType:(MGLStyleFunctionStopType)stopType stops:(nullable NS_DICTIONARY_OF(id, MGLStyleValue<T> *) *)stops attributeName:(NSString *)attributeName options:(nullable NS_DICTIONARY_OF(MGLStyleFunctionOption, id) *)options NS_DESIGNATED_INITIALIZER;
+
+// TODO: API docs
+@property (nonatomic, copy, nullable) NSString *attributeName;
+
+// TODO: API docs
+@property (nonatomic, copy, nullable) NS_DICTIONARY_OF(id, MGLStyleValue<T> *) *stops;
+
+// TODO: API docs
+@property (nonatomic, nullable) MGLStyleValue<T> *defaultValue;
+
+// TODO: API docs
+@property (nonatomic) CGFloat interpolationBase;
+
+@end
+
+MGL_EXPORT
+@interface MGLCompositeStyleFunction<T> : MGLStyleValue<MGLStyleFunction>
+
+// TODO: API docs
++ (instancetype)functionWithStopType:(MGLStyleFunctionStopType)stopType stops:(NS_DICTIONARY_OF(NSNumber *, NS_DICTIONARY_OF(id, MGLStyleValue<T> *) *) *)stops attributeName:(NSString *)attributeName options:(nullable NS_DICTIONARY_OF(MGLStyleFunctionOption, id) *)options;
+
+- (instancetype)initWithStopType:(MGLStyleFunctionStopType)stopType stops:(NS_DICTIONARY_OF(NSNumber *, NS_DICTIONARY_OF(id, MGLStyleValue<T> *) *) *)stops attributeName:(NSString *)attributeName options:(nullable NS_DICTIONARY_OF(MGLStyleFunctionOption, id) *)options NS_DESIGNATED_INITIALIZER;
+
+// TODO: API docs
+@property (nonatomic, copy, nullable) NSString *attributeName;
+
+// TODO: API docs
+@property (nonatomic, copy, nullable) NS_DICTIONARY_OF(NSNumber *, NS_DICTIONARY_OF(id, MGLStyleValue<T> *) *) *stops;
+
+// TODO: API docs
+@property (nonatomic, nullable) MGLStyleValue<T> *defaultValue;
+
+// TODO: API docs
+@property (nonatomic) CGFloat interpolationBase;
 
 @end
 

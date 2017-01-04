@@ -191,6 +191,10 @@ typedef NS_ENUM(NSInteger, MBXSettingsMiscellaneousRows) {
         }
         [self presentViewController:alertController animated:YES completion:nil];
     }
+
+    // Temp
+    NSURL *url = [[NSURL alloc] initWithString:@"mapbox://styles/boundsj/ciws3kslm00n82qqou2hnrow9"];
+    [self.mapView setStyleURL:url];
 }
 
 - (void)saveState:(__unused NSNotification *)notification
@@ -822,7 +826,7 @@ typedef NS_ENUM(NSInteger, MBXSettingsMiscellaneousRows) {
     self.mapView.style.transitionDuration = 5;
     self.mapView.style.transitionDelay = 1;
     MGLFillStyleLayer *buildingLayer = (MGLFillStyleLayer *)[self.mapView.style layerWithIdentifier:@"building"];
-    buildingLayer.fillColor = [MGLStyleValue<UIColor *> valueWithRawValue:[UIColor blackColor]];
+    buildingLayer.fillColor = [MGLStyleValue<UIColor *> valueWithRawValue:[UIColor purpleColor]];
 }
 
 - (void)styleFerryLayer
@@ -855,18 +859,6 @@ typedef NS_ENUM(NSInteger, MBXSettingsMiscellaneousRows) {
         statesLayer.fillColor = [MGLStyleValue<UIColor *> valueWithRawValue:[UIColor redColor]];
         statesLayer.fillOpacity = [MGLStyleValue<NSNumber *> valueWithRawValue:@0.25];
     });
-}
-
-+ (MGLStyleConstantValue<NSValue *> *)testEnum:(NSUInteger)value type:(const char *)type
-{
-    return [MGLStyleConstantValue<NSValue *> valueWithRawValue:[NSValue value:&value withObjCType:type]];
-}
-
-+ (MGLStyleFunction<NSValue *> *)testEnumFunction:(NSUInteger)value type:(const char *)type
-{
-    return [MGLStyleFunction<NSValue *> valueWithStops:@{
-                                                         @18: [self testEnum:value type:type],
-                                                         }];
 }
 
 - (void)styleFilteredLines
@@ -1219,8 +1211,9 @@ typedef NS_ENUM(NSInteger, MBXSettingsMiscellaneousRows) {
                 if ([label.rawValue hasPrefix:@"{name"]) {
                     layer.text = [MGLStyleValue valueWithRawValue:language];
                 }
-            } else if ([layer.text isKindOfClass:[MGLStyleFunction class]]) {
-                MGLStyleFunction *function = (MGLStyleFunction<NSString *> *)layer.text;
+            }
+            else if ([layer.text isKindOfClass:[MGLCameraStyleFunction class]]) {
+                MGLCameraStyleFunction *function = (MGLCameraStyleFunction<NSString *> *)layer.text;
                 [function.stops enumerateKeysAndObjectsUsingBlock:^(id zoomLevel, id stop, BOOL *done) {
                     if ([stop isKindOfClass:[MGLStyleConstantValue class]]) {
                         MGLStyleConstantValue *label = (MGLStyleConstantValue<NSString *> *)stop;
@@ -1675,6 +1668,140 @@ typedef NS_ENUM(NSInteger, MBXSettingsMiscellaneousRows) {
         }
         self.hudLabel.text = [NSString stringWithFormat:@"Visible: %ld  Queued: %ld", (unsigned long)mapView.visibleAnnotations.count, (unsigned long)queuedAnnotations];
     }
+}
+
+#warning remove this test implementation
+
+- (void)mapViewDidFinishLoadingMap:(MGLMapView *)mapView
+{
+    MGLCircleStyleLayer *circleLayer = (MGLCircleStyleLayer *)[self.mapView.style layerWithIdentifier:@"rgb-7q5w7f"];
+
+//    CGVector circleTranslationOne = {100, 0};
+//    NSValue *circleTranslationValueOne = [NSValue value:&circleTranslationOne withObjCType:@encode(CGVector)];
+//    CGVector circleTranslationTwo = {0, 0};
+//    NSValue *circleTranslationValueTwo = [NSValue value:&circleTranslationTwo withObjCType:@encode(CGVector)];
+
+    // Non data driven constant ✔︎
+//    circleLayer.circleTranslation = [MGLStyleValue<NSValue *> valueWithRawValue:circleTranslationValueOne];
+
+    // Non data driven camera function ✔︎
+//    NSDictionary *circleTranslationStops = @{@0: [MGLStyleValue<NSValue *> valueWithRawValue:circleTranslationValueOne],
+//                                             @10: [MGLStyleValue<NSValue *> valueWithRawValue:circleTranslationValueTwo]};
+//    circleLayer.circleTranslation = [MGLStyleValue<NSValue *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval stops:circleTranslationStops options:nil];
+
+    // Enumeration, constant ✔︎
+    //    circleLayer.circleScaleAlignment = [MGLStyleValue<NSValue *> valueWithRawValue:[NSValue valueWithMGLCircleScaleAlignment:MGLCircleScaleAlignmentViewport]];
+
+
+    // Enumeration, camera ✔︎
+//        NSDictionary *scaleAlignmentStops = @{@0.0:  [MGLStyleValue<NSValue *> valueWithRawValue:[NSValue valueWithMGLCircleScaleAlignment:MGLCircleScaleAlignmentMap]],
+//                                              @10.0: [MGLStyleValue<NSValue *> valueWithRawValue:[NSValue valueWithMGLCircleScaleAlignment:MGLCircleScaleAlignmentViewport]]};
+    //    circleLayer.circleScaleAlignment = [MGLStyleValue<NSValue *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval stops:scaleAlignmentStops options:nil];
+
+    // Data driven, constant ✔︎
+//     circleLayer.circleColor = [MGLStyleValue<UIColor *> valueWithRawValue:[UIColor greenColor]];
+
+    // Data driven, camera exponential ✔︎
+//    NSDictionary *redGreenColorStops = @{@0.0:  [MGLStyleValue<UIColor *> valueWithRawValue:[UIColor redColor]],
+//                                         @10.0: [MGLStyleValue<UIColor *> valueWithRawValue:[UIColor redColor]],
+//                                         @15.0: [MGLStyleValue<UIColor *> valueWithRawValue:[UIColor greenColor]]};
+//    circleLayer.circleColor = [MGLStyleValue<UIColor *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeExponential
+//                                                                                  stops:redGreenColorStops
+//                                                                                options:@{MGLStyleFunctionOptionInterpolationBase: @10.0}];
+
+    // Data driven, camera interval ✔︎
+//    NSDictionary *redGreenBlueColorStops = @{@0.0:  [MGLStyleValue<UIColor *> valueWithRawValue:[UIColor redColor]],
+//                                             @12.0: [MGLStyleValue<UIColor *> valueWithRawValue:[UIColor greenColor]],
+//                                             @18.0: [MGLStyleValue<UIColor *> valueWithRawValue:[UIColor blueColor]]};
+//    circleLayer.circleColor = [MGLStyleValue<UIColor *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval stops:redGreenBlueColorStops options:nil];
+
+
+    // Data driven, source, categorical with string attribute key and default ✔︎
+//    circleLayer.circleColor = [MGLStyleValue<UIColor *> sourceFunctionValueWithStopType:MGLStyleFunctionStopTypeCategorical
+//                                                                                  stops:@{@"red": [MGLStyleValue<UIColor *> valueWithRawValue:[UIColor redColor]]}
+//                                                                          attributeName:@"color"
+//                                                                                options:@{MGLStyleFunctionOptionDefaultValue: [MGLStyleValue<UIColor *> valueWithRawValue:[UIColor yellowColor]]}];
+
+    // Data driven, source, categorical with integer attribute key ✔︎
+//    circleLayer.circleColor = [MGLStyleValue<UIColor *> sourceFunctionValueWithStopType:MGLStyleFunctionStopTypeCategorical
+//                                                                                  stops:@{ [NSNumber numberWithInt:0]:   [MGLStyleValue<UIColor *> valueWithRawValue:[UIColor greenColor]],
+//                                                                                           [NSNumber numberWithInt:100]: [MGLStyleValue<UIColor *> valueWithRawValue:[UIColor orangeColor]] }
+//                                                                          attributeName:@"temp"
+//                                                                                options:nil];
+
+    // Data driven, source, categorical with bool attribute key ✔︎
+//    NSDictionary *booleanCategoricalStops = @{@(NO):  [MGLStyleValue<NSNumber *> valueWithRawValue:@(0.0)],
+//                                              @(YES): [MGLStyleValue<NSNumber *> valueWithRawValue:@(2.0)]};
+//    circleLayer.circleBlur = [MGLStyleValue<NSNumber *> sourceFunctionValueWithStopType:MGLStyleFunctionStopTypeCategorical
+//                                                                                  stops:booleanCategoricalStops
+//                                                                          attributeName:@"fuzzy"
+//                                                                                options:nil];
+
+
+
+
+    // Data driven, source exponential ✔︎
+//    NSDictionary *exponentialStops = @{@0.0:  [MGLStyleValue<UIColor *> valueWithRawValue:[UIColor redColor]],
+//                                       @300.0: [MGLStyleValue<UIColor *> valueWithRawValue:[UIColor greenColor]]};
+//    circleLayer.circleColor = [MGLStyleValue<UIColor *> sourceFunctionValueWithStopType:MGLStyleFunctionStopTypeExponential
+//                                                                                  stops:exponentialStops
+//                                                                          attributeName:@"temp"
+//                                                                                options:nil];
+
+
+    // Data driven, source interval ✔︎
+//    NSDictionary *intervalStops = @{@0.0:  [MGLStyleValue<UIColor *> valueWithRawValue:[UIColor blueColor]],
+//                                    @50.0: [MGLStyleValue<UIColor *> valueWithRawValue:[UIColor redColor]],
+//                                    @150.0: [MGLStyleValue<UIColor *> valueWithRawValue:[UIColor redColor]]};
+//    circleLayer.circleColor = [MGLStyleValue<UIColor *> sourceFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+//                                                                                  stops:intervalStops
+//                                                                          attributeName:@"temp"
+//                                                                                options:nil];
+
+    // Data driven, source identity for both number and color ✔︎
+//    circleLayer.circleRadius = [MGLStyleValue<NSNumber *> sourceFunctionValueWithStopType:MGLStyleFunctionStopTypeIdentity
+//                                                                                    stops:nil attributeName:@"size"
+//                                                                                  options:nil];
+//    circleLayer.circleColor = [MGLStyleValue<UIColor *> sourceFunctionValueWithStopType:MGLStyleFunctionStopTypeIdentity
+//                                                                                  stops:nil
+//                                                                          attributeName:@"hexColor"
+//                                                                                options:nil];
+
+
+    // a composite function with categorical stops ✔︎
+//    MGLStyleValue *smallRadius = [MGLStyleValue<NSNumber *> valueWithRawValue:@(5)];
+//    MGLStyleValue *largeRadius = [MGLStyleValue<NSNumber *> valueWithRawValue:@(20)];
+//
+//    NSDictionary *compositeStopsCategorial = @{@0: @{@"green": smallRadius},
+//                                               @10: @{@"green": smallRadius},
+//                                               @15: @{@"green": largeRadius},
+//                                               @20: @{@"green": largeRadius}};
+//
+//    MGLStyleValue *defaultRadius = [MGLStyleValue<NSNumber *> valueWithRawValue:@(2)];
+//    MGLStyleValue *compositeSourceFunctionCategorical = [MGLStyleValue<NSNumber *> compositeFunctionValueWithStopType:MGLStyleFunctionStopTypeCategorical
+//                                                                                                                stops:compositeStopsCategorial
+//                                                                                                        attributeName:@"color"
+//                                                                                                              options:@{MGLStyleFunctionOptionDefaultValue: defaultRadius}];
+//    circleLayer.circleRadius = compositeSourceFunctionCategorical;
+
+    // a composite function with exponential stops ✔︎
+//    NSDictionary *compositeStopsExponentialOrInterval = @{@0: @{@0: smallRadius},
+//                                                          @10: @{@200: smallRadius},
+//                                                          @20: @{@200: largeRadius}};
+//
+//
+//    MGLStyleValue *compositeSourceFunctionExponential = [MGLStyleValue<NSNumber *> compositeFunctionValueWithStopType:MGLStyleFunctionStopTypeExponential
+//                                                                                                                stops:compositeStopsExponentialOrInterval
+//                                                                                                        attributeName:@"temp"
+//                                                                                                              options:nil];
+//    circleLayer.circleRadius = compositeSourceFunctionExponential;
+
+    // a composite function with interval stops ✔︎
+//    MGLStyleValue *compositeSourceFunctionInterval = [MGLStyleValue<NSNumber *> compositeFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+//                                                                                                             stops:compositeStopsExponentialOrInterval
+//                                                                                                     attributeName:@"temp"
+//                                                                                                           options:nil];
+//    circleLayer.circleRadius = compositeSourceFunctionInterval;
 }
 
 @end

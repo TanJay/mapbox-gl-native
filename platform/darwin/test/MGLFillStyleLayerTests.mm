@@ -1,5 +1,5 @@
 // This file is generated.
-// Edit platform/darwin/scripts/generate-style-code.js, then run `make style-code-darwin`.
+// Edit platform/darwin/scripts/generate-style-code.js, then run `make darwin-style-code`.
 
 #import "MGLStyleLayerTests.h"
 
@@ -57,14 +57,14 @@
         XCTAssertEqualObjects(layer.fillAntialiased, styleValue,
                               @"fillAntialiased should round-trip constant values.");
 
-        styleValue = [MGLStyleValue<NSNumber *> valueWithStops:@{
-            @18: styleValue,
-        }];
+        styleValue = [MGLStyleValue<NSNumber *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                             stops:@{@18: styleValue}
+                                                                                           options:nil];        
         layer.fillAntialiased = styleValue;
-        propertyValue = { mbgl::style::Function<bool> {
-            {{ 18, propertyValue.asConstant() }},
-            1,
-        }};
+
+        mbgl::style::IntervalStops<bool> intervalStops = { {{18, false}} };
+        propertyValue = mbgl::style::CameraFunction<bool> { intervalStops };
+        
         XCTAssertEqual(rawLayer->getFillAntialias(), propertyValue,
                        @"Setting fillAntialiased to a function should update fill-antialias.");
         XCTAssertEqualObjects(layer.fillAntialiased, styleValue,
@@ -85,20 +85,20 @@
 
         MGLStyleValue<MGLColor *> *styleValue = [MGLStyleValue<MGLColor *> valueWithRawValue:[MGLColor redColor]];
         layer.fillColor = styleValue;
-        mbgl::style::PropertyValue<mbgl::Color> propertyValue = { { 1, 0, 0, 1 } };
+        mbgl::style::DataDrivenPropertyValue<mbgl::Color> propertyValue = { { 1, 0, 0, 1 } };
         XCTAssertEqual(rawLayer->getFillColor(), propertyValue,
                        @"Setting fillColor to a constant value should update fill-color.");
         XCTAssertEqualObjects(layer.fillColor, styleValue,
                               @"fillColor should round-trip constant values.");
 
-        styleValue = [MGLStyleValue<MGLColor *> valueWithStops:@{
-            @18: styleValue,
-        }];
+        styleValue = [MGLStyleValue<MGLColor *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                             stops:@{@18: styleValue}
+                                                                                           options:nil];        
         layer.fillColor = styleValue;
-        propertyValue = { mbgl::style::Function<mbgl::Color> {
-            {{ 18, propertyValue.asConstant() }},
-            1,
-        }};
+
+        mbgl::style::IntervalStops<mbgl::Color> intervalStops = { {{18, { 1, 0, 0, 1 }}} };
+        propertyValue = mbgl::style::CameraFunction<mbgl::Color> { intervalStops };
+        
         XCTAssertEqual(rawLayer->getFillColor(), propertyValue,
                        @"Setting fillColor to a function should update fill-color.");
         XCTAssertEqualObjects(layer.fillColor, styleValue,
@@ -119,20 +119,20 @@
 
         MGLStyleValue<NSNumber *> *styleValue = [MGLStyleValue<NSNumber *> valueWithRawValue:@0xff];
         layer.fillOpacity = styleValue;
-        mbgl::style::PropertyValue<float> propertyValue = { 0xff };
+        mbgl::style::DataDrivenPropertyValue<float> propertyValue = { 0xff };
         XCTAssertEqual(rawLayer->getFillOpacity(), propertyValue,
                        @"Setting fillOpacity to a constant value should update fill-opacity.");
         XCTAssertEqualObjects(layer.fillOpacity, styleValue,
                               @"fillOpacity should round-trip constant values.");
 
-        styleValue = [MGLStyleValue<NSNumber *> valueWithStops:@{
-            @18: styleValue,
-        }];
+        styleValue = [MGLStyleValue<NSNumber *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                             stops:@{@18: styleValue}
+                                                                                           options:nil];        
         layer.fillOpacity = styleValue;
-        propertyValue = { mbgl::style::Function<float> {
-            {{ 18, propertyValue.asConstant() }},
-            1,
-        }};
+
+        mbgl::style::IntervalStops<float> intervalStops = { {{18, 0xff}} };
+        propertyValue = mbgl::style::CameraFunction<float> { intervalStops };
+        
         XCTAssertEqual(rawLayer->getFillOpacity(), propertyValue,
                        @"Setting fillOpacity to a function should update fill-opacity.");
         XCTAssertEqualObjects(layer.fillOpacity, styleValue,
@@ -153,20 +153,20 @@
 
         MGLStyleValue<MGLColor *> *styleValue = [MGLStyleValue<MGLColor *> valueWithRawValue:[MGLColor redColor]];
         layer.fillOutlineColor = styleValue;
-        mbgl::style::PropertyValue<mbgl::Color> propertyValue = { { 1, 0, 0, 1 } };
+        mbgl::style::DataDrivenPropertyValue<mbgl::Color> propertyValue = { { 1, 0, 0, 1 } };
         XCTAssertEqual(rawLayer->getFillOutlineColor(), propertyValue,
                        @"Setting fillOutlineColor to a constant value should update fill-outline-color.");
         XCTAssertEqualObjects(layer.fillOutlineColor, styleValue,
                               @"fillOutlineColor should round-trip constant values.");
 
-        styleValue = [MGLStyleValue<MGLColor *> valueWithStops:@{
-            @18: styleValue,
-        }];
+        styleValue = [MGLStyleValue<MGLColor *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                             stops:@{@18: styleValue}
+                                                                                           options:nil];        
         layer.fillOutlineColor = styleValue;
-        propertyValue = { mbgl::style::Function<mbgl::Color> {
-            {{ 18, propertyValue.asConstant() }},
-            1,
-        }};
+
+        mbgl::style::IntervalStops<mbgl::Color> intervalStops = { {{18, { 1, 0, 0, 1 }}} };
+        propertyValue = mbgl::style::CameraFunction<mbgl::Color> { intervalStops };
+        
         XCTAssertEqual(rawLayer->getFillOutlineColor(), propertyValue,
                        @"Setting fillOutlineColor to a function should update fill-outline-color.");
         XCTAssertEqualObjects(layer.fillOutlineColor, styleValue,
@@ -193,14 +193,14 @@
         XCTAssertEqualObjects(layer.fillPattern, styleValue,
                               @"fillPattern should round-trip constant values.");
 
-        styleValue = [MGLStyleValue<NSString *> valueWithStops:@{
-            @18: styleValue,
-        }];
+        styleValue = [MGLStyleValue<NSString *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                             stops:@{@18: styleValue}
+                                                                                           options:nil];        
         layer.fillPattern = styleValue;
-        propertyValue = { mbgl::style::Function<std::string> {
-            {{ 18, propertyValue.asConstant() }},
-            1,
-        }};
+
+        mbgl::style::IntervalStops<std::string> intervalStops = { {{18, "Fill Pattern"}} };
+        propertyValue = mbgl::style::CameraFunction<std::string> { intervalStops };
+        
         XCTAssertEqual(rawLayer->getFillPattern(), propertyValue,
                        @"Setting fillPattern to a function should update fill-pattern.");
         XCTAssertEqualObjects(layer.fillPattern, styleValue,
@@ -233,14 +233,14 @@
         XCTAssertEqualObjects(layer.fillTranslation, styleValue,
                               @"fillTranslation should round-trip constant values.");
 
-        styleValue = [MGLStyleValue<NSValue *> valueWithStops:@{
-            @18: styleValue,
-        }];
+        styleValue = [MGLStyleValue<NSValue *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                             stops:@{@18: styleValue}
+                                                                                           options:nil];        
         layer.fillTranslation = styleValue;
-        propertyValue = { mbgl::style::Function<std::array<float, 2>> {
-            {{ 18, propertyValue.asConstant() }},
-            1,
-        }};
+
+        mbgl::style::IntervalStops<std::array<float, 2>> intervalStops = { {{18, { 1, 1 }}} };
+        propertyValue = mbgl::style::CameraFunction<std::array<float, 2>> { intervalStops };
+        
         XCTAssertEqual(rawLayer->getFillTranslate(), propertyValue,
                        @"Setting fillTranslation to a function should update fill-translate.");
         XCTAssertEqualObjects(layer.fillTranslation, styleValue,
@@ -267,14 +267,14 @@
         XCTAssertEqualObjects(layer.fillTranslationAnchor, styleValue,
                               @"fillTranslationAnchor should round-trip constant values.");
 
-        styleValue = [MGLStyleValue<NSValue *> valueWithStops:@{
-            @18: styleValue,
-        }];
+        styleValue = [MGLStyleValue<NSValue *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                             stops:@{@18: styleValue}
+                                                                                           options:nil];        
         layer.fillTranslationAnchor = styleValue;
-        propertyValue = { mbgl::style::Function<mbgl::style::TranslateAnchorType> {
-            {{ 18, propertyValue.asConstant() }},
-            1,
-        }};
+
+        mbgl::style::IntervalStops<mbgl::style::TranslateAnchorType> intervalStops = { {{18, mbgl::style::TranslateAnchorType::Viewport}} };
+        propertyValue = mbgl::style::CameraFunction<mbgl::style::TranslateAnchorType> { intervalStops };
+        
         XCTAssertEqual(rawLayer->getFillTranslateAnchor(), propertyValue,
                        @"Setting fillTranslationAnchor to a function should update fill-translate-anchor.");
         XCTAssertEqualObjects(layer.fillTranslationAnchor, styleValue,

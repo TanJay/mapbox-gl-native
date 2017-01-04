@@ -1,5 +1,5 @@
 // This file is generated.
-// Edit platform/darwin/scripts/generate-style-code.js, then run `make style-code-darwin`.
+// Edit platform/darwin/scripts/generate-style-code.js, then run `make darwin-style-code`.
 
 #import "MGLStyleLayerTests.h"
 
@@ -51,20 +51,20 @@
 
         MGLStyleValue<NSNumber *> *styleValue = [MGLStyleValue<NSNumber *> valueWithRawValue:@0xff];
         layer.circleBlur = styleValue;
-        mbgl::style::PropertyValue<float> propertyValue = { 0xff };
+        mbgl::style::DataDrivenPropertyValue<float> propertyValue = { 0xff };
         XCTAssertEqual(rawLayer->getCircleBlur(), propertyValue,
                        @"Setting circleBlur to a constant value should update circle-blur.");
         XCTAssertEqualObjects(layer.circleBlur, styleValue,
                               @"circleBlur should round-trip constant values.");
 
-        styleValue = [MGLStyleValue<NSNumber *> valueWithStops:@{
-            @18: styleValue,
-        }];
+        styleValue = [MGLStyleValue<NSNumber *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                             stops:@{@18: styleValue}
+                                                                                           options:nil];        
         layer.circleBlur = styleValue;
-        propertyValue = { mbgl::style::Function<float> {
-            {{ 18, propertyValue.asConstant() }},
-            1,
-        }};
+
+        mbgl::style::IntervalStops<float> intervalStops = { {{18, 0xff}} };
+        propertyValue = mbgl::style::CameraFunction<float> { intervalStops };
+        
         XCTAssertEqual(rawLayer->getCircleBlur(), propertyValue,
                        @"Setting circleBlur to a function should update circle-blur.");
         XCTAssertEqualObjects(layer.circleBlur, styleValue,
@@ -85,20 +85,20 @@
 
         MGLStyleValue<MGLColor *> *styleValue = [MGLStyleValue<MGLColor *> valueWithRawValue:[MGLColor redColor]];
         layer.circleColor = styleValue;
-        mbgl::style::PropertyValue<mbgl::Color> propertyValue = { { 1, 0, 0, 1 } };
+        mbgl::style::DataDrivenPropertyValue<mbgl::Color> propertyValue = { { 1, 0, 0, 1 } };
         XCTAssertEqual(rawLayer->getCircleColor(), propertyValue,
                        @"Setting circleColor to a constant value should update circle-color.");
         XCTAssertEqualObjects(layer.circleColor, styleValue,
                               @"circleColor should round-trip constant values.");
 
-        styleValue = [MGLStyleValue<MGLColor *> valueWithStops:@{
-            @18: styleValue,
-        }];
+        styleValue = [MGLStyleValue<MGLColor *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                             stops:@{@18: styleValue}
+                                                                                           options:nil];        
         layer.circleColor = styleValue;
-        propertyValue = { mbgl::style::Function<mbgl::Color> {
-            {{ 18, propertyValue.asConstant() }},
-            1,
-        }};
+
+        mbgl::style::IntervalStops<mbgl::Color> intervalStops = { {{18, { 1, 0, 0, 1 }}} };
+        propertyValue = mbgl::style::CameraFunction<mbgl::Color> { intervalStops };
+        
         XCTAssertEqual(rawLayer->getCircleColor(), propertyValue,
                        @"Setting circleColor to a function should update circle-color.");
         XCTAssertEqualObjects(layer.circleColor, styleValue,
@@ -119,20 +119,20 @@
 
         MGLStyleValue<NSNumber *> *styleValue = [MGLStyleValue<NSNumber *> valueWithRawValue:@0xff];
         layer.circleOpacity = styleValue;
-        mbgl::style::PropertyValue<float> propertyValue = { 0xff };
+        mbgl::style::DataDrivenPropertyValue<float> propertyValue = { 0xff };
         XCTAssertEqual(rawLayer->getCircleOpacity(), propertyValue,
                        @"Setting circleOpacity to a constant value should update circle-opacity.");
         XCTAssertEqualObjects(layer.circleOpacity, styleValue,
                               @"circleOpacity should round-trip constant values.");
 
-        styleValue = [MGLStyleValue<NSNumber *> valueWithStops:@{
-            @18: styleValue,
-        }];
+        styleValue = [MGLStyleValue<NSNumber *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                             stops:@{@18: styleValue}
+                                                                                           options:nil];        
         layer.circleOpacity = styleValue;
-        propertyValue = { mbgl::style::Function<float> {
-            {{ 18, propertyValue.asConstant() }},
-            1,
-        }};
+
+        mbgl::style::IntervalStops<float> intervalStops = { {{18, 0xff}} };
+        propertyValue = mbgl::style::CameraFunction<float> { intervalStops };
+        
         XCTAssertEqual(rawLayer->getCircleOpacity(), propertyValue,
                        @"Setting circleOpacity to a function should update circle-opacity.");
         XCTAssertEqualObjects(layer.circleOpacity, styleValue,
@@ -153,20 +153,20 @@
 
         MGLStyleValue<NSNumber *> *styleValue = [MGLStyleValue<NSNumber *> valueWithRawValue:@0xff];
         layer.circleRadius = styleValue;
-        mbgl::style::PropertyValue<float> propertyValue = { 0xff };
+        mbgl::style::DataDrivenPropertyValue<float> propertyValue = { 0xff };
         XCTAssertEqual(rawLayer->getCircleRadius(), propertyValue,
                        @"Setting circleRadius to a constant value should update circle-radius.");
         XCTAssertEqualObjects(layer.circleRadius, styleValue,
                               @"circleRadius should round-trip constant values.");
 
-        styleValue = [MGLStyleValue<NSNumber *> valueWithStops:@{
-            @18: styleValue,
-        }];
+        styleValue = [MGLStyleValue<NSNumber *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                             stops:@{@18: styleValue}
+                                                                                           options:nil];        
         layer.circleRadius = styleValue;
-        propertyValue = { mbgl::style::Function<float> {
-            {{ 18, propertyValue.asConstant() }},
-            1,
-        }};
+
+        mbgl::style::IntervalStops<float> intervalStops = { {{18, 0xff}} };
+        propertyValue = mbgl::style::CameraFunction<float> { intervalStops };
+        
         XCTAssertEqual(rawLayer->getCircleRadius(), propertyValue,
                        @"Setting circleRadius to a function should update circle-radius.");
         XCTAssertEqualObjects(layer.circleRadius, styleValue,
@@ -193,14 +193,14 @@
         XCTAssertEqualObjects(layer.circleScaleAlignment, styleValue,
                               @"circleScaleAlignment should round-trip constant values.");
 
-        styleValue = [MGLStyleValue<NSValue *> valueWithStops:@{
-            @18: styleValue,
-        }];
+        styleValue = [MGLStyleValue<NSValue *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                             stops:@{@18: styleValue}
+                                                                                           options:nil];        
         layer.circleScaleAlignment = styleValue;
-        propertyValue = { mbgl::style::Function<mbgl::style::CirclePitchScaleType> {
-            {{ 18, propertyValue.asConstant() }},
-            1,
-        }};
+
+        mbgl::style::IntervalStops<mbgl::style::CirclePitchScaleType> intervalStops = { {{18, mbgl::style::CirclePitchScaleType::Viewport}} };
+        propertyValue = mbgl::style::CameraFunction<mbgl::style::CirclePitchScaleType> { intervalStops };
+        
         XCTAssertEqual(rawLayer->getCirclePitchScale(), propertyValue,
                        @"Setting circleScaleAlignment to a function should update circle-pitch-scale.");
         XCTAssertEqualObjects(layer.circleScaleAlignment, styleValue,
@@ -221,20 +221,20 @@
 
         MGLStyleValue<MGLColor *> *styleValue = [MGLStyleValue<MGLColor *> valueWithRawValue:[MGLColor redColor]];
         layer.circleStrokeColor = styleValue;
-        mbgl::style::PropertyValue<mbgl::Color> propertyValue = { { 1, 0, 0, 1 } };
+        mbgl::style::DataDrivenPropertyValue<mbgl::Color> propertyValue = { { 1, 0, 0, 1 } };
         XCTAssertEqual(rawLayer->getCircleStrokeColor(), propertyValue,
                        @"Setting circleStrokeColor to a constant value should update circle-stroke-color.");
         XCTAssertEqualObjects(layer.circleStrokeColor, styleValue,
                               @"circleStrokeColor should round-trip constant values.");
 
-        styleValue = [MGLStyleValue<MGLColor *> valueWithStops:@{
-            @18: styleValue,
-        }];
+        styleValue = [MGLStyleValue<MGLColor *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                             stops:@{@18: styleValue}
+                                                                                           options:nil];        
         layer.circleStrokeColor = styleValue;
-        propertyValue = { mbgl::style::Function<mbgl::Color> {
-            {{ 18, propertyValue.asConstant() }},
-            1,
-        }};
+
+        mbgl::style::IntervalStops<mbgl::Color> intervalStops = { {{18, { 1, 0, 0, 1 }}} };
+        propertyValue = mbgl::style::CameraFunction<mbgl::Color> { intervalStops };
+        
         XCTAssertEqual(rawLayer->getCircleStrokeColor(), propertyValue,
                        @"Setting circleStrokeColor to a function should update circle-stroke-color.");
         XCTAssertEqualObjects(layer.circleStrokeColor, styleValue,
@@ -255,20 +255,20 @@
 
         MGLStyleValue<NSNumber *> *styleValue = [MGLStyleValue<NSNumber *> valueWithRawValue:@0xff];
         layer.circleStrokeOpacity = styleValue;
-        mbgl::style::PropertyValue<float> propertyValue = { 0xff };
+        mbgl::style::DataDrivenPropertyValue<float> propertyValue = { 0xff };
         XCTAssertEqual(rawLayer->getCircleStrokeOpacity(), propertyValue,
                        @"Setting circleStrokeOpacity to a constant value should update circle-stroke-opacity.");
         XCTAssertEqualObjects(layer.circleStrokeOpacity, styleValue,
                               @"circleStrokeOpacity should round-trip constant values.");
 
-        styleValue = [MGLStyleValue<NSNumber *> valueWithStops:@{
-            @18: styleValue,
-        }];
+        styleValue = [MGLStyleValue<NSNumber *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                             stops:@{@18: styleValue}
+                                                                                           options:nil];        
         layer.circleStrokeOpacity = styleValue;
-        propertyValue = { mbgl::style::Function<float> {
-            {{ 18, propertyValue.asConstant() }},
-            1,
-        }};
+
+        mbgl::style::IntervalStops<float> intervalStops = { {{18, 0xff}} };
+        propertyValue = mbgl::style::CameraFunction<float> { intervalStops };
+        
         XCTAssertEqual(rawLayer->getCircleStrokeOpacity(), propertyValue,
                        @"Setting circleStrokeOpacity to a function should update circle-stroke-opacity.");
         XCTAssertEqualObjects(layer.circleStrokeOpacity, styleValue,
@@ -289,20 +289,20 @@
 
         MGLStyleValue<NSNumber *> *styleValue = [MGLStyleValue<NSNumber *> valueWithRawValue:@0xff];
         layer.circleStrokeWidth = styleValue;
-        mbgl::style::PropertyValue<float> propertyValue = { 0xff };
+        mbgl::style::DataDrivenPropertyValue<float> propertyValue = { 0xff };
         XCTAssertEqual(rawLayer->getCircleStrokeWidth(), propertyValue,
                        @"Setting circleStrokeWidth to a constant value should update circle-stroke-width.");
         XCTAssertEqualObjects(layer.circleStrokeWidth, styleValue,
                               @"circleStrokeWidth should round-trip constant values.");
 
-        styleValue = [MGLStyleValue<NSNumber *> valueWithStops:@{
-            @18: styleValue,
-        }];
+        styleValue = [MGLStyleValue<NSNumber *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                             stops:@{@18: styleValue}
+                                                                                           options:nil];        
         layer.circleStrokeWidth = styleValue;
-        propertyValue = { mbgl::style::Function<float> {
-            {{ 18, propertyValue.asConstant() }},
-            1,
-        }};
+
+        mbgl::style::IntervalStops<float> intervalStops = { {{18, 0xff}} };
+        propertyValue = mbgl::style::CameraFunction<float> { intervalStops };
+        
         XCTAssertEqual(rawLayer->getCircleStrokeWidth(), propertyValue,
                        @"Setting circleStrokeWidth to a function should update circle-stroke-width.");
         XCTAssertEqualObjects(layer.circleStrokeWidth, styleValue,
@@ -335,14 +335,14 @@
         XCTAssertEqualObjects(layer.circleTranslation, styleValue,
                               @"circleTranslation should round-trip constant values.");
 
-        styleValue = [MGLStyleValue<NSValue *> valueWithStops:@{
-            @18: styleValue,
-        }];
+        styleValue = [MGLStyleValue<NSValue *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                             stops:@{@18: styleValue}
+                                                                                           options:nil];        
         layer.circleTranslation = styleValue;
-        propertyValue = { mbgl::style::Function<std::array<float, 2>> {
-            {{ 18, propertyValue.asConstant() }},
-            1,
-        }};
+
+        mbgl::style::IntervalStops<std::array<float, 2>> intervalStops = { {{18, { 1, 1 }}} };
+        propertyValue = mbgl::style::CameraFunction<std::array<float, 2>> { intervalStops };
+        
         XCTAssertEqual(rawLayer->getCircleTranslate(), propertyValue,
                        @"Setting circleTranslation to a function should update circle-translate.");
         XCTAssertEqualObjects(layer.circleTranslation, styleValue,
@@ -369,14 +369,14 @@
         XCTAssertEqualObjects(layer.circleTranslationAnchor, styleValue,
                               @"circleTranslationAnchor should round-trip constant values.");
 
-        styleValue = [MGLStyleValue<NSValue *> valueWithStops:@{
-            @18: styleValue,
-        }];
+        styleValue = [MGLStyleValue<NSValue *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                             stops:@{@18: styleValue}
+                                                                                           options:nil];        
         layer.circleTranslationAnchor = styleValue;
-        propertyValue = { mbgl::style::Function<mbgl::style::TranslateAnchorType> {
-            {{ 18, propertyValue.asConstant() }},
-            1,
-        }};
+
+        mbgl::style::IntervalStops<mbgl::style::TranslateAnchorType> intervalStops = { {{18, mbgl::style::TranslateAnchorType::Viewport}} };
+        propertyValue = mbgl::style::CameraFunction<mbgl::style::TranslateAnchorType> { intervalStops };
+        
         XCTAssertEqual(rawLayer->getCircleTranslateAnchor(), propertyValue,
                        @"Setting circleTranslationAnchor to a function should update circle-translate-anchor.");
         XCTAssertEqualObjects(layer.circleTranslationAnchor, styleValue,

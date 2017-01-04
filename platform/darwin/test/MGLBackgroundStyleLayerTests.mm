@@ -1,5 +1,5 @@
 // This file is generated.
-// Edit platform/darwin/scripts/generate-style-code.js, then run `make style-code-darwin`.
+// Edit platform/darwin/scripts/generate-style-code.js, then run `make darwin-style-code`.
 
 #import "MGLStyleLayerTests.h"
 
@@ -36,14 +36,14 @@
         XCTAssertEqualObjects(layer.backgroundColor, styleValue,
                               @"backgroundColor should round-trip constant values.");
 
-        styleValue = [MGLStyleValue<MGLColor *> valueWithStops:@{
-            @18: styleValue,
-        }];
+        styleValue = [MGLStyleValue<MGLColor *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                             stops:@{@18: styleValue}
+                                                                                           options:nil];        
         layer.backgroundColor = styleValue;
-        propertyValue = { mbgl::style::Function<mbgl::Color> {
-            {{ 18, propertyValue.asConstant() }},
-            1,
-        }};
+
+        mbgl::style::IntervalStops<mbgl::Color> intervalStops = { {{18, { 1, 0, 0, 1 }}} };
+        propertyValue = mbgl::style::CameraFunction<mbgl::Color> { intervalStops };
+        
         XCTAssertEqual(rawLayer->getBackgroundColor(), propertyValue,
                        @"Setting backgroundColor to a function should update background-color.");
         XCTAssertEqualObjects(layer.backgroundColor, styleValue,
@@ -70,14 +70,14 @@
         XCTAssertEqualObjects(layer.backgroundOpacity, styleValue,
                               @"backgroundOpacity should round-trip constant values.");
 
-        styleValue = [MGLStyleValue<NSNumber *> valueWithStops:@{
-            @18: styleValue,
-        }];
+        styleValue = [MGLStyleValue<NSNumber *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                             stops:@{@18: styleValue}
+                                                                                           options:nil];        
         layer.backgroundOpacity = styleValue;
-        propertyValue = { mbgl::style::Function<float> {
-            {{ 18, propertyValue.asConstant() }},
-            1,
-        }};
+
+        mbgl::style::IntervalStops<float> intervalStops = { {{18, 0xff}} };
+        propertyValue = mbgl::style::CameraFunction<float> { intervalStops };
+        
         XCTAssertEqual(rawLayer->getBackgroundOpacity(), propertyValue,
                        @"Setting backgroundOpacity to a function should update background-opacity.");
         XCTAssertEqualObjects(layer.backgroundOpacity, styleValue,
@@ -104,14 +104,14 @@
         XCTAssertEqualObjects(layer.backgroundPattern, styleValue,
                               @"backgroundPattern should round-trip constant values.");
 
-        styleValue = [MGLStyleValue<NSString *> valueWithStops:@{
-            @18: styleValue,
-        }];
+        styleValue = [MGLStyleValue<NSString *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                             stops:@{@18: styleValue}
+                                                                                           options:nil];        
         layer.backgroundPattern = styleValue;
-        propertyValue = { mbgl::style::Function<std::string> {
-            {{ 18, propertyValue.asConstant() }},
-            1,
-        }};
+
+        mbgl::style::IntervalStops<std::string> intervalStops = { {{18, "Background Pattern"}} };
+        propertyValue = mbgl::style::CameraFunction<std::string> { intervalStops };
+        
         XCTAssertEqual(rawLayer->getBackgroundPattern(), propertyValue,
                        @"Setting backgroundPattern to a function should update background-pattern.");
         XCTAssertEqualObjects(layer.backgroundPattern, styleValue,

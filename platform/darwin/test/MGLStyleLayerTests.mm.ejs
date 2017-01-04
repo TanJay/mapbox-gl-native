@@ -4,7 +4,7 @@
   const enumProperties = locals.enumProperties;
 -%>
 // This file is generated.
-// Edit platform/darwin/scripts/generate-style-code.js, then run `make style-code-darwin`.
+// Edit platform/darwin/scripts/generate-style-code.js, then run `make darwin-style-code`.
 
 #import "MGLStyleLayerTests.h"
 
@@ -63,20 +63,24 @@
 
         MGLStyleValue<<%- propertyType(property) %>> *styleValue = [MGLStyleValue<<%- propertyType(property) %>> valueWithRawValue:<%- objCTestValue(property, type, 3) %>];
         layer.<%- objCName(property) %> = styleValue;
+<% if (property["property-function"] == true) { -%>
+        mbgl::style::DataDrivenPropertyValue<<%- mbglType(property) %>> propertyValue = { <%- mbglTestValue(property, type) %> };
+<% } else { -%>
         mbgl::style::PropertyValue<<%- mbglType(property) %>> propertyValue = { <%- mbglTestValue(property, type) %> };
+<% } -%>
         XCTAssertEqual(rawLayer->get<%- camelize(originalPropertyName(property)) %>(), propertyValue,
                        @"Setting <%- objCName(property) %> to a constant value should update <%- originalPropertyName(property) %>.");
         XCTAssertEqualObjects(layer.<%- objCName(property) %>, styleValue,
                               @"<%- objCName(property) %> should round-trip constant values.");
 
-        styleValue = [MGLStyleValue<<%- propertyType(property) %>> valueWithStops:@{
-            @18: styleValue,
-        }];
+        styleValue = [MGLStyleValue<<%- propertyType(property) %>> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                             stops:@{@18: styleValue}
+                                                                                           options:nil];        
         layer.<%- objCName(property) %> = styleValue;
-        propertyValue = { mbgl::style::Function<<%- mbglType(property) %>> {
-            {{ 18, propertyValue.asConstant() }},
-            1,
-        }};
+
+        mbgl::style::IntervalStops<<%- mbglType(property) %>> intervalStops = { {{18, <%- mbglTestValue(property, type) %>}} };
+        propertyValue = mbgl::style::CameraFunction<<%- mbglType(property) %>> { intervalStops };
+        
         XCTAssertEqual(rawLayer->get<%- camelize(originalPropertyName(property)) %>(), propertyValue,
                        @"Setting <%- objCName(property) %> to a function should update <%- originalPropertyName(property) %>.");
         XCTAssertEqualObjects(layer.<%- objCName(property) %>, styleValue,
