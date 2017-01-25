@@ -35,6 +35,7 @@ Mapbox welcomes participation and contributions from everyone.  If you'd like to
 * Gesture handling bugs
   - Avoid calls to onFling when while pinch zooming [#7666](https://github.com/mapbox/mapbox-gl-native/issues/7666)
 * Support for style-wide transition animation duration and delay [#6779](https://github.com/mapbox/mapbox-gl-native/issues/6779)
+* LatLng objects produced by the SDK are wrapped by default [#4522](https://github.com/mapbox/mapbox-gl-native/issues/4522)
 
 ## 4.2.1 - December 22, 2016
 
