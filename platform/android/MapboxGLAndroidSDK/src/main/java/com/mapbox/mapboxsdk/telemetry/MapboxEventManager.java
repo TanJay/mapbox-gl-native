@@ -25,11 +25,11 @@ import android.view.WindowManager;
 
 import com.mapbox.mapboxsdk.BuildConfig;
 import com.mapbox.mapboxsdk.Mapbox;
-import com.mapbox.mapboxsdk.constants.GeoConstants;
 import com.mapbox.mapboxsdk.constants.MapboxConstants;
 import com.mapbox.mapboxsdk.exceptions.TelemetryServiceNotConfiguredException;
 import com.mapbox.mapboxsdk.location.LocationServices;
 import com.mapbox.mapboxsdk.utils.MathUtils;
+import com.mapbox.services.android.telemetry.constants.GeoConstants;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
