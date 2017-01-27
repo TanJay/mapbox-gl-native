@@ -26,9 +26,9 @@ import android.view.WindowManager;
 import com.mapbox.mapboxsdk.BuildConfig;
 import com.mapbox.mapboxsdk.Mapbox;
 import com.mapbox.mapboxsdk.constants.MapboxConstants;
-import com.mapbox.mapboxsdk.exceptions.TelemetryServiceNotConfiguredException;
 import com.mapbox.mapboxsdk.location.LocationServices;
 import com.mapbox.mapboxsdk.utils.MathUtils;
+import com.mapbox.services.android.telemetry.TelemetryException;
 import com.mapbox.services.android.telemetry.constants.GeoConstants;
 import com.mapbox.services.android.telemetry.permissions.PermissionsManager;
 import com.mapbox.services.android.telemetry.service.TelemetryService;
@@ -231,7 +231,7 @@ public class MapboxEventManager {
     } catch (Exception exception) {
       // Timber.w("Error checking for Telemetry Service Config: ", exception);
     }
-    throw new TelemetryServiceNotConfiguredException();
+    throw new TelemetryException(null);
   }
 
   public static String generateCreateDate() {
