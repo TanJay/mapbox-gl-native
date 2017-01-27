@@ -16,6 +16,11 @@ dependencies {
     compile('com.mapbox.mapboxsdk:mapbox-java-geojson:2.0.0-SNAPSHOT@jar') {
         transitive = true
     }
+
+    // Mapbox Android Services (Telemetry support)
+    compile('com.mapbox.mapboxsdk:mapbox-android-telemetry:2.0.0-SNAPSHOT@aar') {
+        transitive = true
+    }
 }
 
 android {
