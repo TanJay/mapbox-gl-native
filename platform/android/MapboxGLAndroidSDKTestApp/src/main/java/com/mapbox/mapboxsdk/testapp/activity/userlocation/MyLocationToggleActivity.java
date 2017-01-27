@@ -19,6 +19,7 @@ import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.mapboxsdk.testapp.R;
+import com.mapbox.services.android.telemetry.permissions.PermissionsManager;
 
 public class MyLocationToggleActivity extends AppCompatActivity {
 
@@ -108,7 +109,7 @@ public class MyLocationToggleActivity extends AppCompatActivity {
   @UiThread
   public void toggleGps(boolean enableGps) {
     if (enableGps) {
-      if (!LocationServices.getLocationServices(MyLocationToggleActivity.this).areLocationPermissionsGranted()) {
+      if (!PermissionsManager.areLocationPermissionsGranted(this)) {
         ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.ACCESS_COARSE_LOCATION,
           Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSIONS_LOCATION);
       } else {
