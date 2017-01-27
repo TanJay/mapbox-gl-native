@@ -10,9 +10,9 @@ import com.mapbox.mapboxsdk.camera.CameraPosition;
 import com.mapbox.mapboxsdk.constants.MapboxConstants;
 import com.mapbox.mapboxsdk.constants.MyBearingTracking;
 import com.mapbox.mapboxsdk.constants.MyLocationTracking;
-import com.mapbox.mapboxsdk.location.LocationListener;
-import com.mapbox.mapboxsdk.location.LocationServices;
+import com.mapbox.mapboxsdk.location.LocationSource;
 import com.mapbox.mapboxsdk.maps.widgets.MyLocationView;
+import com.mapbox.services.android.telemetry.location.LocationEngineListener;
 import com.mapbox.services.android.telemetry.permissions.PermissionsManager;
 
 import timber.log.Timber;
@@ -26,7 +26,7 @@ public final class TrackingSettings {
   private final UiSettings uiSettings;
   private final FocalPointChangeListener focalPointChangedListener;
   private final CameraZoomInvalidator zoomInvalidator;
-  private LocationListener myLocationListener;
+  private LocationEngineListener myLocationListener;
 
   private boolean myLocationEnabled;
   private boolean dismissLocationTrackingOnGesture = true;
@@ -279,7 +279,12 @@ public final class TrackingSettings {
 
   void setOnMyLocationChangeListener(@Nullable final MapboxMap.OnMyLocationChangeListener listener) {
     if (listener != null) {
-      myLocationListener = new LocationListener() {
+      myLocationListener = new LocationEngineListener() {
+        @Override
+        public void onConnected() {
+          // Nothing
+        }
+
         @Override
         public void onLocationChanged(Location location) {
           if (listener != null) {
@@ -287,9 +292,9 @@ public final class TrackingSettings {
           }
         }
       };
-      LocationServices.getLocationServices(myLocationView.getContext()).addLocationListener(myLocationListener);
+      LocationSource.getLocationEngine(myLocationView.getContext()).addLocationEngineListener(myLocationListener);
     } else {
-      LocationServices.getLocationServices(myLocationView.getContext()).removeLocationListener(myLocationListener);
+      LocationSource.getLocationEngine(myLocationView.getContext()).removeLocationEngineListener(myLocationListener);
       myLocationListener = null;
     }
   }

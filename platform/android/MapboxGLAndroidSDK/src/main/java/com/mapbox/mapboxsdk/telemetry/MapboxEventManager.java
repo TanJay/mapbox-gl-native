@@ -26,10 +26,11 @@ import android.view.WindowManager;
 import com.mapbox.mapboxsdk.BuildConfig;
 import com.mapbox.mapboxsdk.Mapbox;
 import com.mapbox.mapboxsdk.constants.MapboxConstants;
-import com.mapbox.mapboxsdk.location.LocationServices;
+import com.mapbox.mapboxsdk.location.LocationSource;
 import com.mapbox.services.android.telemetry.TelemetryException;
 import com.mapbox.services.android.telemetry.constants.GeoConstants;
 import com.mapbox.services.android.telemetry.http.GzipRequestInterceptor;
+import com.mapbox.services.android.telemetry.location.LocationEnginePriority;
 import com.mapbox.services.android.telemetry.permissions.PermissionsManager;
 import com.mapbox.services.android.telemetry.service.TelemetryService;
 import com.mapbox.services.android.telemetry.utils.MathUtils;
@@ -263,8 +264,8 @@ public class MapboxEventManager {
       // Make sure Ambient Mode is started at a minimum
       if (PermissionsManager.areLocationPermissionsGranted(context)) {
         // Timber.i("Permissions are good, see if GPS is enabled and if not then setup Ambient.");
-        if (LocationServices.getLocationServices(context).isGpsEnabled()) {
-          LocationServices.getLocationServices(context).toggleGPS(false);
+        if (LocationSource.getLocationEngine(context).getPriority() != LocationEnginePriority.LOW_POWER) {
+          LocationSource.getLocationEngine(context).setPriority(LocationEnginePriority.LOW_POWER);
         }
       } else {
         // Start timer that checks for Permissions
@@ -280,8 +281,8 @@ public class MapboxEventManager {
             if (PermissionsManager.areLocationPermissionsGranted(context)) {
               // Timber.i("Permissions finally granted, so starting Ambient if GPS isn't already enabled");
               // Start Ambient
-              if (LocationServices.getLocationServices(context).isGpsEnabled()) {
-                LocationServices.getLocationServices(context).toggleGPS(false);
+              if (LocationSource.getLocationEngine(context).getPriority() != LocationEnginePriority.LOW_POWER) {
+                LocationSource.getLocationEngine(context).setPriority(LocationEnginePriority.LOW_POWER);
               }
             } else {
               // Restart Handler
