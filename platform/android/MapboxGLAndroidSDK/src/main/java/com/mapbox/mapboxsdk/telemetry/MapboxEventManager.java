@@ -27,12 +27,12 @@ import com.mapbox.mapboxsdk.BuildConfig;
 import com.mapbox.mapboxsdk.Mapbox;
 import com.mapbox.mapboxsdk.constants.MapboxConstants;
 import com.mapbox.mapboxsdk.location.LocationServices;
-import com.mapbox.mapboxsdk.utils.MathUtils;
 import com.mapbox.services.android.telemetry.TelemetryException;
 import com.mapbox.services.android.telemetry.constants.GeoConstants;
 import com.mapbox.services.android.telemetry.http.GzipRequestInterceptor;
 import com.mapbox.services.android.telemetry.permissions.PermissionsManager;
 import com.mapbox.services.android.telemetry.service.TelemetryService;
+import com.mapbox.services.android.telemetry.utils.MathUtils;
 
 import org.json.JSONArray;
 import org.json.JSONObject;

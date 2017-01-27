@@ -16,7 +16,7 @@ import com.almeros.android.multitouch.gesturedetectors.ShoveGestureDetector;
 import com.almeros.android.multitouch.gesturedetectors.TwoFingerGestureDetector;
 import com.mapbox.mapboxsdk.constants.MapboxConstants;
 import com.mapbox.mapboxsdk.telemetry.MapboxEvent;
-import com.mapbox.mapboxsdk.utils.MathUtils;
+import com.mapbox.services.android.telemetry.utils.MathUtils;
 
 /**
  * Manages gestures events on a MapView.
