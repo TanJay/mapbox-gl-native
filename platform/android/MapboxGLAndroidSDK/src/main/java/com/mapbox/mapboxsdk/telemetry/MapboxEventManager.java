@@ -78,7 +78,7 @@ public class MapboxEventManager {
   private String accessToken = null;
   private String eventsURL = MapboxEvent.MAPBOX_EVENTS_BASE_URL;
 
-  private String userAgent = BuildConfig.MAPBOX_EVENTS_USER_AGENT_BASE;
+  private String userAgent = com.mapbox.services.android.telemetry.BuildConfig.MAPBOX_EVENTS_USER_AGENT_BASE;
 
   private Intent batteryStatus = null;
   private final String operatingSystem = "Android - " + Build.VERSION.RELEASE;
@@ -188,7 +188,7 @@ public class MapboxEventManager {
 
       // Build User Agent
       String appIdentifier = getApplicationIdentifier();
-      if (TextUtils.equals(userAgent, BuildConfig.MAPBOX_EVENTS_USER_AGENT_BASE) && !TextUtils.isEmpty(appIdentifier)) {
+      if (TextUtils.equals(userAgent, com.mapbox.services.android.telemetry.BuildConfig.MAPBOX_EVENTS_USER_AGENT_BASE) && !TextUtils.isEmpty(appIdentifier)) {
         userAgent = Util
           .toHumanReadableAscii(String.format(MapboxConstants.MAPBOX_LOCALE, "%s %s", appIdentifier, userAgent));
       }
