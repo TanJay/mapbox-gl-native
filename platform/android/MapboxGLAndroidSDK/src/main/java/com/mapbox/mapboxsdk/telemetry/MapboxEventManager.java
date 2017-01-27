@@ -30,6 +30,7 @@ import com.mapbox.mapboxsdk.exceptions.TelemetryServiceNotConfiguredException;
 import com.mapbox.mapboxsdk.location.LocationServices;
 import com.mapbox.mapboxsdk.utils.MathUtils;
 import com.mapbox.services.android.telemetry.constants.GeoConstants;
+import com.mapbox.services.android.telemetry.permissions.PermissionsManager;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -258,7 +259,7 @@ public class MapboxEventManager {
       context.startService(new Intent(context, TelemetryService.class));
 
       // Make sure Ambient Mode is started at a minimum
-      if (LocationServices.getLocationServices(context).areLocationPermissionsGranted()) {
+      if (PermissionsManager.areLocationPermissionsGranted(context)) {
         // Timber.i("Permissions are good, see if GPS is enabled and if not then setup Ambient.");
         if (LocationServices.getLocationServices(context).isGpsEnabled()) {
           LocationServices.getLocationServices(context).toggleGPS(false);
@@ -274,7 +275,7 @@ public class MapboxEventManager {
 
           @Override
           public void run() {
-            if (LocationServices.getLocationServices(context).areLocationPermissionsGranted()) {
+            if (PermissionsManager.areLocationPermissionsGranted(context)) {
               // Timber.i("Permissions finally granted, so starting Ambient if GPS isn't already enabled");
               // Start Ambient
               if (LocationServices.getLocationServices(context).isGpsEnabled()) {

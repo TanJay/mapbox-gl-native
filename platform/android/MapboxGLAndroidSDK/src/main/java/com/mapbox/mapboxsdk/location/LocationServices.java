@@ -1,22 +1,20 @@
 package com.mapbox.mapboxsdk.location;
 
-import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
 import android.support.annotation.NonNull;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 
-import timber.log.Timber;
-
 import com.mapbox.mapboxsdk.telemetry.TelemetryLocationReceiver;
+import com.mapbox.services.android.telemetry.permissions.PermissionsManager;
 import com.mapzen.android.lost.api.LocationRequest;
 import com.mapzen.android.lost.api.LostApiClient;
 
 import java.util.concurrent.CopyOnWriteArrayList;
+
+import timber.log.Timber;
 
 import static com.mapzen.android.lost.api.LocationServices.FusedLocationApi;
 
@@ -77,7 +75,7 @@ public class LocationServices implements LostApiClient.ConnectionCallbacks,
    * @param enableGPS true if GPS is to be enabled, false if GPS is to be disabled
    */
   public void toggleGPS(boolean enableGPS) {
-    if (!areLocationPermissionsGranted()) {
+    if (!PermissionsManager.areLocationPermissionsGranted(context)) {
       Timber.w("Location Permissions Not Granted Yet.  Try again after requesting.");
       return;
     }
@@ -185,22 +183,6 @@ public class LocationServices implements LostApiClient.ConnectionCallbacks,
    */
   public boolean removeLocationListener(@NonNull LocationListener locationListener) {
     return this.locationListeners.remove(locationListener);
-  }
-
-  /**
-   * Check status of Location Permissions
-   *
-   * @return True if granted to the app, False if not
-   */
-  public boolean areLocationPermissionsGranted() {
-    if ((ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION)
-      != PackageManager.PERMISSION_GRANTED)
-      && (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION)
-      != PackageManager.PERMISSION_GRANTED)) {
-      Timber.w("Location Permissions Not Granted Yet.  Try again after requesting.");
-      return false;
-    }
-    return true;
   }
 
   @Override
