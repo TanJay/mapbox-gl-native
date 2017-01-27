@@ -31,6 +31,7 @@ import com.mapbox.mapboxsdk.location.LocationServices;
 import com.mapbox.mapboxsdk.utils.MathUtils;
 import com.mapbox.services.android.telemetry.constants.GeoConstants;
 import com.mapbox.services.android.telemetry.permissions.PermissionsManager;
+import com.mapbox.services.android.telemetry.service.TelemetryService;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
