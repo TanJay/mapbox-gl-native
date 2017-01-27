@@ -7,7 +7,7 @@ import android.location.LocationManager;
 import android.support.annotation.NonNull;
 import android.support.v4.content.LocalBroadcastManager;
 
-import com.mapbox.mapboxsdk.telemetry.TelemetryLocationReceiver;
+import com.mapbox.services.android.telemetry.TelemetryLocationReceiver;
 import com.mapbox.services.android.telemetry.permissions.PermissionsManager;
 import com.mapzen.android.lost.api.LocationRequest;
 import com.mapzen.android.lost.api.LostApiClient;
