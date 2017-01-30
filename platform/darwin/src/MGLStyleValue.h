@@ -6,23 +6,22 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+// TODO: API docs
 typedef NSString *MGLStyleFunctionOption NS_STRING_ENUM;
 
+// TODO: API docs
 extern MGL_EXPORT const MGLStyleFunctionOption MGLStyleFunctionOptionInterpolationBase;
+
+// TODO: API docs
 extern MGL_EXPORT const MGLStyleFunctionOption MGLStyleFunctionOptionDefaultValue;
 
+// TODO: API docs
 typedef NS_ENUM(NSUInteger, MGLStyleFunctionStopType) {
     MGLStyleFunctionStopTypeExponential = 0,
     MGLStyleFunctionStopTypeInterval,
     MGLStyleFunctionStopTypeCategorical,
     MGLStyleFunctionStopTypeIdentity
 };
-
-@protocol MGLStyleFunction <NSObject>
-
-@property (nonatomic, readonly) MGLStyleFunctionStopType stopType;
-
-@end
 
 /**
  An `MGLStyleValue` object is a generic container for a style attribute value.
@@ -137,13 +136,16 @@ MGL_EXPORT
 @end
 
 MGL_EXPORT
-@interface MGLCameraStyleFunction<T> : MGLStyleValue<MGLStyleFunction>
+@interface MGLCameraStyleFunction<T> : MGLStyleValue
 
 // TODO: API docs
-+ (instancetype)functionWithStopType:(MGLStyleFunctionStopType)stopType stops:(NS_DICTIONARY_OF(id, MGLStyleValue<T> *) *)stops options:(nullable NS_DICTIONARY_OF(MGLStyleFunctionOption, id) *)options;
++ (instancetype)functionWithStopType:(MGLStyleFunctionStopType)stopType stops:(NS_DICTIONARY_OF(NSNumber *, MGLStyleValue<T> *) *)stops options:(nullable NS_DICTIONARY_OF(MGLStyleFunctionOption, id) *)options;
 
 // TODO: API docs
-- (instancetype)initWithStopType:(MGLStyleFunctionStopType)stopType stops:(NS_DICTIONARY_OF(id, MGLStyleValue<T> *) *)stops options:(nullable NS_DICTIONARY_OF(MGLStyleFunctionOption, id) *)options NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithStopType:(MGLStyleFunctionStopType)stopType stops:(NS_DICTIONARY_OF(NSNumber *, MGLStyleValue<T> *) *)stops options:(nullable NS_DICTIONARY_OF(MGLStyleFunctionOption, id) *)options NS_DESIGNATED_INITIALIZER;
+
+// TODO: API docs
+@property (nonatomic) MGLStyleFunctionStopType stopType;
 
 // TODO: API docs
 @property (nonatomic, copy) NS_DICTIONARY_OF(id, MGLStyleValue<T> *) *stops;
@@ -154,7 +156,7 @@ MGL_EXPORT
 @end
 
 MGL_EXPORT
-@interface MGLSourceStyleFunction<T> : MGLStyleValue<MGLStyleFunction>
+@interface MGLSourceStyleFunction<T> : MGLStyleValue
 
 // TODO: API docs
 + (instancetype)functionWithStopType:(MGLStyleFunctionStopType)stopType stops:(nullable NS_DICTIONARY_OF(id, MGLStyleValue<T> *) *)stops attributeName:(NSString *)attributeName options:(nullable NS_DICTIONARY_OF(MGLStyleFunctionOption, id) *)options;
@@ -163,7 +165,10 @@ MGL_EXPORT
 - (instancetype)initWithStopType:(MGLStyleFunctionStopType)stopType stops:(nullable NS_DICTIONARY_OF(id, MGLStyleValue<T> *) *)stops attributeName:(NSString *)attributeName options:(nullable NS_DICTIONARY_OF(MGLStyleFunctionOption, id) *)options NS_DESIGNATED_INITIALIZER;
 
 // TODO: API docs
-@property (nonatomic, copy, nullable) NSString *attributeName;
+@property (nonatomic) MGLStyleFunctionStopType stopType;
+
+// TODO: API docs
+@property (nonatomic, copy) NSString *attributeName;
 
 // TODO: API docs
 @property (nonatomic, copy, nullable) NS_DICTIONARY_OF(id, MGLStyleValue<T> *) *stops;
@@ -177,7 +182,7 @@ MGL_EXPORT
 @end
 
 MGL_EXPORT
-@interface MGLCompositeStyleFunction<T> : MGLStyleValue<MGLStyleFunction>
+@interface MGLCompositeStyleFunction<T> : MGLStyleValue
 
 // TODO: API docs
 + (instancetype)functionWithStopType:(MGLStyleFunctionStopType)stopType stops:(NS_DICTIONARY_OF(NSNumber *, NS_DICTIONARY_OF(id, MGLStyleValue<T> *) *) *)stops attributeName:(NSString *)attributeName options:(nullable NS_DICTIONARY_OF(MGLStyleFunctionOption, id) *)options;
@@ -185,10 +190,13 @@ MGL_EXPORT
 - (instancetype)initWithStopType:(MGLStyleFunctionStopType)stopType stops:(NS_DICTIONARY_OF(NSNumber *, NS_DICTIONARY_OF(id, MGLStyleValue<T> *) *) *)stops attributeName:(NSString *)attributeName options:(nullable NS_DICTIONARY_OF(MGLStyleFunctionOption, id) *)options NS_DESIGNATED_INITIALIZER;
 
 // TODO: API docs
-@property (nonatomic, copy, nullable) NSString *attributeName;
+@property (nonatomic) MGLStyleFunctionStopType stopType;
 
 // TODO: API docs
-@property (nonatomic, copy, nullable) NS_DICTIONARY_OF(NSNumber *, NS_DICTIONARY_OF(id, MGLStyleValue<T> *) *) *stops;
+@property (nonatomic, copy) NSString *attributeName;
+
+// TODO: API docs
+@property (nonatomic, copy) NS_DICTIONARY_OF(NSNumber *, NS_DICTIONARY_OF(id, MGLStyleValue<T> *) *) *stops;
 
 // TODO: API docs
 @property (nonatomic, nullable) MGLStyleValue<T> *defaultValue;

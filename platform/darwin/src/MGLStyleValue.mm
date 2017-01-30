@@ -25,7 +25,7 @@ const MGLStyleFunctionOption MGLStyleFunctionOptionDefaultValue = @"MGLStyleFunc
     return [MGLSourceStyleFunction functionWithStopType:stopType stops:stops attributeName:attributeName options:options];
 }
 
-+ (instancetype)compositeFunctionValueWithStopType:(MGLStyleFunctionStopType)stopType stops:(NSDictionary *)stops attributeName:(NSString *)attributeName options:(nullable NS_DICTIONARY_OF(MGLStyleFunctionOption, id) *)options {
++ (instancetype)compositeFunctionValueWithStopType:(MGLStyleFunctionStopType)stopType stops:(NSDictionary *)stops attributeName:(NSString *)attributeName options:(NSDictionary *)options {
     return [MGLCompositeStyleFunction functionWithStopType:stopType stops:stops attributeName:attributeName options:options];
 }
 
