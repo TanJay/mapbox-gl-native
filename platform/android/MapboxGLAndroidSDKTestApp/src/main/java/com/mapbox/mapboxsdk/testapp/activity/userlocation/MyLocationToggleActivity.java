@@ -143,9 +143,9 @@ public class MyLocationToggleActivity extends AppCompatActivity {
         };
         locationServices.addLocationListener(locationListener);
       }
-      locationToggleFab.setImageResource(R.drawable.ic_location_disabled_24dp);
+      locationToggleFab.setImageResource(R.drawable.ic_location_disabled);
     } else {
-      locationToggleFab.setImageResource(R.drawable.ic_my_location_24dp);
+      locationToggleFab.setImageResource(R.drawable.ic_my_location);
     }
     mapboxMap.setMyLocationEnabled(enabled);
   }
