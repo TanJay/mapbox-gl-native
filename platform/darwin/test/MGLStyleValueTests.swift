@@ -25,11 +25,25 @@ extension MGLStyleValueTests {
         let shapeSource = MGLShapeSource(identifier: "test", shape: nil, options: nil)
         let symbolStyleLayer = MGLSymbolStyleLayer(identifier: "test", source: shapeSource)
 
-        let value = MGLStyleValue<NSNumber>(interpolationBase: 1.0, stops: [1: MGLStyleValue(rawValue: 0),
-                                                                            2: MGLStyleValue(rawValue: 1),
-                                                                            3: MGLStyleValue(rawValue: 2),
-                                                                            4: MGLStyleValue(rawValue: 3)])
-        symbolStyleLayer.iconHaloBlur = value
-        XCTAssertEqual(symbolStyleLayer.iconHaloBlur!, value)
+        // deprecated function, stops with float values
+        let iconHaloBlurStyleValue = MGLStyleValue<NSNumber>(interpolationBase: 1.0, stops: [1: MGLStyleValue(rawValue: 0),
+                                                                                             2: MGLStyleValue(rawValue: 1),
+                                                                                             3: MGLStyleValue(rawValue: 2),
+                                                                                             4: MGLStyleValue(rawValue: 3)])
+        symbolStyleLayer.iconHaloBlur = iconHaloBlurStyleValue
+        XCTAssertEqual(symbolStyleLayer.iconHaloBlur!, iconHaloBlurStyleValue)
+
+        // deprecated function, stops with boolean values
+        let stops: [NSNumber: MGLStyleValue<NSNumber>] = [
+            1: MGLStyleValue(rawValue: true),
+            2: MGLStyleValue(rawValue: false),
+            3: MGLStyleValue(rawValue: true),
+            4: MGLStyleValue(rawValue: false),
+            ]
+        let iconAllowsOverlapStyleValue = MGLStyleValue<NSNumber>(interpolationBase: 1, stops: stops)
+        symbolStyleLayer.iconAllowsOverlap = iconAllowsOverlapStyleValue
+        // iconAllowsOverlap is boolean so mgl and mbgl conversions will coerce the developers stops into interval stops
+        let expectedIconAllowsOverlapStyleValue = MGLStyleValue.cameraFunctionValue(with: .interval, stops: stops, options: nil)
+        XCTAssertEqual(symbolStyleLayer.iconAllowsOverlap, expectedIconAllowsOverlapStyleValue)
     }
 }

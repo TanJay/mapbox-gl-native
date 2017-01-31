@@ -31,25 +31,25 @@
                       @"raster-brightness-max should be unset initially.");
         MGLStyleValue<NSNumber *> *defaultStyleValue = layer.maximumRasterBrightness;
 
-        MGLStyleValue<NSNumber *> *styleValue = [MGLStyleValue<NSNumber *> valueWithRawValue:@0xff];
-        layer.maximumRasterBrightness = styleValue;
+        MGLStyleValue<NSNumber *> *constantStyleValue = [MGLStyleValue<NSNumber *> valueWithRawValue:@0xff];
+        layer.maximumRasterBrightness = constantStyleValue;
         mbgl::style::PropertyValue<float> propertyValue = { 0xff };
         XCTAssertEqual(rawLayer->getRasterBrightnessMax(), propertyValue,
                        @"Setting maximumRasterBrightness to a constant value should update raster-brightness-max.");
-        XCTAssertEqualObjects(layer.maximumRasterBrightness, styleValue,
+        XCTAssertEqualObjects(layer.maximumRasterBrightness, constantStyleValue,
                               @"maximumRasterBrightness should round-trip constant values.");
 
-        styleValue = [MGLStyleValue<NSNumber *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
-                                                                                             stops:@{@18: styleValue}
-                                                                                           options:nil];        
-        layer.maximumRasterBrightness = styleValue;
+        MGLStyleValue<NSNumber *> * functionStyleValue = [MGLStyleValue<NSNumber *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                                              stops:@{@18: constantStyleValue}
+                                                                                                            options:nil];  
+        layer.maximumRasterBrightness = functionStyleValue;
 
         mbgl::style::IntervalStops<float> intervalStops = { {{18, 0xff}} };
         propertyValue = mbgl::style::CameraFunction<float> { intervalStops };
         
         XCTAssertEqual(rawLayer->getRasterBrightnessMax(), propertyValue,
                        @"Setting maximumRasterBrightness to a function should update raster-brightness-max.");
-        XCTAssertEqualObjects(layer.maximumRasterBrightness, styleValue,
+        XCTAssertEqualObjects(layer.maximumRasterBrightness, functionStyleValue,
                               @"maximumRasterBrightness should round-trip functions.");
 
         layer.maximumRasterBrightness = nil;
@@ -65,25 +65,25 @@
                       @"raster-brightness-min should be unset initially.");
         MGLStyleValue<NSNumber *> *defaultStyleValue = layer.minimumRasterBrightness;
 
-        MGLStyleValue<NSNumber *> *styleValue = [MGLStyleValue<NSNumber *> valueWithRawValue:@0xff];
-        layer.minimumRasterBrightness = styleValue;
+        MGLStyleValue<NSNumber *> *constantStyleValue = [MGLStyleValue<NSNumber *> valueWithRawValue:@0xff];
+        layer.minimumRasterBrightness = constantStyleValue;
         mbgl::style::PropertyValue<float> propertyValue = { 0xff };
         XCTAssertEqual(rawLayer->getRasterBrightnessMin(), propertyValue,
                        @"Setting minimumRasterBrightness to a constant value should update raster-brightness-min.");
-        XCTAssertEqualObjects(layer.minimumRasterBrightness, styleValue,
+        XCTAssertEqualObjects(layer.minimumRasterBrightness, constantStyleValue,
                               @"minimumRasterBrightness should round-trip constant values.");
 
-        styleValue = [MGLStyleValue<NSNumber *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
-                                                                                             stops:@{@18: styleValue}
-                                                                                           options:nil];        
-        layer.minimumRasterBrightness = styleValue;
+        MGLStyleValue<NSNumber *> * functionStyleValue = [MGLStyleValue<NSNumber *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                                              stops:@{@18: constantStyleValue}
+                                                                                                            options:nil];  
+        layer.minimumRasterBrightness = functionStyleValue;
 
         mbgl::style::IntervalStops<float> intervalStops = { {{18, 0xff}} };
         propertyValue = mbgl::style::CameraFunction<float> { intervalStops };
         
         XCTAssertEqual(rawLayer->getRasterBrightnessMin(), propertyValue,
                        @"Setting minimumRasterBrightness to a function should update raster-brightness-min.");
-        XCTAssertEqualObjects(layer.minimumRasterBrightness, styleValue,
+        XCTAssertEqualObjects(layer.minimumRasterBrightness, functionStyleValue,
                               @"minimumRasterBrightness should round-trip functions.");
 
         layer.minimumRasterBrightness = nil;
@@ -99,25 +99,25 @@
                       @"raster-contrast should be unset initially.");
         MGLStyleValue<NSNumber *> *defaultStyleValue = layer.rasterContrast;
 
-        MGLStyleValue<NSNumber *> *styleValue = [MGLStyleValue<NSNumber *> valueWithRawValue:@0xff];
-        layer.rasterContrast = styleValue;
+        MGLStyleValue<NSNumber *> *constantStyleValue = [MGLStyleValue<NSNumber *> valueWithRawValue:@0xff];
+        layer.rasterContrast = constantStyleValue;
         mbgl::style::PropertyValue<float> propertyValue = { 0xff };
         XCTAssertEqual(rawLayer->getRasterContrast(), propertyValue,
                        @"Setting rasterContrast to a constant value should update raster-contrast.");
-        XCTAssertEqualObjects(layer.rasterContrast, styleValue,
+        XCTAssertEqualObjects(layer.rasterContrast, constantStyleValue,
                               @"rasterContrast should round-trip constant values.");
 
-        styleValue = [MGLStyleValue<NSNumber *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
-                                                                                             stops:@{@18: styleValue}
-                                                                                           options:nil];        
-        layer.rasterContrast = styleValue;
+        MGLStyleValue<NSNumber *> * functionStyleValue = [MGLStyleValue<NSNumber *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                                              stops:@{@18: constantStyleValue}
+                                                                                                            options:nil];  
+        layer.rasterContrast = functionStyleValue;
 
         mbgl::style::IntervalStops<float> intervalStops = { {{18, 0xff}} };
         propertyValue = mbgl::style::CameraFunction<float> { intervalStops };
         
         XCTAssertEqual(rawLayer->getRasterContrast(), propertyValue,
                        @"Setting rasterContrast to a function should update raster-contrast.");
-        XCTAssertEqualObjects(layer.rasterContrast, styleValue,
+        XCTAssertEqualObjects(layer.rasterContrast, functionStyleValue,
                               @"rasterContrast should round-trip functions.");
 
         layer.rasterContrast = nil;
@@ -133,25 +133,25 @@
                       @"raster-fade-duration should be unset initially.");
         MGLStyleValue<NSNumber *> *defaultStyleValue = layer.rasterFadeDuration;
 
-        MGLStyleValue<NSNumber *> *styleValue = [MGLStyleValue<NSNumber *> valueWithRawValue:@0xff];
-        layer.rasterFadeDuration = styleValue;
+        MGLStyleValue<NSNumber *> *constantStyleValue = [MGLStyleValue<NSNumber *> valueWithRawValue:@0xff];
+        layer.rasterFadeDuration = constantStyleValue;
         mbgl::style::PropertyValue<float> propertyValue = { 0xff };
         XCTAssertEqual(rawLayer->getRasterFadeDuration(), propertyValue,
                        @"Setting rasterFadeDuration to a constant value should update raster-fade-duration.");
-        XCTAssertEqualObjects(layer.rasterFadeDuration, styleValue,
+        XCTAssertEqualObjects(layer.rasterFadeDuration, constantStyleValue,
                               @"rasterFadeDuration should round-trip constant values.");
 
-        styleValue = [MGLStyleValue<NSNumber *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
-                                                                                             stops:@{@18: styleValue}
-                                                                                           options:nil];        
-        layer.rasterFadeDuration = styleValue;
+        MGLStyleValue<NSNumber *> * functionStyleValue = [MGLStyleValue<NSNumber *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                                              stops:@{@18: constantStyleValue}
+                                                                                                            options:nil];  
+        layer.rasterFadeDuration = functionStyleValue;
 
         mbgl::style::IntervalStops<float> intervalStops = { {{18, 0xff}} };
         propertyValue = mbgl::style::CameraFunction<float> { intervalStops };
         
         XCTAssertEqual(rawLayer->getRasterFadeDuration(), propertyValue,
                        @"Setting rasterFadeDuration to a function should update raster-fade-duration.");
-        XCTAssertEqualObjects(layer.rasterFadeDuration, styleValue,
+        XCTAssertEqualObjects(layer.rasterFadeDuration, functionStyleValue,
                               @"rasterFadeDuration should round-trip functions.");
 
         layer.rasterFadeDuration = nil;
@@ -167,25 +167,25 @@
                       @"raster-hue-rotate should be unset initially.");
         MGLStyleValue<NSNumber *> *defaultStyleValue = layer.rasterHueRotation;
 
-        MGLStyleValue<NSNumber *> *styleValue = [MGLStyleValue<NSNumber *> valueWithRawValue:@0xff];
-        layer.rasterHueRotation = styleValue;
+        MGLStyleValue<NSNumber *> *constantStyleValue = [MGLStyleValue<NSNumber *> valueWithRawValue:@0xff];
+        layer.rasterHueRotation = constantStyleValue;
         mbgl::style::PropertyValue<float> propertyValue = { 0xff };
         XCTAssertEqual(rawLayer->getRasterHueRotate(), propertyValue,
                        @"Setting rasterHueRotation to a constant value should update raster-hue-rotate.");
-        XCTAssertEqualObjects(layer.rasterHueRotation, styleValue,
+        XCTAssertEqualObjects(layer.rasterHueRotation, constantStyleValue,
                               @"rasterHueRotation should round-trip constant values.");
 
-        styleValue = [MGLStyleValue<NSNumber *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
-                                                                                             stops:@{@18: styleValue}
-                                                                                           options:nil];        
-        layer.rasterHueRotation = styleValue;
+        MGLStyleValue<NSNumber *> * functionStyleValue = [MGLStyleValue<NSNumber *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                                              stops:@{@18: constantStyleValue}
+                                                                                                            options:nil];  
+        layer.rasterHueRotation = functionStyleValue;
 
         mbgl::style::IntervalStops<float> intervalStops = { {{18, 0xff}} };
         propertyValue = mbgl::style::CameraFunction<float> { intervalStops };
         
         XCTAssertEqual(rawLayer->getRasterHueRotate(), propertyValue,
                        @"Setting rasterHueRotation to a function should update raster-hue-rotate.");
-        XCTAssertEqualObjects(layer.rasterHueRotation, styleValue,
+        XCTAssertEqualObjects(layer.rasterHueRotation, functionStyleValue,
                               @"rasterHueRotation should round-trip functions.");
 
         layer.rasterHueRotation = nil;
@@ -201,25 +201,25 @@
                       @"raster-opacity should be unset initially.");
         MGLStyleValue<NSNumber *> *defaultStyleValue = layer.rasterOpacity;
 
-        MGLStyleValue<NSNumber *> *styleValue = [MGLStyleValue<NSNumber *> valueWithRawValue:@0xff];
-        layer.rasterOpacity = styleValue;
+        MGLStyleValue<NSNumber *> *constantStyleValue = [MGLStyleValue<NSNumber *> valueWithRawValue:@0xff];
+        layer.rasterOpacity = constantStyleValue;
         mbgl::style::PropertyValue<float> propertyValue = { 0xff };
         XCTAssertEqual(rawLayer->getRasterOpacity(), propertyValue,
                        @"Setting rasterOpacity to a constant value should update raster-opacity.");
-        XCTAssertEqualObjects(layer.rasterOpacity, styleValue,
+        XCTAssertEqualObjects(layer.rasterOpacity, constantStyleValue,
                               @"rasterOpacity should round-trip constant values.");
 
-        styleValue = [MGLStyleValue<NSNumber *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
-                                                                                             stops:@{@18: styleValue}
-                                                                                           options:nil];        
-        layer.rasterOpacity = styleValue;
+        MGLStyleValue<NSNumber *> * functionStyleValue = [MGLStyleValue<NSNumber *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                                              stops:@{@18: constantStyleValue}
+                                                                                                            options:nil];  
+        layer.rasterOpacity = functionStyleValue;
 
         mbgl::style::IntervalStops<float> intervalStops = { {{18, 0xff}} };
         propertyValue = mbgl::style::CameraFunction<float> { intervalStops };
         
         XCTAssertEqual(rawLayer->getRasterOpacity(), propertyValue,
                        @"Setting rasterOpacity to a function should update raster-opacity.");
-        XCTAssertEqualObjects(layer.rasterOpacity, styleValue,
+        XCTAssertEqualObjects(layer.rasterOpacity, functionStyleValue,
                               @"rasterOpacity should round-trip functions.");
 
         layer.rasterOpacity = nil;
@@ -235,25 +235,25 @@
                       @"raster-saturation should be unset initially.");
         MGLStyleValue<NSNumber *> *defaultStyleValue = layer.rasterSaturation;
 
-        MGLStyleValue<NSNumber *> *styleValue = [MGLStyleValue<NSNumber *> valueWithRawValue:@0xff];
-        layer.rasterSaturation = styleValue;
+        MGLStyleValue<NSNumber *> *constantStyleValue = [MGLStyleValue<NSNumber *> valueWithRawValue:@0xff];
+        layer.rasterSaturation = constantStyleValue;
         mbgl::style::PropertyValue<float> propertyValue = { 0xff };
         XCTAssertEqual(rawLayer->getRasterSaturation(), propertyValue,
                        @"Setting rasterSaturation to a constant value should update raster-saturation.");
-        XCTAssertEqualObjects(layer.rasterSaturation, styleValue,
+        XCTAssertEqualObjects(layer.rasterSaturation, constantStyleValue,
                               @"rasterSaturation should round-trip constant values.");
 
-        styleValue = [MGLStyleValue<NSNumber *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
-                                                                                             stops:@{@18: styleValue}
-                                                                                           options:nil];        
-        layer.rasterSaturation = styleValue;
+        MGLStyleValue<NSNumber *> * functionStyleValue = [MGLStyleValue<NSNumber *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                                              stops:@{@18: constantStyleValue}
+                                                                                                            options:nil];  
+        layer.rasterSaturation = functionStyleValue;
 
         mbgl::style::IntervalStops<float> intervalStops = { {{18, 0xff}} };
         propertyValue = mbgl::style::CameraFunction<float> { intervalStops };
         
         XCTAssertEqual(rawLayer->getRasterSaturation(), propertyValue,
                        @"Setting rasterSaturation to a function should update raster-saturation.");
-        XCTAssertEqualObjects(layer.rasterSaturation, styleValue,
+        XCTAssertEqualObjects(layer.rasterSaturation, functionStyleValue,
                               @"rasterSaturation should round-trip functions.");
 
         layer.rasterSaturation = nil;

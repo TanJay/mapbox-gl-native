@@ -28,25 +28,25 @@
                       @"background-color should be unset initially.");
         MGLStyleValue<MGLColor *> *defaultStyleValue = layer.backgroundColor;
 
-        MGLStyleValue<MGLColor *> *styleValue = [MGLStyleValue<MGLColor *> valueWithRawValue:[MGLColor redColor]];
-        layer.backgroundColor = styleValue;
+        MGLStyleValue<MGLColor *> *constantStyleValue = [MGLStyleValue<MGLColor *> valueWithRawValue:[MGLColor redColor]];
+        layer.backgroundColor = constantStyleValue;
         mbgl::style::PropertyValue<mbgl::Color> propertyValue = { { 1, 0, 0, 1 } };
         XCTAssertEqual(rawLayer->getBackgroundColor(), propertyValue,
                        @"Setting backgroundColor to a constant value should update background-color.");
-        XCTAssertEqualObjects(layer.backgroundColor, styleValue,
+        XCTAssertEqualObjects(layer.backgroundColor, constantStyleValue,
                               @"backgroundColor should round-trip constant values.");
 
-        styleValue = [MGLStyleValue<MGLColor *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
-                                                                                             stops:@{@18: styleValue}
-                                                                                           options:nil];        
-        layer.backgroundColor = styleValue;
+        MGLStyleValue<MGLColor *> * functionStyleValue = [MGLStyleValue<MGLColor *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                                              stops:@{@18: constantStyleValue}
+                                                                                                            options:nil];  
+        layer.backgroundColor = functionStyleValue;
 
         mbgl::style::IntervalStops<mbgl::Color> intervalStops = { {{18, { 1, 0, 0, 1 }}} };
         propertyValue = mbgl::style::CameraFunction<mbgl::Color> { intervalStops };
         
         XCTAssertEqual(rawLayer->getBackgroundColor(), propertyValue,
                        @"Setting backgroundColor to a function should update background-color.");
-        XCTAssertEqualObjects(layer.backgroundColor, styleValue,
+        XCTAssertEqualObjects(layer.backgroundColor, functionStyleValue,
                               @"backgroundColor should round-trip functions.");
 
         layer.backgroundColor = nil;
@@ -62,25 +62,25 @@
                       @"background-opacity should be unset initially.");
         MGLStyleValue<NSNumber *> *defaultStyleValue = layer.backgroundOpacity;
 
-        MGLStyleValue<NSNumber *> *styleValue = [MGLStyleValue<NSNumber *> valueWithRawValue:@0xff];
-        layer.backgroundOpacity = styleValue;
+        MGLStyleValue<NSNumber *> *constantStyleValue = [MGLStyleValue<NSNumber *> valueWithRawValue:@0xff];
+        layer.backgroundOpacity = constantStyleValue;
         mbgl::style::PropertyValue<float> propertyValue = { 0xff };
         XCTAssertEqual(rawLayer->getBackgroundOpacity(), propertyValue,
                        @"Setting backgroundOpacity to a constant value should update background-opacity.");
-        XCTAssertEqualObjects(layer.backgroundOpacity, styleValue,
+        XCTAssertEqualObjects(layer.backgroundOpacity, constantStyleValue,
                               @"backgroundOpacity should round-trip constant values.");
 
-        styleValue = [MGLStyleValue<NSNumber *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
-                                                                                             stops:@{@18: styleValue}
-                                                                                           options:nil];        
-        layer.backgroundOpacity = styleValue;
+        MGLStyleValue<NSNumber *> * functionStyleValue = [MGLStyleValue<NSNumber *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                                              stops:@{@18: constantStyleValue}
+                                                                                                            options:nil];  
+        layer.backgroundOpacity = functionStyleValue;
 
         mbgl::style::IntervalStops<float> intervalStops = { {{18, 0xff}} };
         propertyValue = mbgl::style::CameraFunction<float> { intervalStops };
         
         XCTAssertEqual(rawLayer->getBackgroundOpacity(), propertyValue,
                        @"Setting backgroundOpacity to a function should update background-opacity.");
-        XCTAssertEqualObjects(layer.backgroundOpacity, styleValue,
+        XCTAssertEqualObjects(layer.backgroundOpacity, functionStyleValue,
                               @"backgroundOpacity should round-trip functions.");
 
         layer.backgroundOpacity = nil;
@@ -96,25 +96,25 @@
                       @"background-pattern should be unset initially.");
         MGLStyleValue<NSString *> *defaultStyleValue = layer.backgroundPattern;
 
-        MGLStyleValue<NSString *> *styleValue = [MGLStyleValue<NSString *> valueWithRawValue:@"Background Pattern"];
-        layer.backgroundPattern = styleValue;
+        MGLStyleValue<NSString *> *constantStyleValue = [MGLStyleValue<NSString *> valueWithRawValue:@"Background Pattern"];
+        layer.backgroundPattern = constantStyleValue;
         mbgl::style::PropertyValue<std::string> propertyValue = { "Background Pattern" };
         XCTAssertEqual(rawLayer->getBackgroundPattern(), propertyValue,
                        @"Setting backgroundPattern to a constant value should update background-pattern.");
-        XCTAssertEqualObjects(layer.backgroundPattern, styleValue,
+        XCTAssertEqualObjects(layer.backgroundPattern, constantStyleValue,
                               @"backgroundPattern should round-trip constant values.");
 
-        styleValue = [MGLStyleValue<NSString *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
-                                                                                             stops:@{@18: styleValue}
-                                                                                           options:nil];        
-        layer.backgroundPattern = styleValue;
+        MGLStyleValue<NSString *> * functionStyleValue = [MGLStyleValue<NSString *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                                              stops:@{@18: constantStyleValue}
+                                                                                                            options:nil];  
+        layer.backgroundPattern = functionStyleValue;
 
         mbgl::style::IntervalStops<std::string> intervalStops = { {{18, "Background Pattern"}} };
         propertyValue = mbgl::style::CameraFunction<std::string> { intervalStops };
         
         XCTAssertEqual(rawLayer->getBackgroundPattern(), propertyValue,
                        @"Setting backgroundPattern to a function should update background-pattern.");
-        XCTAssertEqualObjects(layer.backgroundPattern, styleValue,
+        XCTAssertEqualObjects(layer.backgroundPattern, functionStyleValue,
                               @"backgroundPattern should round-trip functions.");
 
         layer.backgroundPattern = nil;
@@ -122,6 +122,18 @@
                       @"Unsetting backgroundPattern should return background-pattern to the default value.");
         XCTAssertEqualObjects(layer.backgroundPattern, defaultStyleValue,
                               @"backgroundPattern should return the default value after being unset.");
+
+        functionStyleValue = [MGLStyleValue<NSString *> sourceFunctionValueWithStopType:MGLStyleFunctionStopTypeIdentity
+                                                                                                     stops:nil
+                                                                                             attributeName:@""
+                                                                                                   options:nil];
+        XCTAssertThrowsSpecificNamed(layer.backgroundPattern = functionStyleValue, NSException, NSInvalidArgumentException, @"MGLStyleValue should raise an exception if it is applied to a property that cannot support it");
+
+        functionStyleValue = [MGLStyleValue<NSString *> compositeFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                                        stops:@{@18: constantStyleValue}
+                                                                                                attributeName:@""
+                                                                                                      options:nil];
+        XCTAssertThrowsSpecificNamed(layer.backgroundPattern = functionStyleValue, NSException, NSInvalidArgumentException, @"MGLStyleValue should raise an exception if it is applied to a property that cannot support it");        
     }
 }
 

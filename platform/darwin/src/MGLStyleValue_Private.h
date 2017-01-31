@@ -45,20 +45,21 @@ public:
 
     // Convert an mgl style value into a non interpolatable (camera with interval stops) mbgl property value
     mbgl::style::PropertyValue<MBGLType> toPropertyValue(MGLStyleValue<ObjCType> *value) {
+        if ([value isKindOfClass:[MGLSourceStyleFunction class]] || [value isKindOfClass:[MGLCompositeStyleFunction class]]) {
+            [NSException raise:NSInvalidArgumentException
+                        format:@"This property can only be set to camera functions. Use +[MGLStyleValue cameraFunctionValueWithStopType:stops:options:] instead."];
+            return {};
+        }
+
         if ([value isKindOfClass:[MGLStyleConstantValue class]]) {
             return toMBGLConstantValue((MGLStyleConstantValue<ObjCType> *)value);
         } else if ([value isKindOfClass:[MGLCameraStyleFunction class]]) {
             MGLCameraStyleFunction<ObjCType> *cameraStyleFunction = (MGLCameraStyleFunction<ObjCType> *)value;
-            switch (cameraStyleFunction.stopType) {
-                case MGLStyleFunctionStopTypeInterval:
-                    return toMBGLIntervalCameraFunction(cameraStyleFunction);
-                    break;
-                default:
-                    [NSException raise:NSInvalidArgumentException
-                                format:@"Camera functions can only support interval stops for float, boolean, and enumeration values."];
-                    break;
-            }
-            return {};
+            // Intentionally ignore the stop type set by the developer becuase non interpolatable property values
+            // can only have interval stops. This also allows for backwards compatiblity when the developer uses
+            // a deprecated MGLStyleValue method (that used to create an MGLStyleFunction) to create a function
+            // for properties that are piecewise-constant (i.e. enum, bool, string)
+            return toMBGLIntervalCameraFunction(cameraStyleFunction);
         } else if (value) {
             [NSException raise:@"MGLAbstractClassException" format:
              @"The style value %@ cannot be applied to the style. "
@@ -72,6 +73,12 @@ public:
 
     // Convert an mgl style value into a non interpolatable (camera with exponential or interval stops) mbgl property value
     mbgl::style::PropertyValue<MBGLType> toInterpolatablePropertyValue(MGLStyleValue<ObjCType> *value) {
+        if ([value isKindOfClass:[MGLSourceStyleFunction class]] || [value isKindOfClass:[MGLCompositeStyleFunction class]]) {
+            [NSException raise:NSInvalidArgumentException
+                        format:@"This property can only be set to camera functions. Use +[MGLStyleValue cameraFunctionValueWithStopType:stops:options:] instead."];
+            return {};
+        }
+
         if ([value isKindOfClass:[MGLStyleConstantValue class]]) {
             return toMBGLConstantValue((MGLStyleConstantValue<ObjCType> *)value);
         } else if ([value isKindOfClass:[MGLCameraStyleFunction class]]) {
@@ -243,6 +250,12 @@ public:
               typename MGLEnum = ObjCEnum,
               class = typename std::enable_if<std::is_enum<MGLEnum>::value>::type>
     mbgl::style::PropertyValue<MBGLEnum> toEnumPropertyValue(MGLStyleValue<ObjCType> *value) {
+        if ([value isKindOfClass:[MGLSourceStyleFunction class]] || [value isKindOfClass:[MGLCompositeStyleFunction class]]) {
+            [NSException raise:NSInvalidArgumentException
+                        format:@"This property can only be set to camera functions. Use +[MGLStyleValue cameraFunctionValueWithStopType:stops:options:] instead."];
+            return {};
+        }
+
         if ([value isKindOfClass:[MGLStyleConstantValue class]]) {
             MBGLEnum mbglValue;
             getMBGLValue([(MGLStyleConstantValue<ObjCType> *)value rawValue], mbglValue);

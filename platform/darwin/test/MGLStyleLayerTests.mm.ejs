@@ -61,8 +61,8 @@
                       @"<%- originalPropertyName(property) %> should be unset initially.");
         MGLStyleValue<<%- propertyType(property) %>> *defaultStyleValue = layer.<%- objCName(property) %>;
 
-        MGLStyleValue<<%- propertyType(property) %>> *styleValue = [MGLStyleValue<<%- propertyType(property) %>> valueWithRawValue:<%- objCTestValue(property, type, 3) %>];
-        layer.<%- objCName(property) %> = styleValue;
+        MGLStyleValue<<%- propertyType(property) %>> *constantStyleValue = [MGLStyleValue<<%- propertyType(property) %>> valueWithRawValue:<%- objCTestValue(property, type, 3) %>];
+        layer.<%- objCName(property) %> = constantStyleValue;
 <% if (property["property-function"] == true) { -%>
         mbgl::style::DataDrivenPropertyValue<<%- mbglType(property) %>> propertyValue = { <%- mbglTestValue(property, type) %> };
 <% } else { -%>
@@ -70,20 +70,20 @@
 <% } -%>
         XCTAssertEqual(rawLayer->get<%- camelize(originalPropertyName(property)) %>(), propertyValue,
                        @"Setting <%- objCName(property) %> to a constant value should update <%- originalPropertyName(property) %>.");
-        XCTAssertEqualObjects(layer.<%- objCName(property) %>, styleValue,
+        XCTAssertEqualObjects(layer.<%- objCName(property) %>, constantStyleValue,
                               @"<%- objCName(property) %> should round-trip constant values.");
 
-        styleValue = [MGLStyleValue<<%- propertyType(property) %>> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
-                                                                                             stops:@{@18: styleValue}
-                                                                                           options:nil];        
-        layer.<%- objCName(property) %> = styleValue;
+        MGLStyleValue<<%- propertyType(property) %>> * functionStyleValue = [MGLStyleValue<<%- propertyType(property) %>> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                                              stops:@{@18: constantStyleValue}
+                                                                                                            options:nil];  
+        layer.<%- objCName(property) %> = functionStyleValue;
 
         mbgl::style::IntervalStops<<%- mbglType(property) %>> intervalStops = { {{18, <%- mbglTestValue(property, type) %>}} };
         propertyValue = mbgl::style::CameraFunction<<%- mbglType(property) %>> { intervalStops };
         
         XCTAssertEqual(rawLayer->get<%- camelize(originalPropertyName(property)) %>(), propertyValue,
                        @"Setting <%- objCName(property) %> to a function should update <%- originalPropertyName(property) %>.");
-        XCTAssertEqualObjects(layer.<%- objCName(property) %>, styleValue,
+        XCTAssertEqualObjects(layer.<%- objCName(property) %>, functionStyleValue,
                               @"<%- objCName(property) %> should round-trip functions.");
 <% if (!property.required) { -%>
 
@@ -92,6 +92,20 @@
                       @"Unsetting <%- objCName(property) %> should return <%- originalPropertyName(property) %> to the default value.");
         XCTAssertEqualObjects(layer.<%- objCName(property) %>, defaultStyleValue,
                               @"<%- objCName(property) %> should return the default value after being unset.");
+<% } -%>
+<% if (property["function"] == "piecewise-constant") { -%>
+
+        functionStyleValue = [MGLStyleValue<<%- propertyType(property) %>> sourceFunctionValueWithStopType:MGLStyleFunctionStopTypeIdentity
+                                                                                                     stops:nil
+                                                                                             attributeName:@""
+                                                                                                   options:nil];
+        XCTAssertThrowsSpecificNamed(layer.<%- objCName(property) %> = functionStyleValue, NSException, NSInvalidArgumentException, @"MGLStyleValue should raise an exception if it is applied to a property that cannot support it");
+
+        functionStyleValue = [MGLStyleValue<<%- propertyType(property) %>> compositeFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                                        stops:@{@18: constantStyleValue}
+                                                                                                attributeName:@""
+                                                                                                      options:nil];
+        XCTAssertThrowsSpecificNamed(layer.<%- objCName(property) %> = functionStyleValue, NSException, NSInvalidArgumentException, @"MGLStyleValue should raise an exception if it is applied to a property that cannot support it");        
 <% } -%>
     }
 <% } -%>

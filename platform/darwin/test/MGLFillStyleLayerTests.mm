@@ -49,25 +49,25 @@
                       @"fill-antialias should be unset initially.");
         MGLStyleValue<NSNumber *> *defaultStyleValue = layer.fillAntialiased;
 
-        MGLStyleValue<NSNumber *> *styleValue = [MGLStyleValue<NSNumber *> valueWithRawValue:@NO];
-        layer.fillAntialiased = styleValue;
+        MGLStyleValue<NSNumber *> *constantStyleValue = [MGLStyleValue<NSNumber *> valueWithRawValue:@NO];
+        layer.fillAntialiased = constantStyleValue;
         mbgl::style::PropertyValue<bool> propertyValue = { false };
         XCTAssertEqual(rawLayer->getFillAntialias(), propertyValue,
                        @"Setting fillAntialiased to a constant value should update fill-antialias.");
-        XCTAssertEqualObjects(layer.fillAntialiased, styleValue,
+        XCTAssertEqualObjects(layer.fillAntialiased, constantStyleValue,
                               @"fillAntialiased should round-trip constant values.");
 
-        styleValue = [MGLStyleValue<NSNumber *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
-                                                                                             stops:@{@18: styleValue}
-                                                                                           options:nil];        
-        layer.fillAntialiased = styleValue;
+        MGLStyleValue<NSNumber *> * functionStyleValue = [MGLStyleValue<NSNumber *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                                              stops:@{@18: constantStyleValue}
+                                                                                                            options:nil];  
+        layer.fillAntialiased = functionStyleValue;
 
         mbgl::style::IntervalStops<bool> intervalStops = { {{18, false}} };
         propertyValue = mbgl::style::CameraFunction<bool> { intervalStops };
         
         XCTAssertEqual(rawLayer->getFillAntialias(), propertyValue,
                        @"Setting fillAntialiased to a function should update fill-antialias.");
-        XCTAssertEqualObjects(layer.fillAntialiased, styleValue,
+        XCTAssertEqualObjects(layer.fillAntialiased, functionStyleValue,
                               @"fillAntialiased should round-trip functions.");
 
         layer.fillAntialiased = nil;
@@ -75,6 +75,18 @@
                       @"Unsetting fillAntialiased should return fill-antialias to the default value.");
         XCTAssertEqualObjects(layer.fillAntialiased, defaultStyleValue,
                               @"fillAntialiased should return the default value after being unset.");
+
+        functionStyleValue = [MGLStyleValue<NSNumber *> sourceFunctionValueWithStopType:MGLStyleFunctionStopTypeIdentity
+                                                                                                     stops:nil
+                                                                                             attributeName:@""
+                                                                                                   options:nil];
+        XCTAssertThrowsSpecificNamed(layer.fillAntialiased = functionStyleValue, NSException, NSInvalidArgumentException, @"MGLStyleValue should raise an exception if it is applied to a property that cannot support it");
+
+        functionStyleValue = [MGLStyleValue<NSNumber *> compositeFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                                        stops:@{@18: constantStyleValue}
+                                                                                                attributeName:@""
+                                                                                                      options:nil];
+        XCTAssertThrowsSpecificNamed(layer.fillAntialiased = functionStyleValue, NSException, NSInvalidArgumentException, @"MGLStyleValue should raise an exception if it is applied to a property that cannot support it");        
     }
 
     // fill-color
@@ -83,25 +95,25 @@
                       @"fill-color should be unset initially.");
         MGLStyleValue<MGLColor *> *defaultStyleValue = layer.fillColor;
 
-        MGLStyleValue<MGLColor *> *styleValue = [MGLStyleValue<MGLColor *> valueWithRawValue:[MGLColor redColor]];
-        layer.fillColor = styleValue;
+        MGLStyleValue<MGLColor *> *constantStyleValue = [MGLStyleValue<MGLColor *> valueWithRawValue:[MGLColor redColor]];
+        layer.fillColor = constantStyleValue;
         mbgl::style::DataDrivenPropertyValue<mbgl::Color> propertyValue = { { 1, 0, 0, 1 } };
         XCTAssertEqual(rawLayer->getFillColor(), propertyValue,
                        @"Setting fillColor to a constant value should update fill-color.");
-        XCTAssertEqualObjects(layer.fillColor, styleValue,
+        XCTAssertEqualObjects(layer.fillColor, constantStyleValue,
                               @"fillColor should round-trip constant values.");
 
-        styleValue = [MGLStyleValue<MGLColor *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
-                                                                                             stops:@{@18: styleValue}
-                                                                                           options:nil];        
-        layer.fillColor = styleValue;
+        MGLStyleValue<MGLColor *> * functionStyleValue = [MGLStyleValue<MGLColor *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                                              stops:@{@18: constantStyleValue}
+                                                                                                            options:nil];  
+        layer.fillColor = functionStyleValue;
 
         mbgl::style::IntervalStops<mbgl::Color> intervalStops = { {{18, { 1, 0, 0, 1 }}} };
         propertyValue = mbgl::style::CameraFunction<mbgl::Color> { intervalStops };
         
         XCTAssertEqual(rawLayer->getFillColor(), propertyValue,
                        @"Setting fillColor to a function should update fill-color.");
-        XCTAssertEqualObjects(layer.fillColor, styleValue,
+        XCTAssertEqualObjects(layer.fillColor, functionStyleValue,
                               @"fillColor should round-trip functions.");
 
         layer.fillColor = nil;
@@ -117,25 +129,25 @@
                       @"fill-opacity should be unset initially.");
         MGLStyleValue<NSNumber *> *defaultStyleValue = layer.fillOpacity;
 
-        MGLStyleValue<NSNumber *> *styleValue = [MGLStyleValue<NSNumber *> valueWithRawValue:@0xff];
-        layer.fillOpacity = styleValue;
+        MGLStyleValue<NSNumber *> *constantStyleValue = [MGLStyleValue<NSNumber *> valueWithRawValue:@0xff];
+        layer.fillOpacity = constantStyleValue;
         mbgl::style::DataDrivenPropertyValue<float> propertyValue = { 0xff };
         XCTAssertEqual(rawLayer->getFillOpacity(), propertyValue,
                        @"Setting fillOpacity to a constant value should update fill-opacity.");
-        XCTAssertEqualObjects(layer.fillOpacity, styleValue,
+        XCTAssertEqualObjects(layer.fillOpacity, constantStyleValue,
                               @"fillOpacity should round-trip constant values.");
 
-        styleValue = [MGLStyleValue<NSNumber *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
-                                                                                             stops:@{@18: styleValue}
-                                                                                           options:nil];        
-        layer.fillOpacity = styleValue;
+        MGLStyleValue<NSNumber *> * functionStyleValue = [MGLStyleValue<NSNumber *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                                              stops:@{@18: constantStyleValue}
+                                                                                                            options:nil];  
+        layer.fillOpacity = functionStyleValue;
 
         mbgl::style::IntervalStops<float> intervalStops = { {{18, 0xff}} };
         propertyValue = mbgl::style::CameraFunction<float> { intervalStops };
         
         XCTAssertEqual(rawLayer->getFillOpacity(), propertyValue,
                        @"Setting fillOpacity to a function should update fill-opacity.");
-        XCTAssertEqualObjects(layer.fillOpacity, styleValue,
+        XCTAssertEqualObjects(layer.fillOpacity, functionStyleValue,
                               @"fillOpacity should round-trip functions.");
 
         layer.fillOpacity = nil;
@@ -151,25 +163,25 @@
                       @"fill-outline-color should be unset initially.");
         MGLStyleValue<MGLColor *> *defaultStyleValue = layer.fillOutlineColor;
 
-        MGLStyleValue<MGLColor *> *styleValue = [MGLStyleValue<MGLColor *> valueWithRawValue:[MGLColor redColor]];
-        layer.fillOutlineColor = styleValue;
+        MGLStyleValue<MGLColor *> *constantStyleValue = [MGLStyleValue<MGLColor *> valueWithRawValue:[MGLColor redColor]];
+        layer.fillOutlineColor = constantStyleValue;
         mbgl::style::DataDrivenPropertyValue<mbgl::Color> propertyValue = { { 1, 0, 0, 1 } };
         XCTAssertEqual(rawLayer->getFillOutlineColor(), propertyValue,
                        @"Setting fillOutlineColor to a constant value should update fill-outline-color.");
-        XCTAssertEqualObjects(layer.fillOutlineColor, styleValue,
+        XCTAssertEqualObjects(layer.fillOutlineColor, constantStyleValue,
                               @"fillOutlineColor should round-trip constant values.");
 
-        styleValue = [MGLStyleValue<MGLColor *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
-                                                                                             stops:@{@18: styleValue}
-                                                                                           options:nil];        
-        layer.fillOutlineColor = styleValue;
+        MGLStyleValue<MGLColor *> * functionStyleValue = [MGLStyleValue<MGLColor *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                                              stops:@{@18: constantStyleValue}
+                                                                                                            options:nil];  
+        layer.fillOutlineColor = functionStyleValue;
 
         mbgl::style::IntervalStops<mbgl::Color> intervalStops = { {{18, { 1, 0, 0, 1 }}} };
         propertyValue = mbgl::style::CameraFunction<mbgl::Color> { intervalStops };
         
         XCTAssertEqual(rawLayer->getFillOutlineColor(), propertyValue,
                        @"Setting fillOutlineColor to a function should update fill-outline-color.");
-        XCTAssertEqualObjects(layer.fillOutlineColor, styleValue,
+        XCTAssertEqualObjects(layer.fillOutlineColor, functionStyleValue,
                               @"fillOutlineColor should round-trip functions.");
 
         layer.fillOutlineColor = nil;
@@ -185,25 +197,25 @@
                       @"fill-pattern should be unset initially.");
         MGLStyleValue<NSString *> *defaultStyleValue = layer.fillPattern;
 
-        MGLStyleValue<NSString *> *styleValue = [MGLStyleValue<NSString *> valueWithRawValue:@"Fill Pattern"];
-        layer.fillPattern = styleValue;
+        MGLStyleValue<NSString *> *constantStyleValue = [MGLStyleValue<NSString *> valueWithRawValue:@"Fill Pattern"];
+        layer.fillPattern = constantStyleValue;
         mbgl::style::PropertyValue<std::string> propertyValue = { "Fill Pattern" };
         XCTAssertEqual(rawLayer->getFillPattern(), propertyValue,
                        @"Setting fillPattern to a constant value should update fill-pattern.");
-        XCTAssertEqualObjects(layer.fillPattern, styleValue,
+        XCTAssertEqualObjects(layer.fillPattern, constantStyleValue,
                               @"fillPattern should round-trip constant values.");
 
-        styleValue = [MGLStyleValue<NSString *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
-                                                                                             stops:@{@18: styleValue}
-                                                                                           options:nil];        
-        layer.fillPattern = styleValue;
+        MGLStyleValue<NSString *> * functionStyleValue = [MGLStyleValue<NSString *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                                              stops:@{@18: constantStyleValue}
+                                                                                                            options:nil];  
+        layer.fillPattern = functionStyleValue;
 
         mbgl::style::IntervalStops<std::string> intervalStops = { {{18, "Fill Pattern"}} };
         propertyValue = mbgl::style::CameraFunction<std::string> { intervalStops };
         
         XCTAssertEqual(rawLayer->getFillPattern(), propertyValue,
                        @"Setting fillPattern to a function should update fill-pattern.");
-        XCTAssertEqualObjects(layer.fillPattern, styleValue,
+        XCTAssertEqualObjects(layer.fillPattern, functionStyleValue,
                               @"fillPattern should round-trip functions.");
 
         layer.fillPattern = nil;
@@ -211,6 +223,18 @@
                       @"Unsetting fillPattern should return fill-pattern to the default value.");
         XCTAssertEqualObjects(layer.fillPattern, defaultStyleValue,
                               @"fillPattern should return the default value after being unset.");
+
+        functionStyleValue = [MGLStyleValue<NSString *> sourceFunctionValueWithStopType:MGLStyleFunctionStopTypeIdentity
+                                                                                                     stops:nil
+                                                                                             attributeName:@""
+                                                                                                   options:nil];
+        XCTAssertThrowsSpecificNamed(layer.fillPattern = functionStyleValue, NSException, NSInvalidArgumentException, @"MGLStyleValue should raise an exception if it is applied to a property that cannot support it");
+
+        functionStyleValue = [MGLStyleValue<NSString *> compositeFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                                        stops:@{@18: constantStyleValue}
+                                                                                                attributeName:@""
+                                                                                                      options:nil];
+        XCTAssertThrowsSpecificNamed(layer.fillPattern = functionStyleValue, NSException, NSInvalidArgumentException, @"MGLStyleValue should raise an exception if it is applied to a property that cannot support it");        
     }
 
     // fill-translate
@@ -219,31 +243,31 @@
                       @"fill-translate should be unset initially.");
         MGLStyleValue<NSValue *> *defaultStyleValue = layer.fillTranslation;
 
-        MGLStyleValue<NSValue *> *styleValue = [MGLStyleValue<NSValue *> valueWithRawValue:
+        MGLStyleValue<NSValue *> *constantStyleValue = [MGLStyleValue<NSValue *> valueWithRawValue:
 #if TARGET_OS_IPHONE
             [NSValue valueWithCGVector:CGVectorMake(1, 1)]
 #else
             [NSValue valueWithMGLVector:CGVectorMake(1, -1)]
 #endif
         ];
-        layer.fillTranslation = styleValue;
+        layer.fillTranslation = constantStyleValue;
         mbgl::style::PropertyValue<std::array<float, 2>> propertyValue = { { 1, 1 } };
         XCTAssertEqual(rawLayer->getFillTranslate(), propertyValue,
                        @"Setting fillTranslation to a constant value should update fill-translate.");
-        XCTAssertEqualObjects(layer.fillTranslation, styleValue,
+        XCTAssertEqualObjects(layer.fillTranslation, constantStyleValue,
                               @"fillTranslation should round-trip constant values.");
 
-        styleValue = [MGLStyleValue<NSValue *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
-                                                                                             stops:@{@18: styleValue}
-                                                                                           options:nil];        
-        layer.fillTranslation = styleValue;
+        MGLStyleValue<NSValue *> * functionStyleValue = [MGLStyleValue<NSValue *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                                              stops:@{@18: constantStyleValue}
+                                                                                                            options:nil];  
+        layer.fillTranslation = functionStyleValue;
 
         mbgl::style::IntervalStops<std::array<float, 2>> intervalStops = { {{18, { 1, 1 }}} };
         propertyValue = mbgl::style::CameraFunction<std::array<float, 2>> { intervalStops };
         
         XCTAssertEqual(rawLayer->getFillTranslate(), propertyValue,
                        @"Setting fillTranslation to a function should update fill-translate.");
-        XCTAssertEqualObjects(layer.fillTranslation, styleValue,
+        XCTAssertEqualObjects(layer.fillTranslation, functionStyleValue,
                               @"fillTranslation should round-trip functions.");
 
         layer.fillTranslation = nil;
@@ -259,25 +283,25 @@
                       @"fill-translate-anchor should be unset initially.");
         MGLStyleValue<NSValue *> *defaultStyleValue = layer.fillTranslationAnchor;
 
-        MGLStyleValue<NSValue *> *styleValue = [MGLStyleValue<NSValue *> valueWithRawValue:[NSValue valueWithMGLFillTranslationAnchor:MGLFillTranslationAnchorViewport]];
-        layer.fillTranslationAnchor = styleValue;
+        MGLStyleValue<NSValue *> *constantStyleValue = [MGLStyleValue<NSValue *> valueWithRawValue:[NSValue valueWithMGLFillTranslationAnchor:MGLFillTranslationAnchorViewport]];
+        layer.fillTranslationAnchor = constantStyleValue;
         mbgl::style::PropertyValue<mbgl::style::TranslateAnchorType> propertyValue = { mbgl::style::TranslateAnchorType::Viewport };
         XCTAssertEqual(rawLayer->getFillTranslateAnchor(), propertyValue,
                        @"Setting fillTranslationAnchor to a constant value should update fill-translate-anchor.");
-        XCTAssertEqualObjects(layer.fillTranslationAnchor, styleValue,
+        XCTAssertEqualObjects(layer.fillTranslationAnchor, constantStyleValue,
                               @"fillTranslationAnchor should round-trip constant values.");
 
-        styleValue = [MGLStyleValue<NSValue *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
-                                                                                             stops:@{@18: styleValue}
-                                                                                           options:nil];        
-        layer.fillTranslationAnchor = styleValue;
+        MGLStyleValue<NSValue *> * functionStyleValue = [MGLStyleValue<NSValue *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                                              stops:@{@18: constantStyleValue}
+                                                                                                            options:nil];  
+        layer.fillTranslationAnchor = functionStyleValue;
 
         mbgl::style::IntervalStops<mbgl::style::TranslateAnchorType> intervalStops = { {{18, mbgl::style::TranslateAnchorType::Viewport}} };
         propertyValue = mbgl::style::CameraFunction<mbgl::style::TranslateAnchorType> { intervalStops };
         
         XCTAssertEqual(rawLayer->getFillTranslateAnchor(), propertyValue,
                        @"Setting fillTranslationAnchor to a function should update fill-translate-anchor.");
-        XCTAssertEqualObjects(layer.fillTranslationAnchor, styleValue,
+        XCTAssertEqualObjects(layer.fillTranslationAnchor, functionStyleValue,
                               @"fillTranslationAnchor should round-trip functions.");
 
         layer.fillTranslationAnchor = nil;
@@ -285,6 +309,18 @@
                       @"Unsetting fillTranslationAnchor should return fill-translate-anchor to the default value.");
         XCTAssertEqualObjects(layer.fillTranslationAnchor, defaultStyleValue,
                               @"fillTranslationAnchor should return the default value after being unset.");
+
+        functionStyleValue = [MGLStyleValue<NSValue *> sourceFunctionValueWithStopType:MGLStyleFunctionStopTypeIdentity
+                                                                                                     stops:nil
+                                                                                             attributeName:@""
+                                                                                                   options:nil];
+        XCTAssertThrowsSpecificNamed(layer.fillTranslationAnchor = functionStyleValue, NSException, NSInvalidArgumentException, @"MGLStyleValue should raise an exception if it is applied to a property that cannot support it");
+
+        functionStyleValue = [MGLStyleValue<NSValue *> compositeFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                                        stops:@{@18: constantStyleValue}
+                                                                                                attributeName:@""
+                                                                                                      options:nil];
+        XCTAssertThrowsSpecificNamed(layer.fillTranslationAnchor = functionStyleValue, NSException, NSInvalidArgumentException, @"MGLStyleValue should raise an exception if it is applied to a property that cannot support it");        
     }
 }
 

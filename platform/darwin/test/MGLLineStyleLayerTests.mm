@@ -49,25 +49,25 @@
                       @"line-cap should be unset initially.");
         MGLStyleValue<NSValue *> *defaultStyleValue = layer.lineCap;
 
-        MGLStyleValue<NSValue *> *styleValue = [MGLStyleValue<NSValue *> valueWithRawValue:[NSValue valueWithMGLLineCap:MGLLineCapSquare]];
-        layer.lineCap = styleValue;
+        MGLStyleValue<NSValue *> *constantStyleValue = [MGLStyleValue<NSValue *> valueWithRawValue:[NSValue valueWithMGLLineCap:MGLLineCapSquare]];
+        layer.lineCap = constantStyleValue;
         mbgl::style::PropertyValue<mbgl::style::LineCapType> propertyValue = { mbgl::style::LineCapType::Square };
         XCTAssertEqual(rawLayer->getLineCap(), propertyValue,
                        @"Setting lineCap to a constant value should update line-cap.");
-        XCTAssertEqualObjects(layer.lineCap, styleValue,
+        XCTAssertEqualObjects(layer.lineCap, constantStyleValue,
                               @"lineCap should round-trip constant values.");
 
-        styleValue = [MGLStyleValue<NSValue *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
-                                                                                             stops:@{@18: styleValue}
-                                                                                           options:nil];        
-        layer.lineCap = styleValue;
+        MGLStyleValue<NSValue *> * functionStyleValue = [MGLStyleValue<NSValue *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                                              stops:@{@18: constantStyleValue}
+                                                                                                            options:nil];  
+        layer.lineCap = functionStyleValue;
 
         mbgl::style::IntervalStops<mbgl::style::LineCapType> intervalStops = { {{18, mbgl::style::LineCapType::Square}} };
         propertyValue = mbgl::style::CameraFunction<mbgl::style::LineCapType> { intervalStops };
         
         XCTAssertEqual(rawLayer->getLineCap(), propertyValue,
                        @"Setting lineCap to a function should update line-cap.");
-        XCTAssertEqualObjects(layer.lineCap, styleValue,
+        XCTAssertEqualObjects(layer.lineCap, functionStyleValue,
                               @"lineCap should round-trip functions.");
 
         layer.lineCap = nil;
@@ -75,6 +75,18 @@
                       @"Unsetting lineCap should return line-cap to the default value.");
         XCTAssertEqualObjects(layer.lineCap, defaultStyleValue,
                               @"lineCap should return the default value after being unset.");
+
+        functionStyleValue = [MGLStyleValue<NSValue *> sourceFunctionValueWithStopType:MGLStyleFunctionStopTypeIdentity
+                                                                                                     stops:nil
+                                                                                             attributeName:@""
+                                                                                                   options:nil];
+        XCTAssertThrowsSpecificNamed(layer.lineCap = functionStyleValue, NSException, NSInvalidArgumentException, @"MGLStyleValue should raise an exception if it is applied to a property that cannot support it");
+
+        functionStyleValue = [MGLStyleValue<NSValue *> compositeFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                                        stops:@{@18: constantStyleValue}
+                                                                                                attributeName:@""
+                                                                                                      options:nil];
+        XCTAssertThrowsSpecificNamed(layer.lineCap = functionStyleValue, NSException, NSInvalidArgumentException, @"MGLStyleValue should raise an exception if it is applied to a property that cannot support it");        
     }
 
     // line-join
@@ -83,25 +95,25 @@
                       @"line-join should be unset initially.");
         MGLStyleValue<NSValue *> *defaultStyleValue = layer.lineJoin;
 
-        MGLStyleValue<NSValue *> *styleValue = [MGLStyleValue<NSValue *> valueWithRawValue:[NSValue valueWithMGLLineJoin:MGLLineJoinMiter]];
-        layer.lineJoin = styleValue;
+        MGLStyleValue<NSValue *> *constantStyleValue = [MGLStyleValue<NSValue *> valueWithRawValue:[NSValue valueWithMGLLineJoin:MGLLineJoinMiter]];
+        layer.lineJoin = constantStyleValue;
         mbgl::style::PropertyValue<mbgl::style::LineJoinType> propertyValue = { mbgl::style::LineJoinType::Miter };
         XCTAssertEqual(rawLayer->getLineJoin(), propertyValue,
                        @"Setting lineJoin to a constant value should update line-join.");
-        XCTAssertEqualObjects(layer.lineJoin, styleValue,
+        XCTAssertEqualObjects(layer.lineJoin, constantStyleValue,
                               @"lineJoin should round-trip constant values.");
 
-        styleValue = [MGLStyleValue<NSValue *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
-                                                                                             stops:@{@18: styleValue}
-                                                                                           options:nil];        
-        layer.lineJoin = styleValue;
+        MGLStyleValue<NSValue *> * functionStyleValue = [MGLStyleValue<NSValue *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                                              stops:@{@18: constantStyleValue}
+                                                                                                            options:nil];  
+        layer.lineJoin = functionStyleValue;
 
         mbgl::style::IntervalStops<mbgl::style::LineJoinType> intervalStops = { {{18, mbgl::style::LineJoinType::Miter}} };
         propertyValue = mbgl::style::CameraFunction<mbgl::style::LineJoinType> { intervalStops };
         
         XCTAssertEqual(rawLayer->getLineJoin(), propertyValue,
                        @"Setting lineJoin to a function should update line-join.");
-        XCTAssertEqualObjects(layer.lineJoin, styleValue,
+        XCTAssertEqualObjects(layer.lineJoin, functionStyleValue,
                               @"lineJoin should round-trip functions.");
 
         layer.lineJoin = nil;
@@ -109,6 +121,18 @@
                       @"Unsetting lineJoin should return line-join to the default value.");
         XCTAssertEqualObjects(layer.lineJoin, defaultStyleValue,
                               @"lineJoin should return the default value after being unset.");
+
+        functionStyleValue = [MGLStyleValue<NSValue *> sourceFunctionValueWithStopType:MGLStyleFunctionStopTypeIdentity
+                                                                                                     stops:nil
+                                                                                             attributeName:@""
+                                                                                                   options:nil];
+        XCTAssertThrowsSpecificNamed(layer.lineJoin = functionStyleValue, NSException, NSInvalidArgumentException, @"MGLStyleValue should raise an exception if it is applied to a property that cannot support it");
+
+        functionStyleValue = [MGLStyleValue<NSValue *> compositeFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                                        stops:@{@18: constantStyleValue}
+                                                                                                attributeName:@""
+                                                                                                      options:nil];
+        XCTAssertThrowsSpecificNamed(layer.lineJoin = functionStyleValue, NSException, NSInvalidArgumentException, @"MGLStyleValue should raise an exception if it is applied to a property that cannot support it");        
     }
 
     // line-miter-limit
@@ -117,25 +141,25 @@
                       @"line-miter-limit should be unset initially.");
         MGLStyleValue<NSNumber *> *defaultStyleValue = layer.lineMiterLimit;
 
-        MGLStyleValue<NSNumber *> *styleValue = [MGLStyleValue<NSNumber *> valueWithRawValue:@0xff];
-        layer.lineMiterLimit = styleValue;
+        MGLStyleValue<NSNumber *> *constantStyleValue = [MGLStyleValue<NSNumber *> valueWithRawValue:@0xff];
+        layer.lineMiterLimit = constantStyleValue;
         mbgl::style::PropertyValue<float> propertyValue = { 0xff };
         XCTAssertEqual(rawLayer->getLineMiterLimit(), propertyValue,
                        @"Setting lineMiterLimit to a constant value should update line-miter-limit.");
-        XCTAssertEqualObjects(layer.lineMiterLimit, styleValue,
+        XCTAssertEqualObjects(layer.lineMiterLimit, constantStyleValue,
                               @"lineMiterLimit should round-trip constant values.");
 
-        styleValue = [MGLStyleValue<NSNumber *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
-                                                                                             stops:@{@18: styleValue}
-                                                                                           options:nil];        
-        layer.lineMiterLimit = styleValue;
+        MGLStyleValue<NSNumber *> * functionStyleValue = [MGLStyleValue<NSNumber *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                                              stops:@{@18: constantStyleValue}
+                                                                                                            options:nil];  
+        layer.lineMiterLimit = functionStyleValue;
 
         mbgl::style::IntervalStops<float> intervalStops = { {{18, 0xff}} };
         propertyValue = mbgl::style::CameraFunction<float> { intervalStops };
         
         XCTAssertEqual(rawLayer->getLineMiterLimit(), propertyValue,
                        @"Setting lineMiterLimit to a function should update line-miter-limit.");
-        XCTAssertEqualObjects(layer.lineMiterLimit, styleValue,
+        XCTAssertEqualObjects(layer.lineMiterLimit, functionStyleValue,
                               @"lineMiterLimit should round-trip functions.");
 
         layer.lineMiterLimit = nil;
@@ -151,25 +175,25 @@
                       @"line-round-limit should be unset initially.");
         MGLStyleValue<NSNumber *> *defaultStyleValue = layer.lineRoundLimit;
 
-        MGLStyleValue<NSNumber *> *styleValue = [MGLStyleValue<NSNumber *> valueWithRawValue:@0xff];
-        layer.lineRoundLimit = styleValue;
+        MGLStyleValue<NSNumber *> *constantStyleValue = [MGLStyleValue<NSNumber *> valueWithRawValue:@0xff];
+        layer.lineRoundLimit = constantStyleValue;
         mbgl::style::PropertyValue<float> propertyValue = { 0xff };
         XCTAssertEqual(rawLayer->getLineRoundLimit(), propertyValue,
                        @"Setting lineRoundLimit to a constant value should update line-round-limit.");
-        XCTAssertEqualObjects(layer.lineRoundLimit, styleValue,
+        XCTAssertEqualObjects(layer.lineRoundLimit, constantStyleValue,
                               @"lineRoundLimit should round-trip constant values.");
 
-        styleValue = [MGLStyleValue<NSNumber *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
-                                                                                             stops:@{@18: styleValue}
-                                                                                           options:nil];        
-        layer.lineRoundLimit = styleValue;
+        MGLStyleValue<NSNumber *> * functionStyleValue = [MGLStyleValue<NSNumber *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                                              stops:@{@18: constantStyleValue}
+                                                                                                            options:nil];  
+        layer.lineRoundLimit = functionStyleValue;
 
         mbgl::style::IntervalStops<float> intervalStops = { {{18, 0xff}} };
         propertyValue = mbgl::style::CameraFunction<float> { intervalStops };
         
         XCTAssertEqual(rawLayer->getLineRoundLimit(), propertyValue,
                        @"Setting lineRoundLimit to a function should update line-round-limit.");
-        XCTAssertEqualObjects(layer.lineRoundLimit, styleValue,
+        XCTAssertEqualObjects(layer.lineRoundLimit, functionStyleValue,
                               @"lineRoundLimit should round-trip functions.");
 
         layer.lineRoundLimit = nil;
@@ -185,25 +209,25 @@
                       @"line-blur should be unset initially.");
         MGLStyleValue<NSNumber *> *defaultStyleValue = layer.lineBlur;
 
-        MGLStyleValue<NSNumber *> *styleValue = [MGLStyleValue<NSNumber *> valueWithRawValue:@0xff];
-        layer.lineBlur = styleValue;
+        MGLStyleValue<NSNumber *> *constantStyleValue = [MGLStyleValue<NSNumber *> valueWithRawValue:@0xff];
+        layer.lineBlur = constantStyleValue;
         mbgl::style::DataDrivenPropertyValue<float> propertyValue = { 0xff };
         XCTAssertEqual(rawLayer->getLineBlur(), propertyValue,
                        @"Setting lineBlur to a constant value should update line-blur.");
-        XCTAssertEqualObjects(layer.lineBlur, styleValue,
+        XCTAssertEqualObjects(layer.lineBlur, constantStyleValue,
                               @"lineBlur should round-trip constant values.");
 
-        styleValue = [MGLStyleValue<NSNumber *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
-                                                                                             stops:@{@18: styleValue}
-                                                                                           options:nil];        
-        layer.lineBlur = styleValue;
+        MGLStyleValue<NSNumber *> * functionStyleValue = [MGLStyleValue<NSNumber *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                                              stops:@{@18: constantStyleValue}
+                                                                                                            options:nil];  
+        layer.lineBlur = functionStyleValue;
 
         mbgl::style::IntervalStops<float> intervalStops = { {{18, 0xff}} };
         propertyValue = mbgl::style::CameraFunction<float> { intervalStops };
         
         XCTAssertEqual(rawLayer->getLineBlur(), propertyValue,
                        @"Setting lineBlur to a function should update line-blur.");
-        XCTAssertEqualObjects(layer.lineBlur, styleValue,
+        XCTAssertEqualObjects(layer.lineBlur, functionStyleValue,
                               @"lineBlur should round-trip functions.");
 
         layer.lineBlur = nil;
@@ -219,25 +243,25 @@
                       @"line-color should be unset initially.");
         MGLStyleValue<MGLColor *> *defaultStyleValue = layer.lineColor;
 
-        MGLStyleValue<MGLColor *> *styleValue = [MGLStyleValue<MGLColor *> valueWithRawValue:[MGLColor redColor]];
-        layer.lineColor = styleValue;
+        MGLStyleValue<MGLColor *> *constantStyleValue = [MGLStyleValue<MGLColor *> valueWithRawValue:[MGLColor redColor]];
+        layer.lineColor = constantStyleValue;
         mbgl::style::DataDrivenPropertyValue<mbgl::Color> propertyValue = { { 1, 0, 0, 1 } };
         XCTAssertEqual(rawLayer->getLineColor(), propertyValue,
                        @"Setting lineColor to a constant value should update line-color.");
-        XCTAssertEqualObjects(layer.lineColor, styleValue,
+        XCTAssertEqualObjects(layer.lineColor, constantStyleValue,
                               @"lineColor should round-trip constant values.");
 
-        styleValue = [MGLStyleValue<MGLColor *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
-                                                                                             stops:@{@18: styleValue}
-                                                                                           options:nil];        
-        layer.lineColor = styleValue;
+        MGLStyleValue<MGLColor *> * functionStyleValue = [MGLStyleValue<MGLColor *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                                              stops:@{@18: constantStyleValue}
+                                                                                                            options:nil];  
+        layer.lineColor = functionStyleValue;
 
         mbgl::style::IntervalStops<mbgl::Color> intervalStops = { {{18, { 1, 0, 0, 1 }}} };
         propertyValue = mbgl::style::CameraFunction<mbgl::Color> { intervalStops };
         
         XCTAssertEqual(rawLayer->getLineColor(), propertyValue,
                        @"Setting lineColor to a function should update line-color.");
-        XCTAssertEqualObjects(layer.lineColor, styleValue,
+        XCTAssertEqualObjects(layer.lineColor, functionStyleValue,
                               @"lineColor should round-trip functions.");
 
         layer.lineColor = nil;
@@ -253,25 +277,25 @@
                       @"line-dasharray should be unset initially.");
         MGLStyleValue<NSArray<NSNumber *> *> *defaultStyleValue = layer.lineDashPattern;
 
-        MGLStyleValue<NSArray<NSNumber *> *> *styleValue = [MGLStyleValue<NSArray<NSNumber *> *> valueWithRawValue:@[@1, @2]];
-        layer.lineDashPattern = styleValue;
+        MGLStyleValue<NSArray<NSNumber *> *> *constantStyleValue = [MGLStyleValue<NSArray<NSNumber *> *> valueWithRawValue:@[@1, @2]];
+        layer.lineDashPattern = constantStyleValue;
         mbgl::style::PropertyValue<std::vector<float>> propertyValue = { {1, 2} };
         XCTAssertEqual(rawLayer->getLineDasharray(), propertyValue,
                        @"Setting lineDashPattern to a constant value should update line-dasharray.");
-        XCTAssertEqualObjects(layer.lineDashPattern, styleValue,
+        XCTAssertEqualObjects(layer.lineDashPattern, constantStyleValue,
                               @"lineDashPattern should round-trip constant values.");
 
-        styleValue = [MGLStyleValue<NSArray<NSNumber *> *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
-                                                                                             stops:@{@18: styleValue}
-                                                                                           options:nil];        
-        layer.lineDashPattern = styleValue;
+        MGLStyleValue<NSArray<NSNumber *> *> * functionStyleValue = [MGLStyleValue<NSArray<NSNumber *> *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                                              stops:@{@18: constantStyleValue}
+                                                                                                            options:nil];  
+        layer.lineDashPattern = functionStyleValue;
 
         mbgl::style::IntervalStops<std::vector<float>> intervalStops = { {{18, {1, 2}}} };
         propertyValue = mbgl::style::CameraFunction<std::vector<float>> { intervalStops };
         
         XCTAssertEqual(rawLayer->getLineDasharray(), propertyValue,
                        @"Setting lineDashPattern to a function should update line-dasharray.");
-        XCTAssertEqualObjects(layer.lineDashPattern, styleValue,
+        XCTAssertEqualObjects(layer.lineDashPattern, functionStyleValue,
                               @"lineDashPattern should round-trip functions.");
 
         layer.lineDashPattern = nil;
@@ -279,6 +303,18 @@
                       @"Unsetting lineDashPattern should return line-dasharray to the default value.");
         XCTAssertEqualObjects(layer.lineDashPattern, defaultStyleValue,
                               @"lineDashPattern should return the default value after being unset.");
+
+        functionStyleValue = [MGLStyleValue<NSArray<NSNumber *> *> sourceFunctionValueWithStopType:MGLStyleFunctionStopTypeIdentity
+                                                                                                     stops:nil
+                                                                                             attributeName:@""
+                                                                                                   options:nil];
+        XCTAssertThrowsSpecificNamed(layer.lineDashPattern = functionStyleValue, NSException, NSInvalidArgumentException, @"MGLStyleValue should raise an exception if it is applied to a property that cannot support it");
+
+        functionStyleValue = [MGLStyleValue<NSArray<NSNumber *> *> compositeFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                                        stops:@{@18: constantStyleValue}
+                                                                                                attributeName:@""
+                                                                                                      options:nil];
+        XCTAssertThrowsSpecificNamed(layer.lineDashPattern = functionStyleValue, NSException, NSInvalidArgumentException, @"MGLStyleValue should raise an exception if it is applied to a property that cannot support it");        
     }
 
     // line-gap-width
@@ -287,25 +323,25 @@
                       @"line-gap-width should be unset initially.");
         MGLStyleValue<NSNumber *> *defaultStyleValue = layer.lineGapWidth;
 
-        MGLStyleValue<NSNumber *> *styleValue = [MGLStyleValue<NSNumber *> valueWithRawValue:@0xff];
-        layer.lineGapWidth = styleValue;
+        MGLStyleValue<NSNumber *> *constantStyleValue = [MGLStyleValue<NSNumber *> valueWithRawValue:@0xff];
+        layer.lineGapWidth = constantStyleValue;
         mbgl::style::DataDrivenPropertyValue<float> propertyValue = { 0xff };
         XCTAssertEqual(rawLayer->getLineGapWidth(), propertyValue,
                        @"Setting lineGapWidth to a constant value should update line-gap-width.");
-        XCTAssertEqualObjects(layer.lineGapWidth, styleValue,
+        XCTAssertEqualObjects(layer.lineGapWidth, constantStyleValue,
                               @"lineGapWidth should round-trip constant values.");
 
-        styleValue = [MGLStyleValue<NSNumber *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
-                                                                                             stops:@{@18: styleValue}
-                                                                                           options:nil];        
-        layer.lineGapWidth = styleValue;
+        MGLStyleValue<NSNumber *> * functionStyleValue = [MGLStyleValue<NSNumber *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                                              stops:@{@18: constantStyleValue}
+                                                                                                            options:nil];  
+        layer.lineGapWidth = functionStyleValue;
 
         mbgl::style::IntervalStops<float> intervalStops = { {{18, 0xff}} };
         propertyValue = mbgl::style::CameraFunction<float> { intervalStops };
         
         XCTAssertEqual(rawLayer->getLineGapWidth(), propertyValue,
                        @"Setting lineGapWidth to a function should update line-gap-width.");
-        XCTAssertEqualObjects(layer.lineGapWidth, styleValue,
+        XCTAssertEqualObjects(layer.lineGapWidth, functionStyleValue,
                               @"lineGapWidth should round-trip functions.");
 
         layer.lineGapWidth = nil;
@@ -321,25 +357,25 @@
                       @"line-offset should be unset initially.");
         MGLStyleValue<NSNumber *> *defaultStyleValue = layer.lineOffset;
 
-        MGLStyleValue<NSNumber *> *styleValue = [MGLStyleValue<NSNumber *> valueWithRawValue:@0xff];
-        layer.lineOffset = styleValue;
+        MGLStyleValue<NSNumber *> *constantStyleValue = [MGLStyleValue<NSNumber *> valueWithRawValue:@0xff];
+        layer.lineOffset = constantStyleValue;
         mbgl::style::DataDrivenPropertyValue<float> propertyValue = { 0xff };
         XCTAssertEqual(rawLayer->getLineOffset(), propertyValue,
                        @"Setting lineOffset to a constant value should update line-offset.");
-        XCTAssertEqualObjects(layer.lineOffset, styleValue,
+        XCTAssertEqualObjects(layer.lineOffset, constantStyleValue,
                               @"lineOffset should round-trip constant values.");
 
-        styleValue = [MGLStyleValue<NSNumber *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
-                                                                                             stops:@{@18: styleValue}
-                                                                                           options:nil];        
-        layer.lineOffset = styleValue;
+        MGLStyleValue<NSNumber *> * functionStyleValue = [MGLStyleValue<NSNumber *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                                              stops:@{@18: constantStyleValue}
+                                                                                                            options:nil];  
+        layer.lineOffset = functionStyleValue;
 
         mbgl::style::IntervalStops<float> intervalStops = { {{18, 0xff}} };
         propertyValue = mbgl::style::CameraFunction<float> { intervalStops };
         
         XCTAssertEqual(rawLayer->getLineOffset(), propertyValue,
                        @"Setting lineOffset to a function should update line-offset.");
-        XCTAssertEqualObjects(layer.lineOffset, styleValue,
+        XCTAssertEqualObjects(layer.lineOffset, functionStyleValue,
                               @"lineOffset should round-trip functions.");
 
         layer.lineOffset = nil;
@@ -355,25 +391,25 @@
                       @"line-opacity should be unset initially.");
         MGLStyleValue<NSNumber *> *defaultStyleValue = layer.lineOpacity;
 
-        MGLStyleValue<NSNumber *> *styleValue = [MGLStyleValue<NSNumber *> valueWithRawValue:@0xff];
-        layer.lineOpacity = styleValue;
+        MGLStyleValue<NSNumber *> *constantStyleValue = [MGLStyleValue<NSNumber *> valueWithRawValue:@0xff];
+        layer.lineOpacity = constantStyleValue;
         mbgl::style::DataDrivenPropertyValue<float> propertyValue = { 0xff };
         XCTAssertEqual(rawLayer->getLineOpacity(), propertyValue,
                        @"Setting lineOpacity to a constant value should update line-opacity.");
-        XCTAssertEqualObjects(layer.lineOpacity, styleValue,
+        XCTAssertEqualObjects(layer.lineOpacity, constantStyleValue,
                               @"lineOpacity should round-trip constant values.");
 
-        styleValue = [MGLStyleValue<NSNumber *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
-                                                                                             stops:@{@18: styleValue}
-                                                                                           options:nil];        
-        layer.lineOpacity = styleValue;
+        MGLStyleValue<NSNumber *> * functionStyleValue = [MGLStyleValue<NSNumber *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                                              stops:@{@18: constantStyleValue}
+                                                                                                            options:nil];  
+        layer.lineOpacity = functionStyleValue;
 
         mbgl::style::IntervalStops<float> intervalStops = { {{18, 0xff}} };
         propertyValue = mbgl::style::CameraFunction<float> { intervalStops };
         
         XCTAssertEqual(rawLayer->getLineOpacity(), propertyValue,
                        @"Setting lineOpacity to a function should update line-opacity.");
-        XCTAssertEqualObjects(layer.lineOpacity, styleValue,
+        XCTAssertEqualObjects(layer.lineOpacity, functionStyleValue,
                               @"lineOpacity should round-trip functions.");
 
         layer.lineOpacity = nil;
@@ -389,25 +425,25 @@
                       @"line-pattern should be unset initially.");
         MGLStyleValue<NSString *> *defaultStyleValue = layer.linePattern;
 
-        MGLStyleValue<NSString *> *styleValue = [MGLStyleValue<NSString *> valueWithRawValue:@"Line Pattern"];
-        layer.linePattern = styleValue;
+        MGLStyleValue<NSString *> *constantStyleValue = [MGLStyleValue<NSString *> valueWithRawValue:@"Line Pattern"];
+        layer.linePattern = constantStyleValue;
         mbgl::style::PropertyValue<std::string> propertyValue = { "Line Pattern" };
         XCTAssertEqual(rawLayer->getLinePattern(), propertyValue,
                        @"Setting linePattern to a constant value should update line-pattern.");
-        XCTAssertEqualObjects(layer.linePattern, styleValue,
+        XCTAssertEqualObjects(layer.linePattern, constantStyleValue,
                               @"linePattern should round-trip constant values.");
 
-        styleValue = [MGLStyleValue<NSString *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
-                                                                                             stops:@{@18: styleValue}
-                                                                                           options:nil];        
-        layer.linePattern = styleValue;
+        MGLStyleValue<NSString *> * functionStyleValue = [MGLStyleValue<NSString *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                                              stops:@{@18: constantStyleValue}
+                                                                                                            options:nil];  
+        layer.linePattern = functionStyleValue;
 
         mbgl::style::IntervalStops<std::string> intervalStops = { {{18, "Line Pattern"}} };
         propertyValue = mbgl::style::CameraFunction<std::string> { intervalStops };
         
         XCTAssertEqual(rawLayer->getLinePattern(), propertyValue,
                        @"Setting linePattern to a function should update line-pattern.");
-        XCTAssertEqualObjects(layer.linePattern, styleValue,
+        XCTAssertEqualObjects(layer.linePattern, functionStyleValue,
                               @"linePattern should round-trip functions.");
 
         layer.linePattern = nil;
@@ -415,6 +451,18 @@
                       @"Unsetting linePattern should return line-pattern to the default value.");
         XCTAssertEqualObjects(layer.linePattern, defaultStyleValue,
                               @"linePattern should return the default value after being unset.");
+
+        functionStyleValue = [MGLStyleValue<NSString *> sourceFunctionValueWithStopType:MGLStyleFunctionStopTypeIdentity
+                                                                                                     stops:nil
+                                                                                             attributeName:@""
+                                                                                                   options:nil];
+        XCTAssertThrowsSpecificNamed(layer.linePattern = functionStyleValue, NSException, NSInvalidArgumentException, @"MGLStyleValue should raise an exception if it is applied to a property that cannot support it");
+
+        functionStyleValue = [MGLStyleValue<NSString *> compositeFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                                        stops:@{@18: constantStyleValue}
+                                                                                                attributeName:@""
+                                                                                                      options:nil];
+        XCTAssertThrowsSpecificNamed(layer.linePattern = functionStyleValue, NSException, NSInvalidArgumentException, @"MGLStyleValue should raise an exception if it is applied to a property that cannot support it");        
     }
 
     // line-translate
@@ -423,31 +471,31 @@
                       @"line-translate should be unset initially.");
         MGLStyleValue<NSValue *> *defaultStyleValue = layer.lineTranslation;
 
-        MGLStyleValue<NSValue *> *styleValue = [MGLStyleValue<NSValue *> valueWithRawValue:
+        MGLStyleValue<NSValue *> *constantStyleValue = [MGLStyleValue<NSValue *> valueWithRawValue:
 #if TARGET_OS_IPHONE
             [NSValue valueWithCGVector:CGVectorMake(1, 1)]
 #else
             [NSValue valueWithMGLVector:CGVectorMake(1, -1)]
 #endif
         ];
-        layer.lineTranslation = styleValue;
+        layer.lineTranslation = constantStyleValue;
         mbgl::style::PropertyValue<std::array<float, 2>> propertyValue = { { 1, 1 } };
         XCTAssertEqual(rawLayer->getLineTranslate(), propertyValue,
                        @"Setting lineTranslation to a constant value should update line-translate.");
-        XCTAssertEqualObjects(layer.lineTranslation, styleValue,
+        XCTAssertEqualObjects(layer.lineTranslation, constantStyleValue,
                               @"lineTranslation should round-trip constant values.");
 
-        styleValue = [MGLStyleValue<NSValue *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
-                                                                                             stops:@{@18: styleValue}
-                                                                                           options:nil];        
-        layer.lineTranslation = styleValue;
+        MGLStyleValue<NSValue *> * functionStyleValue = [MGLStyleValue<NSValue *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                                              stops:@{@18: constantStyleValue}
+                                                                                                            options:nil];  
+        layer.lineTranslation = functionStyleValue;
 
         mbgl::style::IntervalStops<std::array<float, 2>> intervalStops = { {{18, { 1, 1 }}} };
         propertyValue = mbgl::style::CameraFunction<std::array<float, 2>> { intervalStops };
         
         XCTAssertEqual(rawLayer->getLineTranslate(), propertyValue,
                        @"Setting lineTranslation to a function should update line-translate.");
-        XCTAssertEqualObjects(layer.lineTranslation, styleValue,
+        XCTAssertEqualObjects(layer.lineTranslation, functionStyleValue,
                               @"lineTranslation should round-trip functions.");
 
         layer.lineTranslation = nil;
@@ -463,25 +511,25 @@
                       @"line-translate-anchor should be unset initially.");
         MGLStyleValue<NSValue *> *defaultStyleValue = layer.lineTranslationAnchor;
 
-        MGLStyleValue<NSValue *> *styleValue = [MGLStyleValue<NSValue *> valueWithRawValue:[NSValue valueWithMGLLineTranslationAnchor:MGLLineTranslationAnchorViewport]];
-        layer.lineTranslationAnchor = styleValue;
+        MGLStyleValue<NSValue *> *constantStyleValue = [MGLStyleValue<NSValue *> valueWithRawValue:[NSValue valueWithMGLLineTranslationAnchor:MGLLineTranslationAnchorViewport]];
+        layer.lineTranslationAnchor = constantStyleValue;
         mbgl::style::PropertyValue<mbgl::style::TranslateAnchorType> propertyValue = { mbgl::style::TranslateAnchorType::Viewport };
         XCTAssertEqual(rawLayer->getLineTranslateAnchor(), propertyValue,
                        @"Setting lineTranslationAnchor to a constant value should update line-translate-anchor.");
-        XCTAssertEqualObjects(layer.lineTranslationAnchor, styleValue,
+        XCTAssertEqualObjects(layer.lineTranslationAnchor, constantStyleValue,
                               @"lineTranslationAnchor should round-trip constant values.");
 
-        styleValue = [MGLStyleValue<NSValue *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
-                                                                                             stops:@{@18: styleValue}
-                                                                                           options:nil];        
-        layer.lineTranslationAnchor = styleValue;
+        MGLStyleValue<NSValue *> * functionStyleValue = [MGLStyleValue<NSValue *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                                              stops:@{@18: constantStyleValue}
+                                                                                                            options:nil];  
+        layer.lineTranslationAnchor = functionStyleValue;
 
         mbgl::style::IntervalStops<mbgl::style::TranslateAnchorType> intervalStops = { {{18, mbgl::style::TranslateAnchorType::Viewport}} };
         propertyValue = mbgl::style::CameraFunction<mbgl::style::TranslateAnchorType> { intervalStops };
         
         XCTAssertEqual(rawLayer->getLineTranslateAnchor(), propertyValue,
                        @"Setting lineTranslationAnchor to a function should update line-translate-anchor.");
-        XCTAssertEqualObjects(layer.lineTranslationAnchor, styleValue,
+        XCTAssertEqualObjects(layer.lineTranslationAnchor, functionStyleValue,
                               @"lineTranslationAnchor should round-trip functions.");
 
         layer.lineTranslationAnchor = nil;
@@ -489,6 +537,18 @@
                       @"Unsetting lineTranslationAnchor should return line-translate-anchor to the default value.");
         XCTAssertEqualObjects(layer.lineTranslationAnchor, defaultStyleValue,
                               @"lineTranslationAnchor should return the default value after being unset.");
+
+        functionStyleValue = [MGLStyleValue<NSValue *> sourceFunctionValueWithStopType:MGLStyleFunctionStopTypeIdentity
+                                                                                                     stops:nil
+                                                                                             attributeName:@""
+                                                                                                   options:nil];
+        XCTAssertThrowsSpecificNamed(layer.lineTranslationAnchor = functionStyleValue, NSException, NSInvalidArgumentException, @"MGLStyleValue should raise an exception if it is applied to a property that cannot support it");
+
+        functionStyleValue = [MGLStyleValue<NSValue *> compositeFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                                        stops:@{@18: constantStyleValue}
+                                                                                                attributeName:@""
+                                                                                                      options:nil];
+        XCTAssertThrowsSpecificNamed(layer.lineTranslationAnchor = functionStyleValue, NSException, NSInvalidArgumentException, @"MGLStyleValue should raise an exception if it is applied to a property that cannot support it");        
     }
 
     // line-width
@@ -497,25 +557,25 @@
                       @"line-width should be unset initially.");
         MGLStyleValue<NSNumber *> *defaultStyleValue = layer.lineWidth;
 
-        MGLStyleValue<NSNumber *> *styleValue = [MGLStyleValue<NSNumber *> valueWithRawValue:@0xff];
-        layer.lineWidth = styleValue;
+        MGLStyleValue<NSNumber *> *constantStyleValue = [MGLStyleValue<NSNumber *> valueWithRawValue:@0xff];
+        layer.lineWidth = constantStyleValue;
         mbgl::style::PropertyValue<float> propertyValue = { 0xff };
         XCTAssertEqual(rawLayer->getLineWidth(), propertyValue,
                        @"Setting lineWidth to a constant value should update line-width.");
-        XCTAssertEqualObjects(layer.lineWidth, styleValue,
+        XCTAssertEqualObjects(layer.lineWidth, constantStyleValue,
                               @"lineWidth should round-trip constant values.");
 
-        styleValue = [MGLStyleValue<NSNumber *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
-                                                                                             stops:@{@18: styleValue}
-                                                                                           options:nil];        
-        layer.lineWidth = styleValue;
+        MGLStyleValue<NSNumber *> * functionStyleValue = [MGLStyleValue<NSNumber *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                                              stops:@{@18: constantStyleValue}
+                                                                                                            options:nil];  
+        layer.lineWidth = functionStyleValue;
 
         mbgl::style::IntervalStops<float> intervalStops = { {{18, 0xff}} };
         propertyValue = mbgl::style::CameraFunction<float> { intervalStops };
         
         XCTAssertEqual(rawLayer->getLineWidth(), propertyValue,
                        @"Setting lineWidth to a function should update line-width.");
-        XCTAssertEqualObjects(layer.lineWidth, styleValue,
+        XCTAssertEqualObjects(layer.lineWidth, functionStyleValue,
                               @"lineWidth should round-trip functions.");
 
         layer.lineWidth = nil;

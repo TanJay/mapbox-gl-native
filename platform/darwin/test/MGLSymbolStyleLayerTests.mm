@@ -49,25 +49,25 @@
                       @"icon-allow-overlap should be unset initially.");
         MGLStyleValue<NSNumber *> *defaultStyleValue = layer.iconAllowsOverlap;
 
-        MGLStyleValue<NSNumber *> *styleValue = [MGLStyleValue<NSNumber *> valueWithRawValue:@YES];
-        layer.iconAllowsOverlap = styleValue;
+        MGLStyleValue<NSNumber *> *constantStyleValue = [MGLStyleValue<NSNumber *> valueWithRawValue:@YES];
+        layer.iconAllowsOverlap = constantStyleValue;
         mbgl::style::PropertyValue<bool> propertyValue = { true };
         XCTAssertEqual(rawLayer->getIconAllowOverlap(), propertyValue,
                        @"Setting iconAllowsOverlap to a constant value should update icon-allow-overlap.");
-        XCTAssertEqualObjects(layer.iconAllowsOverlap, styleValue,
+        XCTAssertEqualObjects(layer.iconAllowsOverlap, constantStyleValue,
                               @"iconAllowsOverlap should round-trip constant values.");
 
-        styleValue = [MGLStyleValue<NSNumber *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
-                                                                                             stops:@{@18: styleValue}
-                                                                                           options:nil];        
-        layer.iconAllowsOverlap = styleValue;
+        MGLStyleValue<NSNumber *> * functionStyleValue = [MGLStyleValue<NSNumber *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                                              stops:@{@18: constantStyleValue}
+                                                                                                            options:nil];  
+        layer.iconAllowsOverlap = functionStyleValue;
 
         mbgl::style::IntervalStops<bool> intervalStops = { {{18, true}} };
         propertyValue = mbgl::style::CameraFunction<bool> { intervalStops };
         
         XCTAssertEqual(rawLayer->getIconAllowOverlap(), propertyValue,
                        @"Setting iconAllowsOverlap to a function should update icon-allow-overlap.");
-        XCTAssertEqualObjects(layer.iconAllowsOverlap, styleValue,
+        XCTAssertEqualObjects(layer.iconAllowsOverlap, functionStyleValue,
                               @"iconAllowsOverlap should round-trip functions.");
 
         layer.iconAllowsOverlap = nil;
@@ -75,6 +75,18 @@
                       @"Unsetting iconAllowsOverlap should return icon-allow-overlap to the default value.");
         XCTAssertEqualObjects(layer.iconAllowsOverlap, defaultStyleValue,
                               @"iconAllowsOverlap should return the default value after being unset.");
+
+        functionStyleValue = [MGLStyleValue<NSNumber *> sourceFunctionValueWithStopType:MGLStyleFunctionStopTypeIdentity
+                                                                                                     stops:nil
+                                                                                             attributeName:@""
+                                                                                                   options:nil];
+        XCTAssertThrowsSpecificNamed(layer.iconAllowsOverlap = functionStyleValue, NSException, NSInvalidArgumentException, @"MGLStyleValue should raise an exception if it is applied to a property that cannot support it");
+
+        functionStyleValue = [MGLStyleValue<NSNumber *> compositeFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                                        stops:@{@18: constantStyleValue}
+                                                                                                attributeName:@""
+                                                                                                      options:nil];
+        XCTAssertThrowsSpecificNamed(layer.iconAllowsOverlap = functionStyleValue, NSException, NSInvalidArgumentException, @"MGLStyleValue should raise an exception if it is applied to a property that cannot support it");        
     }
 
     // icon-ignore-placement
@@ -83,25 +95,25 @@
                       @"icon-ignore-placement should be unset initially.");
         MGLStyleValue<NSNumber *> *defaultStyleValue = layer.iconIgnoresPlacement;
 
-        MGLStyleValue<NSNumber *> *styleValue = [MGLStyleValue<NSNumber *> valueWithRawValue:@YES];
-        layer.iconIgnoresPlacement = styleValue;
+        MGLStyleValue<NSNumber *> *constantStyleValue = [MGLStyleValue<NSNumber *> valueWithRawValue:@YES];
+        layer.iconIgnoresPlacement = constantStyleValue;
         mbgl::style::PropertyValue<bool> propertyValue = { true };
         XCTAssertEqual(rawLayer->getIconIgnorePlacement(), propertyValue,
                        @"Setting iconIgnoresPlacement to a constant value should update icon-ignore-placement.");
-        XCTAssertEqualObjects(layer.iconIgnoresPlacement, styleValue,
+        XCTAssertEqualObjects(layer.iconIgnoresPlacement, constantStyleValue,
                               @"iconIgnoresPlacement should round-trip constant values.");
 
-        styleValue = [MGLStyleValue<NSNumber *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
-                                                                                             stops:@{@18: styleValue}
-                                                                                           options:nil];        
-        layer.iconIgnoresPlacement = styleValue;
+        MGLStyleValue<NSNumber *> * functionStyleValue = [MGLStyleValue<NSNumber *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                                              stops:@{@18: constantStyleValue}
+                                                                                                            options:nil];  
+        layer.iconIgnoresPlacement = functionStyleValue;
 
         mbgl::style::IntervalStops<bool> intervalStops = { {{18, true}} };
         propertyValue = mbgl::style::CameraFunction<bool> { intervalStops };
         
         XCTAssertEqual(rawLayer->getIconIgnorePlacement(), propertyValue,
                        @"Setting iconIgnoresPlacement to a function should update icon-ignore-placement.");
-        XCTAssertEqualObjects(layer.iconIgnoresPlacement, styleValue,
+        XCTAssertEqualObjects(layer.iconIgnoresPlacement, functionStyleValue,
                               @"iconIgnoresPlacement should round-trip functions.");
 
         layer.iconIgnoresPlacement = nil;
@@ -109,6 +121,18 @@
                       @"Unsetting iconIgnoresPlacement should return icon-ignore-placement to the default value.");
         XCTAssertEqualObjects(layer.iconIgnoresPlacement, defaultStyleValue,
                               @"iconIgnoresPlacement should return the default value after being unset.");
+
+        functionStyleValue = [MGLStyleValue<NSNumber *> sourceFunctionValueWithStopType:MGLStyleFunctionStopTypeIdentity
+                                                                                                     stops:nil
+                                                                                             attributeName:@""
+                                                                                                   options:nil];
+        XCTAssertThrowsSpecificNamed(layer.iconIgnoresPlacement = functionStyleValue, NSException, NSInvalidArgumentException, @"MGLStyleValue should raise an exception if it is applied to a property that cannot support it");
+
+        functionStyleValue = [MGLStyleValue<NSNumber *> compositeFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                                        stops:@{@18: constantStyleValue}
+                                                                                                attributeName:@""
+                                                                                                      options:nil];
+        XCTAssertThrowsSpecificNamed(layer.iconIgnoresPlacement = functionStyleValue, NSException, NSInvalidArgumentException, @"MGLStyleValue should raise an exception if it is applied to a property that cannot support it");        
     }
 
     // icon-image
@@ -117,25 +141,25 @@
                       @"icon-image should be unset initially.");
         MGLStyleValue<NSString *> *defaultStyleValue = layer.iconImageName;
 
-        MGLStyleValue<NSString *> *styleValue = [MGLStyleValue<NSString *> valueWithRawValue:@"Icon Image"];
-        layer.iconImageName = styleValue;
+        MGLStyleValue<NSString *> *constantStyleValue = [MGLStyleValue<NSString *> valueWithRawValue:@"Icon Image"];
+        layer.iconImageName = constantStyleValue;
         mbgl::style::PropertyValue<std::string> propertyValue = { "Icon Image" };
         XCTAssertEqual(rawLayer->getIconImage(), propertyValue,
                        @"Setting iconImageName to a constant value should update icon-image.");
-        XCTAssertEqualObjects(layer.iconImageName, styleValue,
+        XCTAssertEqualObjects(layer.iconImageName, constantStyleValue,
                               @"iconImageName should round-trip constant values.");
 
-        styleValue = [MGLStyleValue<NSString *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
-                                                                                             stops:@{@18: styleValue}
-                                                                                           options:nil];        
-        layer.iconImageName = styleValue;
+        MGLStyleValue<NSString *> * functionStyleValue = [MGLStyleValue<NSString *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                                              stops:@{@18: constantStyleValue}
+                                                                                                            options:nil];  
+        layer.iconImageName = functionStyleValue;
 
         mbgl::style::IntervalStops<std::string> intervalStops = { {{18, "Icon Image"}} };
         propertyValue = mbgl::style::CameraFunction<std::string> { intervalStops };
         
         XCTAssertEqual(rawLayer->getIconImage(), propertyValue,
                        @"Setting iconImageName to a function should update icon-image.");
-        XCTAssertEqualObjects(layer.iconImageName, styleValue,
+        XCTAssertEqualObjects(layer.iconImageName, functionStyleValue,
                               @"iconImageName should round-trip functions.");
 
         layer.iconImageName = nil;
@@ -143,6 +167,18 @@
                       @"Unsetting iconImageName should return icon-image to the default value.");
         XCTAssertEqualObjects(layer.iconImageName, defaultStyleValue,
                               @"iconImageName should return the default value after being unset.");
+
+        functionStyleValue = [MGLStyleValue<NSString *> sourceFunctionValueWithStopType:MGLStyleFunctionStopTypeIdentity
+                                                                                                     stops:nil
+                                                                                             attributeName:@""
+                                                                                                   options:nil];
+        XCTAssertThrowsSpecificNamed(layer.iconImageName = functionStyleValue, NSException, NSInvalidArgumentException, @"MGLStyleValue should raise an exception if it is applied to a property that cannot support it");
+
+        functionStyleValue = [MGLStyleValue<NSString *> compositeFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                                        stops:@{@18: constantStyleValue}
+                                                                                                attributeName:@""
+                                                                                                      options:nil];
+        XCTAssertThrowsSpecificNamed(layer.iconImageName = functionStyleValue, NSException, NSInvalidArgumentException, @"MGLStyleValue should raise an exception if it is applied to a property that cannot support it");        
     }
 
     // icon-offset
@@ -151,31 +187,31 @@
                       @"icon-offset should be unset initially.");
         MGLStyleValue<NSValue *> *defaultStyleValue = layer.iconOffset;
 
-        MGLStyleValue<NSValue *> *styleValue = [MGLStyleValue<NSValue *> valueWithRawValue:
+        MGLStyleValue<NSValue *> *constantStyleValue = [MGLStyleValue<NSValue *> valueWithRawValue:
 #if TARGET_OS_IPHONE
             [NSValue valueWithCGVector:CGVectorMake(1, 1)]
 #else
             [NSValue valueWithMGLVector:CGVectorMake(1, -1)]
 #endif
         ];
-        layer.iconOffset = styleValue;
+        layer.iconOffset = constantStyleValue;
         mbgl::style::DataDrivenPropertyValue<std::array<float, 2>> propertyValue = { { 1, 1 } };
         XCTAssertEqual(rawLayer->getIconOffset(), propertyValue,
                        @"Setting iconOffset to a constant value should update icon-offset.");
-        XCTAssertEqualObjects(layer.iconOffset, styleValue,
+        XCTAssertEqualObjects(layer.iconOffset, constantStyleValue,
                               @"iconOffset should round-trip constant values.");
 
-        styleValue = [MGLStyleValue<NSValue *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
-                                                                                             stops:@{@18: styleValue}
-                                                                                           options:nil];        
-        layer.iconOffset = styleValue;
+        MGLStyleValue<NSValue *> * functionStyleValue = [MGLStyleValue<NSValue *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                                              stops:@{@18: constantStyleValue}
+                                                                                                            options:nil];  
+        layer.iconOffset = functionStyleValue;
 
         mbgl::style::IntervalStops<std::array<float, 2>> intervalStops = { {{18, { 1, 1 }}} };
         propertyValue = mbgl::style::CameraFunction<std::array<float, 2>> { intervalStops };
         
         XCTAssertEqual(rawLayer->getIconOffset(), propertyValue,
                        @"Setting iconOffset to a function should update icon-offset.");
-        XCTAssertEqualObjects(layer.iconOffset, styleValue,
+        XCTAssertEqualObjects(layer.iconOffset, functionStyleValue,
                               @"iconOffset should round-trip functions.");
 
         layer.iconOffset = nil;
@@ -191,25 +227,25 @@
                       @"icon-optional should be unset initially.");
         MGLStyleValue<NSNumber *> *defaultStyleValue = layer.iconOptional;
 
-        MGLStyleValue<NSNumber *> *styleValue = [MGLStyleValue<NSNumber *> valueWithRawValue:@YES];
-        layer.iconOptional = styleValue;
+        MGLStyleValue<NSNumber *> *constantStyleValue = [MGLStyleValue<NSNumber *> valueWithRawValue:@YES];
+        layer.iconOptional = constantStyleValue;
         mbgl::style::PropertyValue<bool> propertyValue = { true };
         XCTAssertEqual(rawLayer->getIconOptional(), propertyValue,
                        @"Setting iconOptional to a constant value should update icon-optional.");
-        XCTAssertEqualObjects(layer.iconOptional, styleValue,
+        XCTAssertEqualObjects(layer.iconOptional, constantStyleValue,
                               @"iconOptional should round-trip constant values.");
 
-        styleValue = [MGLStyleValue<NSNumber *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
-                                                                                             stops:@{@18: styleValue}
-                                                                                           options:nil];        
-        layer.iconOptional = styleValue;
+        MGLStyleValue<NSNumber *> * functionStyleValue = [MGLStyleValue<NSNumber *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                                              stops:@{@18: constantStyleValue}
+                                                                                                            options:nil];  
+        layer.iconOptional = functionStyleValue;
 
         mbgl::style::IntervalStops<bool> intervalStops = { {{18, true}} };
         propertyValue = mbgl::style::CameraFunction<bool> { intervalStops };
         
         XCTAssertEqual(rawLayer->getIconOptional(), propertyValue,
                        @"Setting iconOptional to a function should update icon-optional.");
-        XCTAssertEqualObjects(layer.iconOptional, styleValue,
+        XCTAssertEqualObjects(layer.iconOptional, functionStyleValue,
                               @"iconOptional should round-trip functions.");
 
         layer.iconOptional = nil;
@@ -217,6 +253,18 @@
                       @"Unsetting iconOptional should return icon-optional to the default value.");
         XCTAssertEqualObjects(layer.iconOptional, defaultStyleValue,
                               @"iconOptional should return the default value after being unset.");
+
+        functionStyleValue = [MGLStyleValue<NSNumber *> sourceFunctionValueWithStopType:MGLStyleFunctionStopTypeIdentity
+                                                                                                     stops:nil
+                                                                                             attributeName:@""
+                                                                                                   options:nil];
+        XCTAssertThrowsSpecificNamed(layer.iconOptional = functionStyleValue, NSException, NSInvalidArgumentException, @"MGLStyleValue should raise an exception if it is applied to a property that cannot support it");
+
+        functionStyleValue = [MGLStyleValue<NSNumber *> compositeFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                                        stops:@{@18: constantStyleValue}
+                                                                                                attributeName:@""
+                                                                                                      options:nil];
+        XCTAssertThrowsSpecificNamed(layer.iconOptional = functionStyleValue, NSException, NSInvalidArgumentException, @"MGLStyleValue should raise an exception if it is applied to a property that cannot support it");        
     }
 
     // icon-padding
@@ -225,25 +273,25 @@
                       @"icon-padding should be unset initially.");
         MGLStyleValue<NSNumber *> *defaultStyleValue = layer.iconPadding;
 
-        MGLStyleValue<NSNumber *> *styleValue = [MGLStyleValue<NSNumber *> valueWithRawValue:@0xff];
-        layer.iconPadding = styleValue;
+        MGLStyleValue<NSNumber *> *constantStyleValue = [MGLStyleValue<NSNumber *> valueWithRawValue:@0xff];
+        layer.iconPadding = constantStyleValue;
         mbgl::style::PropertyValue<float> propertyValue = { 0xff };
         XCTAssertEqual(rawLayer->getIconPadding(), propertyValue,
                        @"Setting iconPadding to a constant value should update icon-padding.");
-        XCTAssertEqualObjects(layer.iconPadding, styleValue,
+        XCTAssertEqualObjects(layer.iconPadding, constantStyleValue,
                               @"iconPadding should round-trip constant values.");
 
-        styleValue = [MGLStyleValue<NSNumber *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
-                                                                                             stops:@{@18: styleValue}
-                                                                                           options:nil];        
-        layer.iconPadding = styleValue;
+        MGLStyleValue<NSNumber *> * functionStyleValue = [MGLStyleValue<NSNumber *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                                              stops:@{@18: constantStyleValue}
+                                                                                                            options:nil];  
+        layer.iconPadding = functionStyleValue;
 
         mbgl::style::IntervalStops<float> intervalStops = { {{18, 0xff}} };
         propertyValue = mbgl::style::CameraFunction<float> { intervalStops };
         
         XCTAssertEqual(rawLayer->getIconPadding(), propertyValue,
                        @"Setting iconPadding to a function should update icon-padding.");
-        XCTAssertEqualObjects(layer.iconPadding, styleValue,
+        XCTAssertEqualObjects(layer.iconPadding, functionStyleValue,
                               @"iconPadding should round-trip functions.");
 
         layer.iconPadding = nil;
@@ -259,25 +307,25 @@
                       @"icon-rotate should be unset initially.");
         MGLStyleValue<NSNumber *> *defaultStyleValue = layer.iconRotation;
 
-        MGLStyleValue<NSNumber *> *styleValue = [MGLStyleValue<NSNumber *> valueWithRawValue:@0xff];
-        layer.iconRotation = styleValue;
+        MGLStyleValue<NSNumber *> *constantStyleValue = [MGLStyleValue<NSNumber *> valueWithRawValue:@0xff];
+        layer.iconRotation = constantStyleValue;
         mbgl::style::DataDrivenPropertyValue<float> propertyValue = { 0xff };
         XCTAssertEqual(rawLayer->getIconRotate(), propertyValue,
                        @"Setting iconRotation to a constant value should update icon-rotate.");
-        XCTAssertEqualObjects(layer.iconRotation, styleValue,
+        XCTAssertEqualObjects(layer.iconRotation, constantStyleValue,
                               @"iconRotation should round-trip constant values.");
 
-        styleValue = [MGLStyleValue<NSNumber *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
-                                                                                             stops:@{@18: styleValue}
-                                                                                           options:nil];        
-        layer.iconRotation = styleValue;
+        MGLStyleValue<NSNumber *> * functionStyleValue = [MGLStyleValue<NSNumber *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                                              stops:@{@18: constantStyleValue}
+                                                                                                            options:nil];  
+        layer.iconRotation = functionStyleValue;
 
         mbgl::style::IntervalStops<float> intervalStops = { {{18, 0xff}} };
         propertyValue = mbgl::style::CameraFunction<float> { intervalStops };
         
         XCTAssertEqual(rawLayer->getIconRotate(), propertyValue,
                        @"Setting iconRotation to a function should update icon-rotate.");
-        XCTAssertEqualObjects(layer.iconRotation, styleValue,
+        XCTAssertEqualObjects(layer.iconRotation, functionStyleValue,
                               @"iconRotation should round-trip functions.");
 
         layer.iconRotation = nil;
@@ -293,25 +341,25 @@
                       @"icon-rotation-alignment should be unset initially.");
         MGLStyleValue<NSValue *> *defaultStyleValue = layer.iconRotationAlignment;
 
-        MGLStyleValue<NSValue *> *styleValue = [MGLStyleValue<NSValue *> valueWithRawValue:[NSValue valueWithMGLIconRotationAlignment:MGLIconRotationAlignmentAuto]];
-        layer.iconRotationAlignment = styleValue;
+        MGLStyleValue<NSValue *> *constantStyleValue = [MGLStyleValue<NSValue *> valueWithRawValue:[NSValue valueWithMGLIconRotationAlignment:MGLIconRotationAlignmentAuto]];
+        layer.iconRotationAlignment = constantStyleValue;
         mbgl::style::PropertyValue<mbgl::style::AlignmentType> propertyValue = { mbgl::style::AlignmentType::Auto };
         XCTAssertEqual(rawLayer->getIconRotationAlignment(), propertyValue,
                        @"Setting iconRotationAlignment to a constant value should update icon-rotation-alignment.");
-        XCTAssertEqualObjects(layer.iconRotationAlignment, styleValue,
+        XCTAssertEqualObjects(layer.iconRotationAlignment, constantStyleValue,
                               @"iconRotationAlignment should round-trip constant values.");
 
-        styleValue = [MGLStyleValue<NSValue *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
-                                                                                             stops:@{@18: styleValue}
-                                                                                           options:nil];        
-        layer.iconRotationAlignment = styleValue;
+        MGLStyleValue<NSValue *> * functionStyleValue = [MGLStyleValue<NSValue *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                                              stops:@{@18: constantStyleValue}
+                                                                                                            options:nil];  
+        layer.iconRotationAlignment = functionStyleValue;
 
         mbgl::style::IntervalStops<mbgl::style::AlignmentType> intervalStops = { {{18, mbgl::style::AlignmentType::Auto}} };
         propertyValue = mbgl::style::CameraFunction<mbgl::style::AlignmentType> { intervalStops };
         
         XCTAssertEqual(rawLayer->getIconRotationAlignment(), propertyValue,
                        @"Setting iconRotationAlignment to a function should update icon-rotation-alignment.");
-        XCTAssertEqualObjects(layer.iconRotationAlignment, styleValue,
+        XCTAssertEqualObjects(layer.iconRotationAlignment, functionStyleValue,
                               @"iconRotationAlignment should round-trip functions.");
 
         layer.iconRotationAlignment = nil;
@@ -319,6 +367,18 @@
                       @"Unsetting iconRotationAlignment should return icon-rotation-alignment to the default value.");
         XCTAssertEqualObjects(layer.iconRotationAlignment, defaultStyleValue,
                               @"iconRotationAlignment should return the default value after being unset.");
+
+        functionStyleValue = [MGLStyleValue<NSValue *> sourceFunctionValueWithStopType:MGLStyleFunctionStopTypeIdentity
+                                                                                                     stops:nil
+                                                                                             attributeName:@""
+                                                                                                   options:nil];
+        XCTAssertThrowsSpecificNamed(layer.iconRotationAlignment = functionStyleValue, NSException, NSInvalidArgumentException, @"MGLStyleValue should raise an exception if it is applied to a property that cannot support it");
+
+        functionStyleValue = [MGLStyleValue<NSValue *> compositeFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                                        stops:@{@18: constantStyleValue}
+                                                                                                attributeName:@""
+                                                                                                      options:nil];
+        XCTAssertThrowsSpecificNamed(layer.iconRotationAlignment = functionStyleValue, NSException, NSInvalidArgumentException, @"MGLStyleValue should raise an exception if it is applied to a property that cannot support it");        
     }
 
     // icon-size
@@ -327,25 +387,25 @@
                       @"icon-size should be unset initially.");
         MGLStyleValue<NSNumber *> *defaultStyleValue = layer.iconScale;
 
-        MGLStyleValue<NSNumber *> *styleValue = [MGLStyleValue<NSNumber *> valueWithRawValue:@0xff];
-        layer.iconScale = styleValue;
+        MGLStyleValue<NSNumber *> *constantStyleValue = [MGLStyleValue<NSNumber *> valueWithRawValue:@0xff];
+        layer.iconScale = constantStyleValue;
         mbgl::style::PropertyValue<float> propertyValue = { 0xff };
         XCTAssertEqual(rawLayer->getIconSize(), propertyValue,
                        @"Setting iconScale to a constant value should update icon-size.");
-        XCTAssertEqualObjects(layer.iconScale, styleValue,
+        XCTAssertEqualObjects(layer.iconScale, constantStyleValue,
                               @"iconScale should round-trip constant values.");
 
-        styleValue = [MGLStyleValue<NSNumber *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
-                                                                                             stops:@{@18: styleValue}
-                                                                                           options:nil];        
-        layer.iconScale = styleValue;
+        MGLStyleValue<NSNumber *> * functionStyleValue = [MGLStyleValue<NSNumber *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                                              stops:@{@18: constantStyleValue}
+                                                                                                            options:nil];  
+        layer.iconScale = functionStyleValue;
 
         mbgl::style::IntervalStops<float> intervalStops = { {{18, 0xff}} };
         propertyValue = mbgl::style::CameraFunction<float> { intervalStops };
         
         XCTAssertEqual(rawLayer->getIconSize(), propertyValue,
                        @"Setting iconScale to a function should update icon-size.");
-        XCTAssertEqualObjects(layer.iconScale, styleValue,
+        XCTAssertEqualObjects(layer.iconScale, functionStyleValue,
                               @"iconScale should round-trip functions.");
 
         layer.iconScale = nil;
@@ -361,25 +421,25 @@
                       @"icon-text-fit should be unset initially.");
         MGLStyleValue<NSValue *> *defaultStyleValue = layer.iconTextFit;
 
-        MGLStyleValue<NSValue *> *styleValue = [MGLStyleValue<NSValue *> valueWithRawValue:[NSValue valueWithMGLIconTextFit:MGLIconTextFitBoth]];
-        layer.iconTextFit = styleValue;
+        MGLStyleValue<NSValue *> *constantStyleValue = [MGLStyleValue<NSValue *> valueWithRawValue:[NSValue valueWithMGLIconTextFit:MGLIconTextFitBoth]];
+        layer.iconTextFit = constantStyleValue;
         mbgl::style::PropertyValue<mbgl::style::IconTextFitType> propertyValue = { mbgl::style::IconTextFitType::Both };
         XCTAssertEqual(rawLayer->getIconTextFit(), propertyValue,
                        @"Setting iconTextFit to a constant value should update icon-text-fit.");
-        XCTAssertEqualObjects(layer.iconTextFit, styleValue,
+        XCTAssertEqualObjects(layer.iconTextFit, constantStyleValue,
                               @"iconTextFit should round-trip constant values.");
 
-        styleValue = [MGLStyleValue<NSValue *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
-                                                                                             stops:@{@18: styleValue}
-                                                                                           options:nil];        
-        layer.iconTextFit = styleValue;
+        MGLStyleValue<NSValue *> * functionStyleValue = [MGLStyleValue<NSValue *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                                              stops:@{@18: constantStyleValue}
+                                                                                                            options:nil];  
+        layer.iconTextFit = functionStyleValue;
 
         mbgl::style::IntervalStops<mbgl::style::IconTextFitType> intervalStops = { {{18, mbgl::style::IconTextFitType::Both}} };
         propertyValue = mbgl::style::CameraFunction<mbgl::style::IconTextFitType> { intervalStops };
         
         XCTAssertEqual(rawLayer->getIconTextFit(), propertyValue,
                        @"Setting iconTextFit to a function should update icon-text-fit.");
-        XCTAssertEqualObjects(layer.iconTextFit, styleValue,
+        XCTAssertEqualObjects(layer.iconTextFit, functionStyleValue,
                               @"iconTextFit should round-trip functions.");
 
         layer.iconTextFit = nil;
@@ -387,6 +447,18 @@
                       @"Unsetting iconTextFit should return icon-text-fit to the default value.");
         XCTAssertEqualObjects(layer.iconTextFit, defaultStyleValue,
                               @"iconTextFit should return the default value after being unset.");
+
+        functionStyleValue = [MGLStyleValue<NSValue *> sourceFunctionValueWithStopType:MGLStyleFunctionStopTypeIdentity
+                                                                                                     stops:nil
+                                                                                             attributeName:@""
+                                                                                                   options:nil];
+        XCTAssertThrowsSpecificNamed(layer.iconTextFit = functionStyleValue, NSException, NSInvalidArgumentException, @"MGLStyleValue should raise an exception if it is applied to a property that cannot support it");
+
+        functionStyleValue = [MGLStyleValue<NSValue *> compositeFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                                        stops:@{@18: constantStyleValue}
+                                                                                                attributeName:@""
+                                                                                                      options:nil];
+        XCTAssertThrowsSpecificNamed(layer.iconTextFit = functionStyleValue, NSException, NSInvalidArgumentException, @"MGLStyleValue should raise an exception if it is applied to a property that cannot support it");        
     }
 
     // icon-text-fit-padding
@@ -395,31 +467,31 @@
                       @"icon-text-fit-padding should be unset initially.");
         MGLStyleValue<NSValue *> *defaultStyleValue = layer.iconTextFitPadding;
 
-        MGLStyleValue<NSValue *> *styleValue = [MGLStyleValue<NSValue *> valueWithRawValue:
+        MGLStyleValue<NSValue *> *constantStyleValue = [MGLStyleValue<NSValue *> valueWithRawValue:
 #if TARGET_OS_IPHONE
             [NSValue valueWithUIEdgeInsets:UIEdgeInsetsMake(1, 1, 1, 1)]
 #else
             [NSValue valueWithEdgeInsets:NSEdgeInsetsMake(1, 1, 1, 1)]
 #endif
         ];
-        layer.iconTextFitPadding = styleValue;
+        layer.iconTextFitPadding = constantStyleValue;
         mbgl::style::PropertyValue<std::array<float, 4>> propertyValue = { { 1, 1, 1, 1 } };
         XCTAssertEqual(rawLayer->getIconTextFitPadding(), propertyValue,
                        @"Setting iconTextFitPadding to a constant value should update icon-text-fit-padding.");
-        XCTAssertEqualObjects(layer.iconTextFitPadding, styleValue,
+        XCTAssertEqualObjects(layer.iconTextFitPadding, constantStyleValue,
                               @"iconTextFitPadding should round-trip constant values.");
 
-        styleValue = [MGLStyleValue<NSValue *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
-                                                                                             stops:@{@18: styleValue}
-                                                                                           options:nil];        
-        layer.iconTextFitPadding = styleValue;
+        MGLStyleValue<NSValue *> * functionStyleValue = [MGLStyleValue<NSValue *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                                              stops:@{@18: constantStyleValue}
+                                                                                                            options:nil];  
+        layer.iconTextFitPadding = functionStyleValue;
 
         mbgl::style::IntervalStops<std::array<float, 4>> intervalStops = { {{18, { 1, 1, 1, 1 }}} };
         propertyValue = mbgl::style::CameraFunction<std::array<float, 4>> { intervalStops };
         
         XCTAssertEqual(rawLayer->getIconTextFitPadding(), propertyValue,
                        @"Setting iconTextFitPadding to a function should update icon-text-fit-padding.");
-        XCTAssertEqualObjects(layer.iconTextFitPadding, styleValue,
+        XCTAssertEqualObjects(layer.iconTextFitPadding, functionStyleValue,
                               @"iconTextFitPadding should round-trip functions.");
 
         layer.iconTextFitPadding = nil;
@@ -435,25 +507,25 @@
                       @"icon-keep-upright should be unset initially.");
         MGLStyleValue<NSNumber *> *defaultStyleValue = layer.keepsIconUpright;
 
-        MGLStyleValue<NSNumber *> *styleValue = [MGLStyleValue<NSNumber *> valueWithRawValue:@YES];
-        layer.keepsIconUpright = styleValue;
+        MGLStyleValue<NSNumber *> *constantStyleValue = [MGLStyleValue<NSNumber *> valueWithRawValue:@YES];
+        layer.keepsIconUpright = constantStyleValue;
         mbgl::style::PropertyValue<bool> propertyValue = { true };
         XCTAssertEqual(rawLayer->getIconKeepUpright(), propertyValue,
                        @"Setting keepsIconUpright to a constant value should update icon-keep-upright.");
-        XCTAssertEqualObjects(layer.keepsIconUpright, styleValue,
+        XCTAssertEqualObjects(layer.keepsIconUpright, constantStyleValue,
                               @"keepsIconUpright should round-trip constant values.");
 
-        styleValue = [MGLStyleValue<NSNumber *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
-                                                                                             stops:@{@18: styleValue}
-                                                                                           options:nil];        
-        layer.keepsIconUpright = styleValue;
+        MGLStyleValue<NSNumber *> * functionStyleValue = [MGLStyleValue<NSNumber *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                                              stops:@{@18: constantStyleValue}
+                                                                                                            options:nil];  
+        layer.keepsIconUpright = functionStyleValue;
 
         mbgl::style::IntervalStops<bool> intervalStops = { {{18, true}} };
         propertyValue = mbgl::style::CameraFunction<bool> { intervalStops };
         
         XCTAssertEqual(rawLayer->getIconKeepUpright(), propertyValue,
                        @"Setting keepsIconUpright to a function should update icon-keep-upright.");
-        XCTAssertEqualObjects(layer.keepsIconUpright, styleValue,
+        XCTAssertEqualObjects(layer.keepsIconUpright, functionStyleValue,
                               @"keepsIconUpright should round-trip functions.");
 
         layer.keepsIconUpright = nil;
@@ -461,6 +533,18 @@
                       @"Unsetting keepsIconUpright should return icon-keep-upright to the default value.");
         XCTAssertEqualObjects(layer.keepsIconUpright, defaultStyleValue,
                               @"keepsIconUpright should return the default value after being unset.");
+
+        functionStyleValue = [MGLStyleValue<NSNumber *> sourceFunctionValueWithStopType:MGLStyleFunctionStopTypeIdentity
+                                                                                                     stops:nil
+                                                                                             attributeName:@""
+                                                                                                   options:nil];
+        XCTAssertThrowsSpecificNamed(layer.keepsIconUpright = functionStyleValue, NSException, NSInvalidArgumentException, @"MGLStyleValue should raise an exception if it is applied to a property that cannot support it");
+
+        functionStyleValue = [MGLStyleValue<NSNumber *> compositeFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                                        stops:@{@18: constantStyleValue}
+                                                                                                attributeName:@""
+                                                                                                      options:nil];
+        XCTAssertThrowsSpecificNamed(layer.keepsIconUpright = functionStyleValue, NSException, NSInvalidArgumentException, @"MGLStyleValue should raise an exception if it is applied to a property that cannot support it");        
     }
 
     // text-keep-upright
@@ -469,25 +553,25 @@
                       @"text-keep-upright should be unset initially.");
         MGLStyleValue<NSNumber *> *defaultStyleValue = layer.keepsTextUpright;
 
-        MGLStyleValue<NSNumber *> *styleValue = [MGLStyleValue<NSNumber *> valueWithRawValue:@NO];
-        layer.keepsTextUpright = styleValue;
+        MGLStyleValue<NSNumber *> *constantStyleValue = [MGLStyleValue<NSNumber *> valueWithRawValue:@NO];
+        layer.keepsTextUpright = constantStyleValue;
         mbgl::style::PropertyValue<bool> propertyValue = { false };
         XCTAssertEqual(rawLayer->getTextKeepUpright(), propertyValue,
                        @"Setting keepsTextUpright to a constant value should update text-keep-upright.");
-        XCTAssertEqualObjects(layer.keepsTextUpright, styleValue,
+        XCTAssertEqualObjects(layer.keepsTextUpright, constantStyleValue,
                               @"keepsTextUpright should round-trip constant values.");
 
-        styleValue = [MGLStyleValue<NSNumber *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
-                                                                                             stops:@{@18: styleValue}
-                                                                                           options:nil];        
-        layer.keepsTextUpright = styleValue;
+        MGLStyleValue<NSNumber *> * functionStyleValue = [MGLStyleValue<NSNumber *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                                              stops:@{@18: constantStyleValue}
+                                                                                                            options:nil];  
+        layer.keepsTextUpright = functionStyleValue;
 
         mbgl::style::IntervalStops<bool> intervalStops = { {{18, false}} };
         propertyValue = mbgl::style::CameraFunction<bool> { intervalStops };
         
         XCTAssertEqual(rawLayer->getTextKeepUpright(), propertyValue,
                        @"Setting keepsTextUpright to a function should update text-keep-upright.");
-        XCTAssertEqualObjects(layer.keepsTextUpright, styleValue,
+        XCTAssertEqualObjects(layer.keepsTextUpright, functionStyleValue,
                               @"keepsTextUpright should round-trip functions.");
 
         layer.keepsTextUpright = nil;
@@ -495,6 +579,18 @@
                       @"Unsetting keepsTextUpright should return text-keep-upright to the default value.");
         XCTAssertEqualObjects(layer.keepsTextUpright, defaultStyleValue,
                               @"keepsTextUpright should return the default value after being unset.");
+
+        functionStyleValue = [MGLStyleValue<NSNumber *> sourceFunctionValueWithStopType:MGLStyleFunctionStopTypeIdentity
+                                                                                                     stops:nil
+                                                                                             attributeName:@""
+                                                                                                   options:nil];
+        XCTAssertThrowsSpecificNamed(layer.keepsTextUpright = functionStyleValue, NSException, NSInvalidArgumentException, @"MGLStyleValue should raise an exception if it is applied to a property that cannot support it");
+
+        functionStyleValue = [MGLStyleValue<NSNumber *> compositeFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                                        stops:@{@18: constantStyleValue}
+                                                                                                attributeName:@""
+                                                                                                      options:nil];
+        XCTAssertThrowsSpecificNamed(layer.keepsTextUpright = functionStyleValue, NSException, NSInvalidArgumentException, @"MGLStyleValue should raise an exception if it is applied to a property that cannot support it");        
     }
 
     // text-max-angle
@@ -503,25 +599,25 @@
                       @"text-max-angle should be unset initially.");
         MGLStyleValue<NSNumber *> *defaultStyleValue = layer.maximumTextAngle;
 
-        MGLStyleValue<NSNumber *> *styleValue = [MGLStyleValue<NSNumber *> valueWithRawValue:@0xff];
-        layer.maximumTextAngle = styleValue;
+        MGLStyleValue<NSNumber *> *constantStyleValue = [MGLStyleValue<NSNumber *> valueWithRawValue:@0xff];
+        layer.maximumTextAngle = constantStyleValue;
         mbgl::style::PropertyValue<float> propertyValue = { 0xff };
         XCTAssertEqual(rawLayer->getTextMaxAngle(), propertyValue,
                        @"Setting maximumTextAngle to a constant value should update text-max-angle.");
-        XCTAssertEqualObjects(layer.maximumTextAngle, styleValue,
+        XCTAssertEqualObjects(layer.maximumTextAngle, constantStyleValue,
                               @"maximumTextAngle should round-trip constant values.");
 
-        styleValue = [MGLStyleValue<NSNumber *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
-                                                                                             stops:@{@18: styleValue}
-                                                                                           options:nil];        
-        layer.maximumTextAngle = styleValue;
+        MGLStyleValue<NSNumber *> * functionStyleValue = [MGLStyleValue<NSNumber *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                                              stops:@{@18: constantStyleValue}
+                                                                                                            options:nil];  
+        layer.maximumTextAngle = functionStyleValue;
 
         mbgl::style::IntervalStops<float> intervalStops = { {{18, 0xff}} };
         propertyValue = mbgl::style::CameraFunction<float> { intervalStops };
         
         XCTAssertEqual(rawLayer->getTextMaxAngle(), propertyValue,
                        @"Setting maximumTextAngle to a function should update text-max-angle.");
-        XCTAssertEqualObjects(layer.maximumTextAngle, styleValue,
+        XCTAssertEqualObjects(layer.maximumTextAngle, functionStyleValue,
                               @"maximumTextAngle should round-trip functions.");
 
         layer.maximumTextAngle = nil;
@@ -537,25 +633,25 @@
                       @"text-max-width should be unset initially.");
         MGLStyleValue<NSNumber *> *defaultStyleValue = layer.maximumTextWidth;
 
-        MGLStyleValue<NSNumber *> *styleValue = [MGLStyleValue<NSNumber *> valueWithRawValue:@0xff];
-        layer.maximumTextWidth = styleValue;
+        MGLStyleValue<NSNumber *> *constantStyleValue = [MGLStyleValue<NSNumber *> valueWithRawValue:@0xff];
+        layer.maximumTextWidth = constantStyleValue;
         mbgl::style::PropertyValue<float> propertyValue = { 0xff };
         XCTAssertEqual(rawLayer->getTextMaxWidth(), propertyValue,
                        @"Setting maximumTextWidth to a constant value should update text-max-width.");
-        XCTAssertEqualObjects(layer.maximumTextWidth, styleValue,
+        XCTAssertEqualObjects(layer.maximumTextWidth, constantStyleValue,
                               @"maximumTextWidth should round-trip constant values.");
 
-        styleValue = [MGLStyleValue<NSNumber *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
-                                                                                             stops:@{@18: styleValue}
-                                                                                           options:nil];        
-        layer.maximumTextWidth = styleValue;
+        MGLStyleValue<NSNumber *> * functionStyleValue = [MGLStyleValue<NSNumber *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                                              stops:@{@18: constantStyleValue}
+                                                                                                            options:nil];  
+        layer.maximumTextWidth = functionStyleValue;
 
         mbgl::style::IntervalStops<float> intervalStops = { {{18, 0xff}} };
         propertyValue = mbgl::style::CameraFunction<float> { intervalStops };
         
         XCTAssertEqual(rawLayer->getTextMaxWidth(), propertyValue,
                        @"Setting maximumTextWidth to a function should update text-max-width.");
-        XCTAssertEqualObjects(layer.maximumTextWidth, styleValue,
+        XCTAssertEqualObjects(layer.maximumTextWidth, functionStyleValue,
                               @"maximumTextWidth should round-trip functions.");
 
         layer.maximumTextWidth = nil;
@@ -571,25 +667,25 @@
                       @"symbol-avoid-edges should be unset initially.");
         MGLStyleValue<NSNumber *> *defaultStyleValue = layer.symbolAvoidsEdges;
 
-        MGLStyleValue<NSNumber *> *styleValue = [MGLStyleValue<NSNumber *> valueWithRawValue:@YES];
-        layer.symbolAvoidsEdges = styleValue;
+        MGLStyleValue<NSNumber *> *constantStyleValue = [MGLStyleValue<NSNumber *> valueWithRawValue:@YES];
+        layer.symbolAvoidsEdges = constantStyleValue;
         mbgl::style::PropertyValue<bool> propertyValue = { true };
         XCTAssertEqual(rawLayer->getSymbolAvoidEdges(), propertyValue,
                        @"Setting symbolAvoidsEdges to a constant value should update symbol-avoid-edges.");
-        XCTAssertEqualObjects(layer.symbolAvoidsEdges, styleValue,
+        XCTAssertEqualObjects(layer.symbolAvoidsEdges, constantStyleValue,
                               @"symbolAvoidsEdges should round-trip constant values.");
 
-        styleValue = [MGLStyleValue<NSNumber *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
-                                                                                             stops:@{@18: styleValue}
-                                                                                           options:nil];        
-        layer.symbolAvoidsEdges = styleValue;
+        MGLStyleValue<NSNumber *> * functionStyleValue = [MGLStyleValue<NSNumber *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                                              stops:@{@18: constantStyleValue}
+                                                                                                            options:nil];  
+        layer.symbolAvoidsEdges = functionStyleValue;
 
         mbgl::style::IntervalStops<bool> intervalStops = { {{18, true}} };
         propertyValue = mbgl::style::CameraFunction<bool> { intervalStops };
         
         XCTAssertEqual(rawLayer->getSymbolAvoidEdges(), propertyValue,
                        @"Setting symbolAvoidsEdges to a function should update symbol-avoid-edges.");
-        XCTAssertEqualObjects(layer.symbolAvoidsEdges, styleValue,
+        XCTAssertEqualObjects(layer.symbolAvoidsEdges, functionStyleValue,
                               @"symbolAvoidsEdges should round-trip functions.");
 
         layer.symbolAvoidsEdges = nil;
@@ -597,6 +693,18 @@
                       @"Unsetting symbolAvoidsEdges should return symbol-avoid-edges to the default value.");
         XCTAssertEqualObjects(layer.symbolAvoidsEdges, defaultStyleValue,
                               @"symbolAvoidsEdges should return the default value after being unset.");
+
+        functionStyleValue = [MGLStyleValue<NSNumber *> sourceFunctionValueWithStopType:MGLStyleFunctionStopTypeIdentity
+                                                                                                     stops:nil
+                                                                                             attributeName:@""
+                                                                                                   options:nil];
+        XCTAssertThrowsSpecificNamed(layer.symbolAvoidsEdges = functionStyleValue, NSException, NSInvalidArgumentException, @"MGLStyleValue should raise an exception if it is applied to a property that cannot support it");
+
+        functionStyleValue = [MGLStyleValue<NSNumber *> compositeFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                                        stops:@{@18: constantStyleValue}
+                                                                                                attributeName:@""
+                                                                                                      options:nil];
+        XCTAssertThrowsSpecificNamed(layer.symbolAvoidsEdges = functionStyleValue, NSException, NSInvalidArgumentException, @"MGLStyleValue should raise an exception if it is applied to a property that cannot support it");        
     }
 
     // symbol-placement
@@ -605,25 +713,25 @@
                       @"symbol-placement should be unset initially.");
         MGLStyleValue<NSValue *> *defaultStyleValue = layer.symbolPlacement;
 
-        MGLStyleValue<NSValue *> *styleValue = [MGLStyleValue<NSValue *> valueWithRawValue:[NSValue valueWithMGLSymbolPlacement:MGLSymbolPlacementLine]];
-        layer.symbolPlacement = styleValue;
+        MGLStyleValue<NSValue *> *constantStyleValue = [MGLStyleValue<NSValue *> valueWithRawValue:[NSValue valueWithMGLSymbolPlacement:MGLSymbolPlacementLine]];
+        layer.symbolPlacement = constantStyleValue;
         mbgl::style::PropertyValue<mbgl::style::SymbolPlacementType> propertyValue = { mbgl::style::SymbolPlacementType::Line };
         XCTAssertEqual(rawLayer->getSymbolPlacement(), propertyValue,
                        @"Setting symbolPlacement to a constant value should update symbol-placement.");
-        XCTAssertEqualObjects(layer.symbolPlacement, styleValue,
+        XCTAssertEqualObjects(layer.symbolPlacement, constantStyleValue,
                               @"symbolPlacement should round-trip constant values.");
 
-        styleValue = [MGLStyleValue<NSValue *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
-                                                                                             stops:@{@18: styleValue}
-                                                                                           options:nil];        
-        layer.symbolPlacement = styleValue;
+        MGLStyleValue<NSValue *> * functionStyleValue = [MGLStyleValue<NSValue *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                                              stops:@{@18: constantStyleValue}
+                                                                                                            options:nil];  
+        layer.symbolPlacement = functionStyleValue;
 
         mbgl::style::IntervalStops<mbgl::style::SymbolPlacementType> intervalStops = { {{18, mbgl::style::SymbolPlacementType::Line}} };
         propertyValue = mbgl::style::CameraFunction<mbgl::style::SymbolPlacementType> { intervalStops };
         
         XCTAssertEqual(rawLayer->getSymbolPlacement(), propertyValue,
                        @"Setting symbolPlacement to a function should update symbol-placement.");
-        XCTAssertEqualObjects(layer.symbolPlacement, styleValue,
+        XCTAssertEqualObjects(layer.symbolPlacement, functionStyleValue,
                               @"symbolPlacement should round-trip functions.");
 
         layer.symbolPlacement = nil;
@@ -631,6 +739,18 @@
                       @"Unsetting symbolPlacement should return symbol-placement to the default value.");
         XCTAssertEqualObjects(layer.symbolPlacement, defaultStyleValue,
                               @"symbolPlacement should return the default value after being unset.");
+
+        functionStyleValue = [MGLStyleValue<NSValue *> sourceFunctionValueWithStopType:MGLStyleFunctionStopTypeIdentity
+                                                                                                     stops:nil
+                                                                                             attributeName:@""
+                                                                                                   options:nil];
+        XCTAssertThrowsSpecificNamed(layer.symbolPlacement = functionStyleValue, NSException, NSInvalidArgumentException, @"MGLStyleValue should raise an exception if it is applied to a property that cannot support it");
+
+        functionStyleValue = [MGLStyleValue<NSValue *> compositeFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                                        stops:@{@18: constantStyleValue}
+                                                                                                attributeName:@""
+                                                                                                      options:nil];
+        XCTAssertThrowsSpecificNamed(layer.symbolPlacement = functionStyleValue, NSException, NSInvalidArgumentException, @"MGLStyleValue should raise an exception if it is applied to a property that cannot support it");        
     }
 
     // symbol-spacing
@@ -639,25 +759,25 @@
                       @"symbol-spacing should be unset initially.");
         MGLStyleValue<NSNumber *> *defaultStyleValue = layer.symbolSpacing;
 
-        MGLStyleValue<NSNumber *> *styleValue = [MGLStyleValue<NSNumber *> valueWithRawValue:@0xff];
-        layer.symbolSpacing = styleValue;
+        MGLStyleValue<NSNumber *> *constantStyleValue = [MGLStyleValue<NSNumber *> valueWithRawValue:@0xff];
+        layer.symbolSpacing = constantStyleValue;
         mbgl::style::PropertyValue<float> propertyValue = { 0xff };
         XCTAssertEqual(rawLayer->getSymbolSpacing(), propertyValue,
                        @"Setting symbolSpacing to a constant value should update symbol-spacing.");
-        XCTAssertEqualObjects(layer.symbolSpacing, styleValue,
+        XCTAssertEqualObjects(layer.symbolSpacing, constantStyleValue,
                               @"symbolSpacing should round-trip constant values.");
 
-        styleValue = [MGLStyleValue<NSNumber *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
-                                                                                             stops:@{@18: styleValue}
-                                                                                           options:nil];        
-        layer.symbolSpacing = styleValue;
+        MGLStyleValue<NSNumber *> * functionStyleValue = [MGLStyleValue<NSNumber *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                                              stops:@{@18: constantStyleValue}
+                                                                                                            options:nil];  
+        layer.symbolSpacing = functionStyleValue;
 
         mbgl::style::IntervalStops<float> intervalStops = { {{18, 0xff}} };
         propertyValue = mbgl::style::CameraFunction<float> { intervalStops };
         
         XCTAssertEqual(rawLayer->getSymbolSpacing(), propertyValue,
                        @"Setting symbolSpacing to a function should update symbol-spacing.");
-        XCTAssertEqualObjects(layer.symbolSpacing, styleValue,
+        XCTAssertEqualObjects(layer.symbolSpacing, functionStyleValue,
                               @"symbolSpacing should round-trip functions.");
 
         layer.symbolSpacing = nil;
@@ -673,25 +793,25 @@
                       @"text-field should be unset initially.");
         MGLStyleValue<NSString *> *defaultStyleValue = layer.text;
 
-        MGLStyleValue<NSString *> *styleValue = [MGLStyleValue<NSString *> valueWithRawValue:@"Text Field"];
-        layer.text = styleValue;
+        MGLStyleValue<NSString *> *constantStyleValue = [MGLStyleValue<NSString *> valueWithRawValue:@"Text Field"];
+        layer.text = constantStyleValue;
         mbgl::style::PropertyValue<std::string> propertyValue = { "Text Field" };
         XCTAssertEqual(rawLayer->getTextField(), propertyValue,
                        @"Setting text to a constant value should update text-field.");
-        XCTAssertEqualObjects(layer.text, styleValue,
+        XCTAssertEqualObjects(layer.text, constantStyleValue,
                               @"text should round-trip constant values.");
 
-        styleValue = [MGLStyleValue<NSString *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
-                                                                                             stops:@{@18: styleValue}
-                                                                                           options:nil];        
-        layer.text = styleValue;
+        MGLStyleValue<NSString *> * functionStyleValue = [MGLStyleValue<NSString *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                                              stops:@{@18: constantStyleValue}
+                                                                                                            options:nil];  
+        layer.text = functionStyleValue;
 
         mbgl::style::IntervalStops<std::string> intervalStops = { {{18, "Text Field"}} };
         propertyValue = mbgl::style::CameraFunction<std::string> { intervalStops };
         
         XCTAssertEqual(rawLayer->getTextField(), propertyValue,
                        @"Setting text to a function should update text-field.");
-        XCTAssertEqualObjects(layer.text, styleValue,
+        XCTAssertEqualObjects(layer.text, functionStyleValue,
                               @"text should round-trip functions.");
 
         layer.text = nil;
@@ -699,6 +819,18 @@
                       @"Unsetting text should return text-field to the default value.");
         XCTAssertEqualObjects(layer.text, defaultStyleValue,
                               @"text should return the default value after being unset.");
+
+        functionStyleValue = [MGLStyleValue<NSString *> sourceFunctionValueWithStopType:MGLStyleFunctionStopTypeIdentity
+                                                                                                     stops:nil
+                                                                                             attributeName:@""
+                                                                                                   options:nil];
+        XCTAssertThrowsSpecificNamed(layer.text = functionStyleValue, NSException, NSInvalidArgumentException, @"MGLStyleValue should raise an exception if it is applied to a property that cannot support it");
+
+        functionStyleValue = [MGLStyleValue<NSString *> compositeFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                                        stops:@{@18: constantStyleValue}
+                                                                                                attributeName:@""
+                                                                                                      options:nil];
+        XCTAssertThrowsSpecificNamed(layer.text = functionStyleValue, NSException, NSInvalidArgumentException, @"MGLStyleValue should raise an exception if it is applied to a property that cannot support it");        
     }
 
     // text-allow-overlap
@@ -707,25 +839,25 @@
                       @"text-allow-overlap should be unset initially.");
         MGLStyleValue<NSNumber *> *defaultStyleValue = layer.textAllowsOverlap;
 
-        MGLStyleValue<NSNumber *> *styleValue = [MGLStyleValue<NSNumber *> valueWithRawValue:@YES];
-        layer.textAllowsOverlap = styleValue;
+        MGLStyleValue<NSNumber *> *constantStyleValue = [MGLStyleValue<NSNumber *> valueWithRawValue:@YES];
+        layer.textAllowsOverlap = constantStyleValue;
         mbgl::style::PropertyValue<bool> propertyValue = { true };
         XCTAssertEqual(rawLayer->getTextAllowOverlap(), propertyValue,
                        @"Setting textAllowsOverlap to a constant value should update text-allow-overlap.");
-        XCTAssertEqualObjects(layer.textAllowsOverlap, styleValue,
+        XCTAssertEqualObjects(layer.textAllowsOverlap, constantStyleValue,
                               @"textAllowsOverlap should round-trip constant values.");
 
-        styleValue = [MGLStyleValue<NSNumber *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
-                                                                                             stops:@{@18: styleValue}
-                                                                                           options:nil];        
-        layer.textAllowsOverlap = styleValue;
+        MGLStyleValue<NSNumber *> * functionStyleValue = [MGLStyleValue<NSNumber *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                                              stops:@{@18: constantStyleValue}
+                                                                                                            options:nil];  
+        layer.textAllowsOverlap = functionStyleValue;
 
         mbgl::style::IntervalStops<bool> intervalStops = { {{18, true}} };
         propertyValue = mbgl::style::CameraFunction<bool> { intervalStops };
         
         XCTAssertEqual(rawLayer->getTextAllowOverlap(), propertyValue,
                        @"Setting textAllowsOverlap to a function should update text-allow-overlap.");
-        XCTAssertEqualObjects(layer.textAllowsOverlap, styleValue,
+        XCTAssertEqualObjects(layer.textAllowsOverlap, functionStyleValue,
                               @"textAllowsOverlap should round-trip functions.");
 
         layer.textAllowsOverlap = nil;
@@ -733,6 +865,18 @@
                       @"Unsetting textAllowsOverlap should return text-allow-overlap to the default value.");
         XCTAssertEqualObjects(layer.textAllowsOverlap, defaultStyleValue,
                               @"textAllowsOverlap should return the default value after being unset.");
+
+        functionStyleValue = [MGLStyleValue<NSNumber *> sourceFunctionValueWithStopType:MGLStyleFunctionStopTypeIdentity
+                                                                                                     stops:nil
+                                                                                             attributeName:@""
+                                                                                                   options:nil];
+        XCTAssertThrowsSpecificNamed(layer.textAllowsOverlap = functionStyleValue, NSException, NSInvalidArgumentException, @"MGLStyleValue should raise an exception if it is applied to a property that cannot support it");
+
+        functionStyleValue = [MGLStyleValue<NSNumber *> compositeFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                                        stops:@{@18: constantStyleValue}
+                                                                                                attributeName:@""
+                                                                                                      options:nil];
+        XCTAssertThrowsSpecificNamed(layer.textAllowsOverlap = functionStyleValue, NSException, NSInvalidArgumentException, @"MGLStyleValue should raise an exception if it is applied to a property that cannot support it");        
     }
 
     // text-anchor
@@ -741,25 +885,25 @@
                       @"text-anchor should be unset initially.");
         MGLStyleValue<NSValue *> *defaultStyleValue = layer.textAnchor;
 
-        MGLStyleValue<NSValue *> *styleValue = [MGLStyleValue<NSValue *> valueWithRawValue:[NSValue valueWithMGLTextAnchor:MGLTextAnchorBottomRight]];
-        layer.textAnchor = styleValue;
+        MGLStyleValue<NSValue *> *constantStyleValue = [MGLStyleValue<NSValue *> valueWithRawValue:[NSValue valueWithMGLTextAnchor:MGLTextAnchorBottomRight]];
+        layer.textAnchor = constantStyleValue;
         mbgl::style::PropertyValue<mbgl::style::TextAnchorType> propertyValue = { mbgl::style::TextAnchorType::BottomRight };
         XCTAssertEqual(rawLayer->getTextAnchor(), propertyValue,
                        @"Setting textAnchor to a constant value should update text-anchor.");
-        XCTAssertEqualObjects(layer.textAnchor, styleValue,
+        XCTAssertEqualObjects(layer.textAnchor, constantStyleValue,
                               @"textAnchor should round-trip constant values.");
 
-        styleValue = [MGLStyleValue<NSValue *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
-                                                                                             stops:@{@18: styleValue}
-                                                                                           options:nil];        
-        layer.textAnchor = styleValue;
+        MGLStyleValue<NSValue *> * functionStyleValue = [MGLStyleValue<NSValue *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                                              stops:@{@18: constantStyleValue}
+                                                                                                            options:nil];  
+        layer.textAnchor = functionStyleValue;
 
         mbgl::style::IntervalStops<mbgl::style::TextAnchorType> intervalStops = { {{18, mbgl::style::TextAnchorType::BottomRight}} };
         propertyValue = mbgl::style::CameraFunction<mbgl::style::TextAnchorType> { intervalStops };
         
         XCTAssertEqual(rawLayer->getTextAnchor(), propertyValue,
                        @"Setting textAnchor to a function should update text-anchor.");
-        XCTAssertEqualObjects(layer.textAnchor, styleValue,
+        XCTAssertEqualObjects(layer.textAnchor, functionStyleValue,
                               @"textAnchor should round-trip functions.");
 
         layer.textAnchor = nil;
@@ -767,6 +911,18 @@
                       @"Unsetting textAnchor should return text-anchor to the default value.");
         XCTAssertEqualObjects(layer.textAnchor, defaultStyleValue,
                               @"textAnchor should return the default value after being unset.");
+
+        functionStyleValue = [MGLStyleValue<NSValue *> sourceFunctionValueWithStopType:MGLStyleFunctionStopTypeIdentity
+                                                                                                     stops:nil
+                                                                                             attributeName:@""
+                                                                                                   options:nil];
+        XCTAssertThrowsSpecificNamed(layer.textAnchor = functionStyleValue, NSException, NSInvalidArgumentException, @"MGLStyleValue should raise an exception if it is applied to a property that cannot support it");
+
+        functionStyleValue = [MGLStyleValue<NSValue *> compositeFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                                        stops:@{@18: constantStyleValue}
+                                                                                                attributeName:@""
+                                                                                                      options:nil];
+        XCTAssertThrowsSpecificNamed(layer.textAnchor = functionStyleValue, NSException, NSInvalidArgumentException, @"MGLStyleValue should raise an exception if it is applied to a property that cannot support it");        
     }
 
     // text-font
@@ -775,25 +931,25 @@
                       @"text-font should be unset initially.");
         MGLStyleValue<NSArray<NSString *> *> *defaultStyleValue = layer.textFontNames;
 
-        MGLStyleValue<NSArray<NSString *> *> *styleValue = [MGLStyleValue<NSArray<NSString *> *> valueWithRawValue:@[@"Text Font", @"Tnof Txet"]];
-        layer.textFontNames = styleValue;
+        MGLStyleValue<NSArray<NSString *> *> *constantStyleValue = [MGLStyleValue<NSArray<NSString *> *> valueWithRawValue:@[@"Text Font", @"Tnof Txet"]];
+        layer.textFontNames = constantStyleValue;
         mbgl::style::PropertyValue<std::vector<std::string>> propertyValue = { { "Text Font", "Tnof Txet" } };
         XCTAssertEqual(rawLayer->getTextFont(), propertyValue,
                        @"Setting textFontNames to a constant value should update text-font.");
-        XCTAssertEqualObjects(layer.textFontNames, styleValue,
+        XCTAssertEqualObjects(layer.textFontNames, constantStyleValue,
                               @"textFontNames should round-trip constant values.");
 
-        styleValue = [MGLStyleValue<NSArray<NSString *> *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
-                                                                                             stops:@{@18: styleValue}
-                                                                                           options:nil];        
-        layer.textFontNames = styleValue;
+        MGLStyleValue<NSArray<NSString *> *> * functionStyleValue = [MGLStyleValue<NSArray<NSString *> *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                                              stops:@{@18: constantStyleValue}
+                                                                                                            options:nil];  
+        layer.textFontNames = functionStyleValue;
 
         mbgl::style::IntervalStops<std::vector<std::string>> intervalStops = { {{18, { "Text Font", "Tnof Txet" }}} };
         propertyValue = mbgl::style::CameraFunction<std::vector<std::string>> { intervalStops };
         
         XCTAssertEqual(rawLayer->getTextFont(), propertyValue,
                        @"Setting textFontNames to a function should update text-font.");
-        XCTAssertEqualObjects(layer.textFontNames, styleValue,
+        XCTAssertEqualObjects(layer.textFontNames, functionStyleValue,
                               @"textFontNames should round-trip functions.");
 
         layer.textFontNames = nil;
@@ -801,6 +957,18 @@
                       @"Unsetting textFontNames should return text-font to the default value.");
         XCTAssertEqualObjects(layer.textFontNames, defaultStyleValue,
                               @"textFontNames should return the default value after being unset.");
+
+        functionStyleValue = [MGLStyleValue<NSArray<NSString *> *> sourceFunctionValueWithStopType:MGLStyleFunctionStopTypeIdentity
+                                                                                                     stops:nil
+                                                                                             attributeName:@""
+                                                                                                   options:nil];
+        XCTAssertThrowsSpecificNamed(layer.textFontNames = functionStyleValue, NSException, NSInvalidArgumentException, @"MGLStyleValue should raise an exception if it is applied to a property that cannot support it");
+
+        functionStyleValue = [MGLStyleValue<NSArray<NSString *> *> compositeFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                                        stops:@{@18: constantStyleValue}
+                                                                                                attributeName:@""
+                                                                                                      options:nil];
+        XCTAssertThrowsSpecificNamed(layer.textFontNames = functionStyleValue, NSException, NSInvalidArgumentException, @"MGLStyleValue should raise an exception if it is applied to a property that cannot support it");        
     }
 
     // text-size
@@ -809,25 +977,25 @@
                       @"text-size should be unset initially.");
         MGLStyleValue<NSNumber *> *defaultStyleValue = layer.textFontSize;
 
-        MGLStyleValue<NSNumber *> *styleValue = [MGLStyleValue<NSNumber *> valueWithRawValue:@0xff];
-        layer.textFontSize = styleValue;
+        MGLStyleValue<NSNumber *> *constantStyleValue = [MGLStyleValue<NSNumber *> valueWithRawValue:@0xff];
+        layer.textFontSize = constantStyleValue;
         mbgl::style::PropertyValue<float> propertyValue = { 0xff };
         XCTAssertEqual(rawLayer->getTextSize(), propertyValue,
                        @"Setting textFontSize to a constant value should update text-size.");
-        XCTAssertEqualObjects(layer.textFontSize, styleValue,
+        XCTAssertEqualObjects(layer.textFontSize, constantStyleValue,
                               @"textFontSize should round-trip constant values.");
 
-        styleValue = [MGLStyleValue<NSNumber *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
-                                                                                             stops:@{@18: styleValue}
-                                                                                           options:nil];        
-        layer.textFontSize = styleValue;
+        MGLStyleValue<NSNumber *> * functionStyleValue = [MGLStyleValue<NSNumber *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                                              stops:@{@18: constantStyleValue}
+                                                                                                            options:nil];  
+        layer.textFontSize = functionStyleValue;
 
         mbgl::style::IntervalStops<float> intervalStops = { {{18, 0xff}} };
         propertyValue = mbgl::style::CameraFunction<float> { intervalStops };
         
         XCTAssertEqual(rawLayer->getTextSize(), propertyValue,
                        @"Setting textFontSize to a function should update text-size.");
-        XCTAssertEqualObjects(layer.textFontSize, styleValue,
+        XCTAssertEqualObjects(layer.textFontSize, functionStyleValue,
                               @"textFontSize should round-trip functions.");
 
         layer.textFontSize = nil;
@@ -843,25 +1011,25 @@
                       @"text-ignore-placement should be unset initially.");
         MGLStyleValue<NSNumber *> *defaultStyleValue = layer.textIgnoresPlacement;
 
-        MGLStyleValue<NSNumber *> *styleValue = [MGLStyleValue<NSNumber *> valueWithRawValue:@YES];
-        layer.textIgnoresPlacement = styleValue;
+        MGLStyleValue<NSNumber *> *constantStyleValue = [MGLStyleValue<NSNumber *> valueWithRawValue:@YES];
+        layer.textIgnoresPlacement = constantStyleValue;
         mbgl::style::PropertyValue<bool> propertyValue = { true };
         XCTAssertEqual(rawLayer->getTextIgnorePlacement(), propertyValue,
                        @"Setting textIgnoresPlacement to a constant value should update text-ignore-placement.");
-        XCTAssertEqualObjects(layer.textIgnoresPlacement, styleValue,
+        XCTAssertEqualObjects(layer.textIgnoresPlacement, constantStyleValue,
                               @"textIgnoresPlacement should round-trip constant values.");
 
-        styleValue = [MGLStyleValue<NSNumber *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
-                                                                                             stops:@{@18: styleValue}
-                                                                                           options:nil];        
-        layer.textIgnoresPlacement = styleValue;
+        MGLStyleValue<NSNumber *> * functionStyleValue = [MGLStyleValue<NSNumber *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                                              stops:@{@18: constantStyleValue}
+                                                                                                            options:nil];  
+        layer.textIgnoresPlacement = functionStyleValue;
 
         mbgl::style::IntervalStops<bool> intervalStops = { {{18, true}} };
         propertyValue = mbgl::style::CameraFunction<bool> { intervalStops };
         
         XCTAssertEqual(rawLayer->getTextIgnorePlacement(), propertyValue,
                        @"Setting textIgnoresPlacement to a function should update text-ignore-placement.");
-        XCTAssertEqualObjects(layer.textIgnoresPlacement, styleValue,
+        XCTAssertEqualObjects(layer.textIgnoresPlacement, functionStyleValue,
                               @"textIgnoresPlacement should round-trip functions.");
 
         layer.textIgnoresPlacement = nil;
@@ -869,6 +1037,18 @@
                       @"Unsetting textIgnoresPlacement should return text-ignore-placement to the default value.");
         XCTAssertEqualObjects(layer.textIgnoresPlacement, defaultStyleValue,
                               @"textIgnoresPlacement should return the default value after being unset.");
+
+        functionStyleValue = [MGLStyleValue<NSNumber *> sourceFunctionValueWithStopType:MGLStyleFunctionStopTypeIdentity
+                                                                                                     stops:nil
+                                                                                             attributeName:@""
+                                                                                                   options:nil];
+        XCTAssertThrowsSpecificNamed(layer.textIgnoresPlacement = functionStyleValue, NSException, NSInvalidArgumentException, @"MGLStyleValue should raise an exception if it is applied to a property that cannot support it");
+
+        functionStyleValue = [MGLStyleValue<NSNumber *> compositeFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                                        stops:@{@18: constantStyleValue}
+                                                                                                attributeName:@""
+                                                                                                      options:nil];
+        XCTAssertThrowsSpecificNamed(layer.textIgnoresPlacement = functionStyleValue, NSException, NSInvalidArgumentException, @"MGLStyleValue should raise an exception if it is applied to a property that cannot support it");        
     }
 
     // text-justify
@@ -877,25 +1057,25 @@
                       @"text-justify should be unset initially.");
         MGLStyleValue<NSValue *> *defaultStyleValue = layer.textJustification;
 
-        MGLStyleValue<NSValue *> *styleValue = [MGLStyleValue<NSValue *> valueWithRawValue:[NSValue valueWithMGLTextJustification:MGLTextJustificationRight]];
-        layer.textJustification = styleValue;
+        MGLStyleValue<NSValue *> *constantStyleValue = [MGLStyleValue<NSValue *> valueWithRawValue:[NSValue valueWithMGLTextJustification:MGLTextJustificationRight]];
+        layer.textJustification = constantStyleValue;
         mbgl::style::PropertyValue<mbgl::style::TextJustifyType> propertyValue = { mbgl::style::TextJustifyType::Right };
         XCTAssertEqual(rawLayer->getTextJustify(), propertyValue,
                        @"Setting textJustification to a constant value should update text-justify.");
-        XCTAssertEqualObjects(layer.textJustification, styleValue,
+        XCTAssertEqualObjects(layer.textJustification, constantStyleValue,
                               @"textJustification should round-trip constant values.");
 
-        styleValue = [MGLStyleValue<NSValue *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
-                                                                                             stops:@{@18: styleValue}
-                                                                                           options:nil];        
-        layer.textJustification = styleValue;
+        MGLStyleValue<NSValue *> * functionStyleValue = [MGLStyleValue<NSValue *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                                              stops:@{@18: constantStyleValue}
+                                                                                                            options:nil];  
+        layer.textJustification = functionStyleValue;
 
         mbgl::style::IntervalStops<mbgl::style::TextJustifyType> intervalStops = { {{18, mbgl::style::TextJustifyType::Right}} };
         propertyValue = mbgl::style::CameraFunction<mbgl::style::TextJustifyType> { intervalStops };
         
         XCTAssertEqual(rawLayer->getTextJustify(), propertyValue,
                        @"Setting textJustification to a function should update text-justify.");
-        XCTAssertEqualObjects(layer.textJustification, styleValue,
+        XCTAssertEqualObjects(layer.textJustification, functionStyleValue,
                               @"textJustification should round-trip functions.");
 
         layer.textJustification = nil;
@@ -903,6 +1083,18 @@
                       @"Unsetting textJustification should return text-justify to the default value.");
         XCTAssertEqualObjects(layer.textJustification, defaultStyleValue,
                               @"textJustification should return the default value after being unset.");
+
+        functionStyleValue = [MGLStyleValue<NSValue *> sourceFunctionValueWithStopType:MGLStyleFunctionStopTypeIdentity
+                                                                                                     stops:nil
+                                                                                             attributeName:@""
+                                                                                                   options:nil];
+        XCTAssertThrowsSpecificNamed(layer.textJustification = functionStyleValue, NSException, NSInvalidArgumentException, @"MGLStyleValue should raise an exception if it is applied to a property that cannot support it");
+
+        functionStyleValue = [MGLStyleValue<NSValue *> compositeFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                                        stops:@{@18: constantStyleValue}
+                                                                                                attributeName:@""
+                                                                                                      options:nil];
+        XCTAssertThrowsSpecificNamed(layer.textJustification = functionStyleValue, NSException, NSInvalidArgumentException, @"MGLStyleValue should raise an exception if it is applied to a property that cannot support it");        
     }
 
     // text-letter-spacing
@@ -911,25 +1103,25 @@
                       @"text-letter-spacing should be unset initially.");
         MGLStyleValue<NSNumber *> *defaultStyleValue = layer.textLetterSpacing;
 
-        MGLStyleValue<NSNumber *> *styleValue = [MGLStyleValue<NSNumber *> valueWithRawValue:@0xff];
-        layer.textLetterSpacing = styleValue;
+        MGLStyleValue<NSNumber *> *constantStyleValue = [MGLStyleValue<NSNumber *> valueWithRawValue:@0xff];
+        layer.textLetterSpacing = constantStyleValue;
         mbgl::style::PropertyValue<float> propertyValue = { 0xff };
         XCTAssertEqual(rawLayer->getTextLetterSpacing(), propertyValue,
                        @"Setting textLetterSpacing to a constant value should update text-letter-spacing.");
-        XCTAssertEqualObjects(layer.textLetterSpacing, styleValue,
+        XCTAssertEqualObjects(layer.textLetterSpacing, constantStyleValue,
                               @"textLetterSpacing should round-trip constant values.");
 
-        styleValue = [MGLStyleValue<NSNumber *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
-                                                                                             stops:@{@18: styleValue}
-                                                                                           options:nil];        
-        layer.textLetterSpacing = styleValue;
+        MGLStyleValue<NSNumber *> * functionStyleValue = [MGLStyleValue<NSNumber *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                                              stops:@{@18: constantStyleValue}
+                                                                                                            options:nil];  
+        layer.textLetterSpacing = functionStyleValue;
 
         mbgl::style::IntervalStops<float> intervalStops = { {{18, 0xff}} };
         propertyValue = mbgl::style::CameraFunction<float> { intervalStops };
         
         XCTAssertEqual(rawLayer->getTextLetterSpacing(), propertyValue,
                        @"Setting textLetterSpacing to a function should update text-letter-spacing.");
-        XCTAssertEqualObjects(layer.textLetterSpacing, styleValue,
+        XCTAssertEqualObjects(layer.textLetterSpacing, functionStyleValue,
                               @"textLetterSpacing should round-trip functions.");
 
         layer.textLetterSpacing = nil;
@@ -945,25 +1137,25 @@
                       @"text-line-height should be unset initially.");
         MGLStyleValue<NSNumber *> *defaultStyleValue = layer.textLineHeight;
 
-        MGLStyleValue<NSNumber *> *styleValue = [MGLStyleValue<NSNumber *> valueWithRawValue:@0xff];
-        layer.textLineHeight = styleValue;
+        MGLStyleValue<NSNumber *> *constantStyleValue = [MGLStyleValue<NSNumber *> valueWithRawValue:@0xff];
+        layer.textLineHeight = constantStyleValue;
         mbgl::style::PropertyValue<float> propertyValue = { 0xff };
         XCTAssertEqual(rawLayer->getTextLineHeight(), propertyValue,
                        @"Setting textLineHeight to a constant value should update text-line-height.");
-        XCTAssertEqualObjects(layer.textLineHeight, styleValue,
+        XCTAssertEqualObjects(layer.textLineHeight, constantStyleValue,
                               @"textLineHeight should round-trip constant values.");
 
-        styleValue = [MGLStyleValue<NSNumber *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
-                                                                                             stops:@{@18: styleValue}
-                                                                                           options:nil];        
-        layer.textLineHeight = styleValue;
+        MGLStyleValue<NSNumber *> * functionStyleValue = [MGLStyleValue<NSNumber *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                                              stops:@{@18: constantStyleValue}
+                                                                                                            options:nil];  
+        layer.textLineHeight = functionStyleValue;
 
         mbgl::style::IntervalStops<float> intervalStops = { {{18, 0xff}} };
         propertyValue = mbgl::style::CameraFunction<float> { intervalStops };
         
         XCTAssertEqual(rawLayer->getTextLineHeight(), propertyValue,
                        @"Setting textLineHeight to a function should update text-line-height.");
-        XCTAssertEqualObjects(layer.textLineHeight, styleValue,
+        XCTAssertEqualObjects(layer.textLineHeight, functionStyleValue,
                               @"textLineHeight should round-trip functions.");
 
         layer.textLineHeight = nil;
@@ -979,31 +1171,31 @@
                       @"text-offset should be unset initially.");
         MGLStyleValue<NSValue *> *defaultStyleValue = layer.textOffset;
 
-        MGLStyleValue<NSValue *> *styleValue = [MGLStyleValue<NSValue *> valueWithRawValue:
+        MGLStyleValue<NSValue *> *constantStyleValue = [MGLStyleValue<NSValue *> valueWithRawValue:
 #if TARGET_OS_IPHONE
             [NSValue valueWithCGVector:CGVectorMake(1, 1)]
 #else
             [NSValue valueWithMGLVector:CGVectorMake(1, -1)]
 #endif
         ];
-        layer.textOffset = styleValue;
+        layer.textOffset = constantStyleValue;
         mbgl::style::PropertyValue<std::array<float, 2>> propertyValue = { { 1, 1 } };
         XCTAssertEqual(rawLayer->getTextOffset(), propertyValue,
                        @"Setting textOffset to a constant value should update text-offset.");
-        XCTAssertEqualObjects(layer.textOffset, styleValue,
+        XCTAssertEqualObjects(layer.textOffset, constantStyleValue,
                               @"textOffset should round-trip constant values.");
 
-        styleValue = [MGLStyleValue<NSValue *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
-                                                                                             stops:@{@18: styleValue}
-                                                                                           options:nil];        
-        layer.textOffset = styleValue;
+        MGLStyleValue<NSValue *> * functionStyleValue = [MGLStyleValue<NSValue *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                                              stops:@{@18: constantStyleValue}
+                                                                                                            options:nil];  
+        layer.textOffset = functionStyleValue;
 
         mbgl::style::IntervalStops<std::array<float, 2>> intervalStops = { {{18, { 1, 1 }}} };
         propertyValue = mbgl::style::CameraFunction<std::array<float, 2>> { intervalStops };
         
         XCTAssertEqual(rawLayer->getTextOffset(), propertyValue,
                        @"Setting textOffset to a function should update text-offset.");
-        XCTAssertEqualObjects(layer.textOffset, styleValue,
+        XCTAssertEqualObjects(layer.textOffset, functionStyleValue,
                               @"textOffset should round-trip functions.");
 
         layer.textOffset = nil;
@@ -1019,25 +1211,25 @@
                       @"text-optional should be unset initially.");
         MGLStyleValue<NSNumber *> *defaultStyleValue = layer.textOptional;
 
-        MGLStyleValue<NSNumber *> *styleValue = [MGLStyleValue<NSNumber *> valueWithRawValue:@YES];
-        layer.textOptional = styleValue;
+        MGLStyleValue<NSNumber *> *constantStyleValue = [MGLStyleValue<NSNumber *> valueWithRawValue:@YES];
+        layer.textOptional = constantStyleValue;
         mbgl::style::PropertyValue<bool> propertyValue = { true };
         XCTAssertEqual(rawLayer->getTextOptional(), propertyValue,
                        @"Setting textOptional to a constant value should update text-optional.");
-        XCTAssertEqualObjects(layer.textOptional, styleValue,
+        XCTAssertEqualObjects(layer.textOptional, constantStyleValue,
                               @"textOptional should round-trip constant values.");
 
-        styleValue = [MGLStyleValue<NSNumber *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
-                                                                                             stops:@{@18: styleValue}
-                                                                                           options:nil];        
-        layer.textOptional = styleValue;
+        MGLStyleValue<NSNumber *> * functionStyleValue = [MGLStyleValue<NSNumber *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                                              stops:@{@18: constantStyleValue}
+                                                                                                            options:nil];  
+        layer.textOptional = functionStyleValue;
 
         mbgl::style::IntervalStops<bool> intervalStops = { {{18, true}} };
         propertyValue = mbgl::style::CameraFunction<bool> { intervalStops };
         
         XCTAssertEqual(rawLayer->getTextOptional(), propertyValue,
                        @"Setting textOptional to a function should update text-optional.");
-        XCTAssertEqualObjects(layer.textOptional, styleValue,
+        XCTAssertEqualObjects(layer.textOptional, functionStyleValue,
                               @"textOptional should round-trip functions.");
 
         layer.textOptional = nil;
@@ -1045,6 +1237,18 @@
                       @"Unsetting textOptional should return text-optional to the default value.");
         XCTAssertEqualObjects(layer.textOptional, defaultStyleValue,
                               @"textOptional should return the default value after being unset.");
+
+        functionStyleValue = [MGLStyleValue<NSNumber *> sourceFunctionValueWithStopType:MGLStyleFunctionStopTypeIdentity
+                                                                                                     stops:nil
+                                                                                             attributeName:@""
+                                                                                                   options:nil];
+        XCTAssertThrowsSpecificNamed(layer.textOptional = functionStyleValue, NSException, NSInvalidArgumentException, @"MGLStyleValue should raise an exception if it is applied to a property that cannot support it");
+
+        functionStyleValue = [MGLStyleValue<NSNumber *> compositeFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                                        stops:@{@18: constantStyleValue}
+                                                                                                attributeName:@""
+                                                                                                      options:nil];
+        XCTAssertThrowsSpecificNamed(layer.textOptional = functionStyleValue, NSException, NSInvalidArgumentException, @"MGLStyleValue should raise an exception if it is applied to a property that cannot support it");        
     }
 
     // text-padding
@@ -1053,25 +1257,25 @@
                       @"text-padding should be unset initially.");
         MGLStyleValue<NSNumber *> *defaultStyleValue = layer.textPadding;
 
-        MGLStyleValue<NSNumber *> *styleValue = [MGLStyleValue<NSNumber *> valueWithRawValue:@0xff];
-        layer.textPadding = styleValue;
+        MGLStyleValue<NSNumber *> *constantStyleValue = [MGLStyleValue<NSNumber *> valueWithRawValue:@0xff];
+        layer.textPadding = constantStyleValue;
         mbgl::style::PropertyValue<float> propertyValue = { 0xff };
         XCTAssertEqual(rawLayer->getTextPadding(), propertyValue,
                        @"Setting textPadding to a constant value should update text-padding.");
-        XCTAssertEqualObjects(layer.textPadding, styleValue,
+        XCTAssertEqualObjects(layer.textPadding, constantStyleValue,
                               @"textPadding should round-trip constant values.");
 
-        styleValue = [MGLStyleValue<NSNumber *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
-                                                                                             stops:@{@18: styleValue}
-                                                                                           options:nil];        
-        layer.textPadding = styleValue;
+        MGLStyleValue<NSNumber *> * functionStyleValue = [MGLStyleValue<NSNumber *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                                              stops:@{@18: constantStyleValue}
+                                                                                                            options:nil];  
+        layer.textPadding = functionStyleValue;
 
         mbgl::style::IntervalStops<float> intervalStops = { {{18, 0xff}} };
         propertyValue = mbgl::style::CameraFunction<float> { intervalStops };
         
         XCTAssertEqual(rawLayer->getTextPadding(), propertyValue,
                        @"Setting textPadding to a function should update text-padding.");
-        XCTAssertEqualObjects(layer.textPadding, styleValue,
+        XCTAssertEqualObjects(layer.textPadding, functionStyleValue,
                               @"textPadding should round-trip functions.");
 
         layer.textPadding = nil;
@@ -1087,25 +1291,25 @@
                       @"text-pitch-alignment should be unset initially.");
         MGLStyleValue<NSValue *> *defaultStyleValue = layer.textPitchAlignment;
 
-        MGLStyleValue<NSValue *> *styleValue = [MGLStyleValue<NSValue *> valueWithRawValue:[NSValue valueWithMGLTextPitchAlignment:MGLTextPitchAlignmentAuto]];
-        layer.textPitchAlignment = styleValue;
+        MGLStyleValue<NSValue *> *constantStyleValue = [MGLStyleValue<NSValue *> valueWithRawValue:[NSValue valueWithMGLTextPitchAlignment:MGLTextPitchAlignmentAuto]];
+        layer.textPitchAlignment = constantStyleValue;
         mbgl::style::PropertyValue<mbgl::style::AlignmentType> propertyValue = { mbgl::style::AlignmentType::Auto };
         XCTAssertEqual(rawLayer->getTextPitchAlignment(), propertyValue,
                        @"Setting textPitchAlignment to a constant value should update text-pitch-alignment.");
-        XCTAssertEqualObjects(layer.textPitchAlignment, styleValue,
+        XCTAssertEqualObjects(layer.textPitchAlignment, constantStyleValue,
                               @"textPitchAlignment should round-trip constant values.");
 
-        styleValue = [MGLStyleValue<NSValue *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
-                                                                                             stops:@{@18: styleValue}
-                                                                                           options:nil];        
-        layer.textPitchAlignment = styleValue;
+        MGLStyleValue<NSValue *> * functionStyleValue = [MGLStyleValue<NSValue *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                                              stops:@{@18: constantStyleValue}
+                                                                                                            options:nil];  
+        layer.textPitchAlignment = functionStyleValue;
 
         mbgl::style::IntervalStops<mbgl::style::AlignmentType> intervalStops = { {{18, mbgl::style::AlignmentType::Auto}} };
         propertyValue = mbgl::style::CameraFunction<mbgl::style::AlignmentType> { intervalStops };
         
         XCTAssertEqual(rawLayer->getTextPitchAlignment(), propertyValue,
                        @"Setting textPitchAlignment to a function should update text-pitch-alignment.");
-        XCTAssertEqualObjects(layer.textPitchAlignment, styleValue,
+        XCTAssertEqualObjects(layer.textPitchAlignment, functionStyleValue,
                               @"textPitchAlignment should round-trip functions.");
 
         layer.textPitchAlignment = nil;
@@ -1113,6 +1317,18 @@
                       @"Unsetting textPitchAlignment should return text-pitch-alignment to the default value.");
         XCTAssertEqualObjects(layer.textPitchAlignment, defaultStyleValue,
                               @"textPitchAlignment should return the default value after being unset.");
+
+        functionStyleValue = [MGLStyleValue<NSValue *> sourceFunctionValueWithStopType:MGLStyleFunctionStopTypeIdentity
+                                                                                                     stops:nil
+                                                                                             attributeName:@""
+                                                                                                   options:nil];
+        XCTAssertThrowsSpecificNamed(layer.textPitchAlignment = functionStyleValue, NSException, NSInvalidArgumentException, @"MGLStyleValue should raise an exception if it is applied to a property that cannot support it");
+
+        functionStyleValue = [MGLStyleValue<NSValue *> compositeFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                                        stops:@{@18: constantStyleValue}
+                                                                                                attributeName:@""
+                                                                                                      options:nil];
+        XCTAssertThrowsSpecificNamed(layer.textPitchAlignment = functionStyleValue, NSException, NSInvalidArgumentException, @"MGLStyleValue should raise an exception if it is applied to a property that cannot support it");        
     }
 
     // text-rotate
@@ -1121,25 +1337,25 @@
                       @"text-rotate should be unset initially.");
         MGLStyleValue<NSNumber *> *defaultStyleValue = layer.textRotation;
 
-        MGLStyleValue<NSNumber *> *styleValue = [MGLStyleValue<NSNumber *> valueWithRawValue:@0xff];
-        layer.textRotation = styleValue;
+        MGLStyleValue<NSNumber *> *constantStyleValue = [MGLStyleValue<NSNumber *> valueWithRawValue:@0xff];
+        layer.textRotation = constantStyleValue;
         mbgl::style::PropertyValue<float> propertyValue = { 0xff };
         XCTAssertEqual(rawLayer->getTextRotate(), propertyValue,
                        @"Setting textRotation to a constant value should update text-rotate.");
-        XCTAssertEqualObjects(layer.textRotation, styleValue,
+        XCTAssertEqualObjects(layer.textRotation, constantStyleValue,
                               @"textRotation should round-trip constant values.");
 
-        styleValue = [MGLStyleValue<NSNumber *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
-                                                                                             stops:@{@18: styleValue}
-                                                                                           options:nil];        
-        layer.textRotation = styleValue;
+        MGLStyleValue<NSNumber *> * functionStyleValue = [MGLStyleValue<NSNumber *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                                              stops:@{@18: constantStyleValue}
+                                                                                                            options:nil];  
+        layer.textRotation = functionStyleValue;
 
         mbgl::style::IntervalStops<float> intervalStops = { {{18, 0xff}} };
         propertyValue = mbgl::style::CameraFunction<float> { intervalStops };
         
         XCTAssertEqual(rawLayer->getTextRotate(), propertyValue,
                        @"Setting textRotation to a function should update text-rotate.");
-        XCTAssertEqualObjects(layer.textRotation, styleValue,
+        XCTAssertEqualObjects(layer.textRotation, functionStyleValue,
                               @"textRotation should round-trip functions.");
 
         layer.textRotation = nil;
@@ -1155,25 +1371,25 @@
                       @"text-rotation-alignment should be unset initially.");
         MGLStyleValue<NSValue *> *defaultStyleValue = layer.textRotationAlignment;
 
-        MGLStyleValue<NSValue *> *styleValue = [MGLStyleValue<NSValue *> valueWithRawValue:[NSValue valueWithMGLTextRotationAlignment:MGLTextRotationAlignmentAuto]];
-        layer.textRotationAlignment = styleValue;
+        MGLStyleValue<NSValue *> *constantStyleValue = [MGLStyleValue<NSValue *> valueWithRawValue:[NSValue valueWithMGLTextRotationAlignment:MGLTextRotationAlignmentAuto]];
+        layer.textRotationAlignment = constantStyleValue;
         mbgl::style::PropertyValue<mbgl::style::AlignmentType> propertyValue = { mbgl::style::AlignmentType::Auto };
         XCTAssertEqual(rawLayer->getTextRotationAlignment(), propertyValue,
                        @"Setting textRotationAlignment to a constant value should update text-rotation-alignment.");
-        XCTAssertEqualObjects(layer.textRotationAlignment, styleValue,
+        XCTAssertEqualObjects(layer.textRotationAlignment, constantStyleValue,
                               @"textRotationAlignment should round-trip constant values.");
 
-        styleValue = [MGLStyleValue<NSValue *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
-                                                                                             stops:@{@18: styleValue}
-                                                                                           options:nil];        
-        layer.textRotationAlignment = styleValue;
+        MGLStyleValue<NSValue *> * functionStyleValue = [MGLStyleValue<NSValue *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                                              stops:@{@18: constantStyleValue}
+                                                                                                            options:nil];  
+        layer.textRotationAlignment = functionStyleValue;
 
         mbgl::style::IntervalStops<mbgl::style::AlignmentType> intervalStops = { {{18, mbgl::style::AlignmentType::Auto}} };
         propertyValue = mbgl::style::CameraFunction<mbgl::style::AlignmentType> { intervalStops };
         
         XCTAssertEqual(rawLayer->getTextRotationAlignment(), propertyValue,
                        @"Setting textRotationAlignment to a function should update text-rotation-alignment.");
-        XCTAssertEqualObjects(layer.textRotationAlignment, styleValue,
+        XCTAssertEqualObjects(layer.textRotationAlignment, functionStyleValue,
                               @"textRotationAlignment should round-trip functions.");
 
         layer.textRotationAlignment = nil;
@@ -1181,6 +1397,18 @@
                       @"Unsetting textRotationAlignment should return text-rotation-alignment to the default value.");
         XCTAssertEqualObjects(layer.textRotationAlignment, defaultStyleValue,
                               @"textRotationAlignment should return the default value after being unset.");
+
+        functionStyleValue = [MGLStyleValue<NSValue *> sourceFunctionValueWithStopType:MGLStyleFunctionStopTypeIdentity
+                                                                                                     stops:nil
+                                                                                             attributeName:@""
+                                                                                                   options:nil];
+        XCTAssertThrowsSpecificNamed(layer.textRotationAlignment = functionStyleValue, NSException, NSInvalidArgumentException, @"MGLStyleValue should raise an exception if it is applied to a property that cannot support it");
+
+        functionStyleValue = [MGLStyleValue<NSValue *> compositeFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                                        stops:@{@18: constantStyleValue}
+                                                                                                attributeName:@""
+                                                                                                      options:nil];
+        XCTAssertThrowsSpecificNamed(layer.textRotationAlignment = functionStyleValue, NSException, NSInvalidArgumentException, @"MGLStyleValue should raise an exception if it is applied to a property that cannot support it");        
     }
 
     // text-transform
@@ -1189,25 +1417,25 @@
                       @"text-transform should be unset initially.");
         MGLStyleValue<NSValue *> *defaultStyleValue = layer.textTransform;
 
-        MGLStyleValue<NSValue *> *styleValue = [MGLStyleValue<NSValue *> valueWithRawValue:[NSValue valueWithMGLTextTransform:MGLTextTransformLowercase]];
-        layer.textTransform = styleValue;
+        MGLStyleValue<NSValue *> *constantStyleValue = [MGLStyleValue<NSValue *> valueWithRawValue:[NSValue valueWithMGLTextTransform:MGLTextTransformLowercase]];
+        layer.textTransform = constantStyleValue;
         mbgl::style::PropertyValue<mbgl::style::TextTransformType> propertyValue = { mbgl::style::TextTransformType::Lowercase };
         XCTAssertEqual(rawLayer->getTextTransform(), propertyValue,
                        @"Setting textTransform to a constant value should update text-transform.");
-        XCTAssertEqualObjects(layer.textTransform, styleValue,
+        XCTAssertEqualObjects(layer.textTransform, constantStyleValue,
                               @"textTransform should round-trip constant values.");
 
-        styleValue = [MGLStyleValue<NSValue *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
-                                                                                             stops:@{@18: styleValue}
-                                                                                           options:nil];        
-        layer.textTransform = styleValue;
+        MGLStyleValue<NSValue *> * functionStyleValue = [MGLStyleValue<NSValue *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                                              stops:@{@18: constantStyleValue}
+                                                                                                            options:nil];  
+        layer.textTransform = functionStyleValue;
 
         mbgl::style::IntervalStops<mbgl::style::TextTransformType> intervalStops = { {{18, mbgl::style::TextTransformType::Lowercase}} };
         propertyValue = mbgl::style::CameraFunction<mbgl::style::TextTransformType> { intervalStops };
         
         XCTAssertEqual(rawLayer->getTextTransform(), propertyValue,
                        @"Setting textTransform to a function should update text-transform.");
-        XCTAssertEqualObjects(layer.textTransform, styleValue,
+        XCTAssertEqualObjects(layer.textTransform, functionStyleValue,
                               @"textTransform should round-trip functions.");
 
         layer.textTransform = nil;
@@ -1215,6 +1443,18 @@
                       @"Unsetting textTransform should return text-transform to the default value.");
         XCTAssertEqualObjects(layer.textTransform, defaultStyleValue,
                               @"textTransform should return the default value after being unset.");
+
+        functionStyleValue = [MGLStyleValue<NSValue *> sourceFunctionValueWithStopType:MGLStyleFunctionStopTypeIdentity
+                                                                                                     stops:nil
+                                                                                             attributeName:@""
+                                                                                                   options:nil];
+        XCTAssertThrowsSpecificNamed(layer.textTransform = functionStyleValue, NSException, NSInvalidArgumentException, @"MGLStyleValue should raise an exception if it is applied to a property that cannot support it");
+
+        functionStyleValue = [MGLStyleValue<NSValue *> compositeFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                                        stops:@{@18: constantStyleValue}
+                                                                                                attributeName:@""
+                                                                                                      options:nil];
+        XCTAssertThrowsSpecificNamed(layer.textTransform = functionStyleValue, NSException, NSInvalidArgumentException, @"MGLStyleValue should raise an exception if it is applied to a property that cannot support it");        
     }
 
     // icon-color
@@ -1223,25 +1463,25 @@
                       @"icon-color should be unset initially.");
         MGLStyleValue<MGLColor *> *defaultStyleValue = layer.iconColor;
 
-        MGLStyleValue<MGLColor *> *styleValue = [MGLStyleValue<MGLColor *> valueWithRawValue:[MGLColor redColor]];
-        layer.iconColor = styleValue;
+        MGLStyleValue<MGLColor *> *constantStyleValue = [MGLStyleValue<MGLColor *> valueWithRawValue:[MGLColor redColor]];
+        layer.iconColor = constantStyleValue;
         mbgl::style::PropertyValue<mbgl::Color> propertyValue = { { 1, 0, 0, 1 } };
         XCTAssertEqual(rawLayer->getIconColor(), propertyValue,
                        @"Setting iconColor to a constant value should update icon-color.");
-        XCTAssertEqualObjects(layer.iconColor, styleValue,
+        XCTAssertEqualObjects(layer.iconColor, constantStyleValue,
                               @"iconColor should round-trip constant values.");
 
-        styleValue = [MGLStyleValue<MGLColor *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
-                                                                                             stops:@{@18: styleValue}
-                                                                                           options:nil];        
-        layer.iconColor = styleValue;
+        MGLStyleValue<MGLColor *> * functionStyleValue = [MGLStyleValue<MGLColor *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                                              stops:@{@18: constantStyleValue}
+                                                                                                            options:nil];  
+        layer.iconColor = functionStyleValue;
 
         mbgl::style::IntervalStops<mbgl::Color> intervalStops = { {{18, { 1, 0, 0, 1 }}} };
         propertyValue = mbgl::style::CameraFunction<mbgl::Color> { intervalStops };
         
         XCTAssertEqual(rawLayer->getIconColor(), propertyValue,
                        @"Setting iconColor to a function should update icon-color.");
-        XCTAssertEqualObjects(layer.iconColor, styleValue,
+        XCTAssertEqualObjects(layer.iconColor, functionStyleValue,
                               @"iconColor should round-trip functions.");
 
         layer.iconColor = nil;
@@ -1257,25 +1497,25 @@
                       @"icon-halo-blur should be unset initially.");
         MGLStyleValue<NSNumber *> *defaultStyleValue = layer.iconHaloBlur;
 
-        MGLStyleValue<NSNumber *> *styleValue = [MGLStyleValue<NSNumber *> valueWithRawValue:@0xff];
-        layer.iconHaloBlur = styleValue;
+        MGLStyleValue<NSNumber *> *constantStyleValue = [MGLStyleValue<NSNumber *> valueWithRawValue:@0xff];
+        layer.iconHaloBlur = constantStyleValue;
         mbgl::style::PropertyValue<float> propertyValue = { 0xff };
         XCTAssertEqual(rawLayer->getIconHaloBlur(), propertyValue,
                        @"Setting iconHaloBlur to a constant value should update icon-halo-blur.");
-        XCTAssertEqualObjects(layer.iconHaloBlur, styleValue,
+        XCTAssertEqualObjects(layer.iconHaloBlur, constantStyleValue,
                               @"iconHaloBlur should round-trip constant values.");
 
-        styleValue = [MGLStyleValue<NSNumber *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
-                                                                                             stops:@{@18: styleValue}
-                                                                                           options:nil];        
-        layer.iconHaloBlur = styleValue;
+        MGLStyleValue<NSNumber *> * functionStyleValue = [MGLStyleValue<NSNumber *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                                              stops:@{@18: constantStyleValue}
+                                                                                                            options:nil];  
+        layer.iconHaloBlur = functionStyleValue;
 
         mbgl::style::IntervalStops<float> intervalStops = { {{18, 0xff}} };
         propertyValue = mbgl::style::CameraFunction<float> { intervalStops };
         
         XCTAssertEqual(rawLayer->getIconHaloBlur(), propertyValue,
                        @"Setting iconHaloBlur to a function should update icon-halo-blur.");
-        XCTAssertEqualObjects(layer.iconHaloBlur, styleValue,
+        XCTAssertEqualObjects(layer.iconHaloBlur, functionStyleValue,
                               @"iconHaloBlur should round-trip functions.");
 
         layer.iconHaloBlur = nil;
@@ -1291,25 +1531,25 @@
                       @"icon-halo-color should be unset initially.");
         MGLStyleValue<MGLColor *> *defaultStyleValue = layer.iconHaloColor;
 
-        MGLStyleValue<MGLColor *> *styleValue = [MGLStyleValue<MGLColor *> valueWithRawValue:[MGLColor redColor]];
-        layer.iconHaloColor = styleValue;
+        MGLStyleValue<MGLColor *> *constantStyleValue = [MGLStyleValue<MGLColor *> valueWithRawValue:[MGLColor redColor]];
+        layer.iconHaloColor = constantStyleValue;
         mbgl::style::PropertyValue<mbgl::Color> propertyValue = { { 1, 0, 0, 1 } };
         XCTAssertEqual(rawLayer->getIconHaloColor(), propertyValue,
                        @"Setting iconHaloColor to a constant value should update icon-halo-color.");
-        XCTAssertEqualObjects(layer.iconHaloColor, styleValue,
+        XCTAssertEqualObjects(layer.iconHaloColor, constantStyleValue,
                               @"iconHaloColor should round-trip constant values.");
 
-        styleValue = [MGLStyleValue<MGLColor *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
-                                                                                             stops:@{@18: styleValue}
-                                                                                           options:nil];        
-        layer.iconHaloColor = styleValue;
+        MGLStyleValue<MGLColor *> * functionStyleValue = [MGLStyleValue<MGLColor *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                                              stops:@{@18: constantStyleValue}
+                                                                                                            options:nil];  
+        layer.iconHaloColor = functionStyleValue;
 
         mbgl::style::IntervalStops<mbgl::Color> intervalStops = { {{18, { 1, 0, 0, 1 }}} };
         propertyValue = mbgl::style::CameraFunction<mbgl::Color> { intervalStops };
         
         XCTAssertEqual(rawLayer->getIconHaloColor(), propertyValue,
                        @"Setting iconHaloColor to a function should update icon-halo-color.");
-        XCTAssertEqualObjects(layer.iconHaloColor, styleValue,
+        XCTAssertEqualObjects(layer.iconHaloColor, functionStyleValue,
                               @"iconHaloColor should round-trip functions.");
 
         layer.iconHaloColor = nil;
@@ -1325,25 +1565,25 @@
                       @"icon-halo-width should be unset initially.");
         MGLStyleValue<NSNumber *> *defaultStyleValue = layer.iconHaloWidth;
 
-        MGLStyleValue<NSNumber *> *styleValue = [MGLStyleValue<NSNumber *> valueWithRawValue:@0xff];
-        layer.iconHaloWidth = styleValue;
+        MGLStyleValue<NSNumber *> *constantStyleValue = [MGLStyleValue<NSNumber *> valueWithRawValue:@0xff];
+        layer.iconHaloWidth = constantStyleValue;
         mbgl::style::PropertyValue<float> propertyValue = { 0xff };
         XCTAssertEqual(rawLayer->getIconHaloWidth(), propertyValue,
                        @"Setting iconHaloWidth to a constant value should update icon-halo-width.");
-        XCTAssertEqualObjects(layer.iconHaloWidth, styleValue,
+        XCTAssertEqualObjects(layer.iconHaloWidth, constantStyleValue,
                               @"iconHaloWidth should round-trip constant values.");
 
-        styleValue = [MGLStyleValue<NSNumber *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
-                                                                                             stops:@{@18: styleValue}
-                                                                                           options:nil];        
-        layer.iconHaloWidth = styleValue;
+        MGLStyleValue<NSNumber *> * functionStyleValue = [MGLStyleValue<NSNumber *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                                              stops:@{@18: constantStyleValue}
+                                                                                                            options:nil];  
+        layer.iconHaloWidth = functionStyleValue;
 
         mbgl::style::IntervalStops<float> intervalStops = { {{18, 0xff}} };
         propertyValue = mbgl::style::CameraFunction<float> { intervalStops };
         
         XCTAssertEqual(rawLayer->getIconHaloWidth(), propertyValue,
                        @"Setting iconHaloWidth to a function should update icon-halo-width.");
-        XCTAssertEqualObjects(layer.iconHaloWidth, styleValue,
+        XCTAssertEqualObjects(layer.iconHaloWidth, functionStyleValue,
                               @"iconHaloWidth should round-trip functions.");
 
         layer.iconHaloWidth = nil;
@@ -1359,25 +1599,25 @@
                       @"icon-opacity should be unset initially.");
         MGLStyleValue<NSNumber *> *defaultStyleValue = layer.iconOpacity;
 
-        MGLStyleValue<NSNumber *> *styleValue = [MGLStyleValue<NSNumber *> valueWithRawValue:@0xff];
-        layer.iconOpacity = styleValue;
+        MGLStyleValue<NSNumber *> *constantStyleValue = [MGLStyleValue<NSNumber *> valueWithRawValue:@0xff];
+        layer.iconOpacity = constantStyleValue;
         mbgl::style::PropertyValue<float> propertyValue = { 0xff };
         XCTAssertEqual(rawLayer->getIconOpacity(), propertyValue,
                        @"Setting iconOpacity to a constant value should update icon-opacity.");
-        XCTAssertEqualObjects(layer.iconOpacity, styleValue,
+        XCTAssertEqualObjects(layer.iconOpacity, constantStyleValue,
                               @"iconOpacity should round-trip constant values.");
 
-        styleValue = [MGLStyleValue<NSNumber *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
-                                                                                             stops:@{@18: styleValue}
-                                                                                           options:nil];        
-        layer.iconOpacity = styleValue;
+        MGLStyleValue<NSNumber *> * functionStyleValue = [MGLStyleValue<NSNumber *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                                              stops:@{@18: constantStyleValue}
+                                                                                                            options:nil];  
+        layer.iconOpacity = functionStyleValue;
 
         mbgl::style::IntervalStops<float> intervalStops = { {{18, 0xff}} };
         propertyValue = mbgl::style::CameraFunction<float> { intervalStops };
         
         XCTAssertEqual(rawLayer->getIconOpacity(), propertyValue,
                        @"Setting iconOpacity to a function should update icon-opacity.");
-        XCTAssertEqualObjects(layer.iconOpacity, styleValue,
+        XCTAssertEqualObjects(layer.iconOpacity, functionStyleValue,
                               @"iconOpacity should round-trip functions.");
 
         layer.iconOpacity = nil;
@@ -1393,31 +1633,31 @@
                       @"icon-translate should be unset initially.");
         MGLStyleValue<NSValue *> *defaultStyleValue = layer.iconTranslation;
 
-        MGLStyleValue<NSValue *> *styleValue = [MGLStyleValue<NSValue *> valueWithRawValue:
+        MGLStyleValue<NSValue *> *constantStyleValue = [MGLStyleValue<NSValue *> valueWithRawValue:
 #if TARGET_OS_IPHONE
             [NSValue valueWithCGVector:CGVectorMake(1, 1)]
 #else
             [NSValue valueWithMGLVector:CGVectorMake(1, -1)]
 #endif
         ];
-        layer.iconTranslation = styleValue;
+        layer.iconTranslation = constantStyleValue;
         mbgl::style::PropertyValue<std::array<float, 2>> propertyValue = { { 1, 1 } };
         XCTAssertEqual(rawLayer->getIconTranslate(), propertyValue,
                        @"Setting iconTranslation to a constant value should update icon-translate.");
-        XCTAssertEqualObjects(layer.iconTranslation, styleValue,
+        XCTAssertEqualObjects(layer.iconTranslation, constantStyleValue,
                               @"iconTranslation should round-trip constant values.");
 
-        styleValue = [MGLStyleValue<NSValue *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
-                                                                                             stops:@{@18: styleValue}
-                                                                                           options:nil];        
-        layer.iconTranslation = styleValue;
+        MGLStyleValue<NSValue *> * functionStyleValue = [MGLStyleValue<NSValue *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                                              stops:@{@18: constantStyleValue}
+                                                                                                            options:nil];  
+        layer.iconTranslation = functionStyleValue;
 
         mbgl::style::IntervalStops<std::array<float, 2>> intervalStops = { {{18, { 1, 1 }}} };
         propertyValue = mbgl::style::CameraFunction<std::array<float, 2>> { intervalStops };
         
         XCTAssertEqual(rawLayer->getIconTranslate(), propertyValue,
                        @"Setting iconTranslation to a function should update icon-translate.");
-        XCTAssertEqualObjects(layer.iconTranslation, styleValue,
+        XCTAssertEqualObjects(layer.iconTranslation, functionStyleValue,
                               @"iconTranslation should round-trip functions.");
 
         layer.iconTranslation = nil;
@@ -1433,25 +1673,25 @@
                       @"icon-translate-anchor should be unset initially.");
         MGLStyleValue<NSValue *> *defaultStyleValue = layer.iconTranslationAnchor;
 
-        MGLStyleValue<NSValue *> *styleValue = [MGLStyleValue<NSValue *> valueWithRawValue:[NSValue valueWithMGLIconTranslationAnchor:MGLIconTranslationAnchorViewport]];
-        layer.iconTranslationAnchor = styleValue;
+        MGLStyleValue<NSValue *> *constantStyleValue = [MGLStyleValue<NSValue *> valueWithRawValue:[NSValue valueWithMGLIconTranslationAnchor:MGLIconTranslationAnchorViewport]];
+        layer.iconTranslationAnchor = constantStyleValue;
         mbgl::style::PropertyValue<mbgl::style::TranslateAnchorType> propertyValue = { mbgl::style::TranslateAnchorType::Viewport };
         XCTAssertEqual(rawLayer->getIconTranslateAnchor(), propertyValue,
                        @"Setting iconTranslationAnchor to a constant value should update icon-translate-anchor.");
-        XCTAssertEqualObjects(layer.iconTranslationAnchor, styleValue,
+        XCTAssertEqualObjects(layer.iconTranslationAnchor, constantStyleValue,
                               @"iconTranslationAnchor should round-trip constant values.");
 
-        styleValue = [MGLStyleValue<NSValue *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
-                                                                                             stops:@{@18: styleValue}
-                                                                                           options:nil];        
-        layer.iconTranslationAnchor = styleValue;
+        MGLStyleValue<NSValue *> * functionStyleValue = [MGLStyleValue<NSValue *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                                              stops:@{@18: constantStyleValue}
+                                                                                                            options:nil];  
+        layer.iconTranslationAnchor = functionStyleValue;
 
         mbgl::style::IntervalStops<mbgl::style::TranslateAnchorType> intervalStops = { {{18, mbgl::style::TranslateAnchorType::Viewport}} };
         propertyValue = mbgl::style::CameraFunction<mbgl::style::TranslateAnchorType> { intervalStops };
         
         XCTAssertEqual(rawLayer->getIconTranslateAnchor(), propertyValue,
                        @"Setting iconTranslationAnchor to a function should update icon-translate-anchor.");
-        XCTAssertEqualObjects(layer.iconTranslationAnchor, styleValue,
+        XCTAssertEqualObjects(layer.iconTranslationAnchor, functionStyleValue,
                               @"iconTranslationAnchor should round-trip functions.");
 
         layer.iconTranslationAnchor = nil;
@@ -1459,6 +1699,18 @@
                       @"Unsetting iconTranslationAnchor should return icon-translate-anchor to the default value.");
         XCTAssertEqualObjects(layer.iconTranslationAnchor, defaultStyleValue,
                               @"iconTranslationAnchor should return the default value after being unset.");
+
+        functionStyleValue = [MGLStyleValue<NSValue *> sourceFunctionValueWithStopType:MGLStyleFunctionStopTypeIdentity
+                                                                                                     stops:nil
+                                                                                             attributeName:@""
+                                                                                                   options:nil];
+        XCTAssertThrowsSpecificNamed(layer.iconTranslationAnchor = functionStyleValue, NSException, NSInvalidArgumentException, @"MGLStyleValue should raise an exception if it is applied to a property that cannot support it");
+
+        functionStyleValue = [MGLStyleValue<NSValue *> compositeFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                                        stops:@{@18: constantStyleValue}
+                                                                                                attributeName:@""
+                                                                                                      options:nil];
+        XCTAssertThrowsSpecificNamed(layer.iconTranslationAnchor = functionStyleValue, NSException, NSInvalidArgumentException, @"MGLStyleValue should raise an exception if it is applied to a property that cannot support it");        
     }
 
     // text-color
@@ -1467,25 +1719,25 @@
                       @"text-color should be unset initially.");
         MGLStyleValue<MGLColor *> *defaultStyleValue = layer.textColor;
 
-        MGLStyleValue<MGLColor *> *styleValue = [MGLStyleValue<MGLColor *> valueWithRawValue:[MGLColor redColor]];
-        layer.textColor = styleValue;
+        MGLStyleValue<MGLColor *> *constantStyleValue = [MGLStyleValue<MGLColor *> valueWithRawValue:[MGLColor redColor]];
+        layer.textColor = constantStyleValue;
         mbgl::style::PropertyValue<mbgl::Color> propertyValue = { { 1, 0, 0, 1 } };
         XCTAssertEqual(rawLayer->getTextColor(), propertyValue,
                        @"Setting textColor to a constant value should update text-color.");
-        XCTAssertEqualObjects(layer.textColor, styleValue,
+        XCTAssertEqualObjects(layer.textColor, constantStyleValue,
                               @"textColor should round-trip constant values.");
 
-        styleValue = [MGLStyleValue<MGLColor *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
-                                                                                             stops:@{@18: styleValue}
-                                                                                           options:nil];        
-        layer.textColor = styleValue;
+        MGLStyleValue<MGLColor *> * functionStyleValue = [MGLStyleValue<MGLColor *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                                              stops:@{@18: constantStyleValue}
+                                                                                                            options:nil];  
+        layer.textColor = functionStyleValue;
 
         mbgl::style::IntervalStops<mbgl::Color> intervalStops = { {{18, { 1, 0, 0, 1 }}} };
         propertyValue = mbgl::style::CameraFunction<mbgl::Color> { intervalStops };
         
         XCTAssertEqual(rawLayer->getTextColor(), propertyValue,
                        @"Setting textColor to a function should update text-color.");
-        XCTAssertEqualObjects(layer.textColor, styleValue,
+        XCTAssertEqualObjects(layer.textColor, functionStyleValue,
                               @"textColor should round-trip functions.");
 
         layer.textColor = nil;
@@ -1501,25 +1753,25 @@
                       @"text-halo-blur should be unset initially.");
         MGLStyleValue<NSNumber *> *defaultStyleValue = layer.textHaloBlur;
 
-        MGLStyleValue<NSNumber *> *styleValue = [MGLStyleValue<NSNumber *> valueWithRawValue:@0xff];
-        layer.textHaloBlur = styleValue;
+        MGLStyleValue<NSNumber *> *constantStyleValue = [MGLStyleValue<NSNumber *> valueWithRawValue:@0xff];
+        layer.textHaloBlur = constantStyleValue;
         mbgl::style::PropertyValue<float> propertyValue = { 0xff };
         XCTAssertEqual(rawLayer->getTextHaloBlur(), propertyValue,
                        @"Setting textHaloBlur to a constant value should update text-halo-blur.");
-        XCTAssertEqualObjects(layer.textHaloBlur, styleValue,
+        XCTAssertEqualObjects(layer.textHaloBlur, constantStyleValue,
                               @"textHaloBlur should round-trip constant values.");
 
-        styleValue = [MGLStyleValue<NSNumber *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
-                                                                                             stops:@{@18: styleValue}
-                                                                                           options:nil];        
-        layer.textHaloBlur = styleValue;
+        MGLStyleValue<NSNumber *> * functionStyleValue = [MGLStyleValue<NSNumber *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                                              stops:@{@18: constantStyleValue}
+                                                                                                            options:nil];  
+        layer.textHaloBlur = functionStyleValue;
 
         mbgl::style::IntervalStops<float> intervalStops = { {{18, 0xff}} };
         propertyValue = mbgl::style::CameraFunction<float> { intervalStops };
         
         XCTAssertEqual(rawLayer->getTextHaloBlur(), propertyValue,
                        @"Setting textHaloBlur to a function should update text-halo-blur.");
-        XCTAssertEqualObjects(layer.textHaloBlur, styleValue,
+        XCTAssertEqualObjects(layer.textHaloBlur, functionStyleValue,
                               @"textHaloBlur should round-trip functions.");
 
         layer.textHaloBlur = nil;
@@ -1535,25 +1787,25 @@
                       @"text-halo-color should be unset initially.");
         MGLStyleValue<MGLColor *> *defaultStyleValue = layer.textHaloColor;
 
-        MGLStyleValue<MGLColor *> *styleValue = [MGLStyleValue<MGLColor *> valueWithRawValue:[MGLColor redColor]];
-        layer.textHaloColor = styleValue;
+        MGLStyleValue<MGLColor *> *constantStyleValue = [MGLStyleValue<MGLColor *> valueWithRawValue:[MGLColor redColor]];
+        layer.textHaloColor = constantStyleValue;
         mbgl::style::PropertyValue<mbgl::Color> propertyValue = { { 1, 0, 0, 1 } };
         XCTAssertEqual(rawLayer->getTextHaloColor(), propertyValue,
                        @"Setting textHaloColor to a constant value should update text-halo-color.");
-        XCTAssertEqualObjects(layer.textHaloColor, styleValue,
+        XCTAssertEqualObjects(layer.textHaloColor, constantStyleValue,
                               @"textHaloColor should round-trip constant values.");
 
-        styleValue = [MGLStyleValue<MGLColor *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
-                                                                                             stops:@{@18: styleValue}
-                                                                                           options:nil];        
-        layer.textHaloColor = styleValue;
+        MGLStyleValue<MGLColor *> * functionStyleValue = [MGLStyleValue<MGLColor *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                                              stops:@{@18: constantStyleValue}
+                                                                                                            options:nil];  
+        layer.textHaloColor = functionStyleValue;
 
         mbgl::style::IntervalStops<mbgl::Color> intervalStops = { {{18, { 1, 0, 0, 1 }}} };
         propertyValue = mbgl::style::CameraFunction<mbgl::Color> { intervalStops };
         
         XCTAssertEqual(rawLayer->getTextHaloColor(), propertyValue,
                        @"Setting textHaloColor to a function should update text-halo-color.");
-        XCTAssertEqualObjects(layer.textHaloColor, styleValue,
+        XCTAssertEqualObjects(layer.textHaloColor, functionStyleValue,
                               @"textHaloColor should round-trip functions.");
 
         layer.textHaloColor = nil;
@@ -1569,25 +1821,25 @@
                       @"text-halo-width should be unset initially.");
         MGLStyleValue<NSNumber *> *defaultStyleValue = layer.textHaloWidth;
 
-        MGLStyleValue<NSNumber *> *styleValue = [MGLStyleValue<NSNumber *> valueWithRawValue:@0xff];
-        layer.textHaloWidth = styleValue;
+        MGLStyleValue<NSNumber *> *constantStyleValue = [MGLStyleValue<NSNumber *> valueWithRawValue:@0xff];
+        layer.textHaloWidth = constantStyleValue;
         mbgl::style::PropertyValue<float> propertyValue = { 0xff };
         XCTAssertEqual(rawLayer->getTextHaloWidth(), propertyValue,
                        @"Setting textHaloWidth to a constant value should update text-halo-width.");
-        XCTAssertEqualObjects(layer.textHaloWidth, styleValue,
+        XCTAssertEqualObjects(layer.textHaloWidth, constantStyleValue,
                               @"textHaloWidth should round-trip constant values.");
 
-        styleValue = [MGLStyleValue<NSNumber *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
-                                                                                             stops:@{@18: styleValue}
-                                                                                           options:nil];        
-        layer.textHaloWidth = styleValue;
+        MGLStyleValue<NSNumber *> * functionStyleValue = [MGLStyleValue<NSNumber *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                                              stops:@{@18: constantStyleValue}
+                                                                                                            options:nil];  
+        layer.textHaloWidth = functionStyleValue;
 
         mbgl::style::IntervalStops<float> intervalStops = { {{18, 0xff}} };
         propertyValue = mbgl::style::CameraFunction<float> { intervalStops };
         
         XCTAssertEqual(rawLayer->getTextHaloWidth(), propertyValue,
                        @"Setting textHaloWidth to a function should update text-halo-width.");
-        XCTAssertEqualObjects(layer.textHaloWidth, styleValue,
+        XCTAssertEqualObjects(layer.textHaloWidth, functionStyleValue,
                               @"textHaloWidth should round-trip functions.");
 
         layer.textHaloWidth = nil;
@@ -1603,25 +1855,25 @@
                       @"text-opacity should be unset initially.");
         MGLStyleValue<NSNumber *> *defaultStyleValue = layer.textOpacity;
 
-        MGLStyleValue<NSNumber *> *styleValue = [MGLStyleValue<NSNumber *> valueWithRawValue:@0xff];
-        layer.textOpacity = styleValue;
+        MGLStyleValue<NSNumber *> *constantStyleValue = [MGLStyleValue<NSNumber *> valueWithRawValue:@0xff];
+        layer.textOpacity = constantStyleValue;
         mbgl::style::PropertyValue<float> propertyValue = { 0xff };
         XCTAssertEqual(rawLayer->getTextOpacity(), propertyValue,
                        @"Setting textOpacity to a constant value should update text-opacity.");
-        XCTAssertEqualObjects(layer.textOpacity, styleValue,
+        XCTAssertEqualObjects(layer.textOpacity, constantStyleValue,
                               @"textOpacity should round-trip constant values.");
 
-        styleValue = [MGLStyleValue<NSNumber *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
-                                                                                             stops:@{@18: styleValue}
-                                                                                           options:nil];        
-        layer.textOpacity = styleValue;
+        MGLStyleValue<NSNumber *> * functionStyleValue = [MGLStyleValue<NSNumber *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                                              stops:@{@18: constantStyleValue}
+                                                                                                            options:nil];  
+        layer.textOpacity = functionStyleValue;
 
         mbgl::style::IntervalStops<float> intervalStops = { {{18, 0xff}} };
         propertyValue = mbgl::style::CameraFunction<float> { intervalStops };
         
         XCTAssertEqual(rawLayer->getTextOpacity(), propertyValue,
                        @"Setting textOpacity to a function should update text-opacity.");
-        XCTAssertEqualObjects(layer.textOpacity, styleValue,
+        XCTAssertEqualObjects(layer.textOpacity, functionStyleValue,
                               @"textOpacity should round-trip functions.");
 
         layer.textOpacity = nil;
@@ -1637,31 +1889,31 @@
                       @"text-translate should be unset initially.");
         MGLStyleValue<NSValue *> *defaultStyleValue = layer.textTranslation;
 
-        MGLStyleValue<NSValue *> *styleValue = [MGLStyleValue<NSValue *> valueWithRawValue:
+        MGLStyleValue<NSValue *> *constantStyleValue = [MGLStyleValue<NSValue *> valueWithRawValue:
 #if TARGET_OS_IPHONE
             [NSValue valueWithCGVector:CGVectorMake(1, 1)]
 #else
             [NSValue valueWithMGLVector:CGVectorMake(1, -1)]
 #endif
         ];
-        layer.textTranslation = styleValue;
+        layer.textTranslation = constantStyleValue;
         mbgl::style::PropertyValue<std::array<float, 2>> propertyValue = { { 1, 1 } };
         XCTAssertEqual(rawLayer->getTextTranslate(), propertyValue,
                        @"Setting textTranslation to a constant value should update text-translate.");
-        XCTAssertEqualObjects(layer.textTranslation, styleValue,
+        XCTAssertEqualObjects(layer.textTranslation, constantStyleValue,
                               @"textTranslation should round-trip constant values.");
 
-        styleValue = [MGLStyleValue<NSValue *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
-                                                                                             stops:@{@18: styleValue}
-                                                                                           options:nil];        
-        layer.textTranslation = styleValue;
+        MGLStyleValue<NSValue *> * functionStyleValue = [MGLStyleValue<NSValue *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                                              stops:@{@18: constantStyleValue}
+                                                                                                            options:nil];  
+        layer.textTranslation = functionStyleValue;
 
         mbgl::style::IntervalStops<std::array<float, 2>> intervalStops = { {{18, { 1, 1 }}} };
         propertyValue = mbgl::style::CameraFunction<std::array<float, 2>> { intervalStops };
         
         XCTAssertEqual(rawLayer->getTextTranslate(), propertyValue,
                        @"Setting textTranslation to a function should update text-translate.");
-        XCTAssertEqualObjects(layer.textTranslation, styleValue,
+        XCTAssertEqualObjects(layer.textTranslation, functionStyleValue,
                               @"textTranslation should round-trip functions.");
 
         layer.textTranslation = nil;
@@ -1677,25 +1929,25 @@
                       @"text-translate-anchor should be unset initially.");
         MGLStyleValue<NSValue *> *defaultStyleValue = layer.textTranslationAnchor;
 
-        MGLStyleValue<NSValue *> *styleValue = [MGLStyleValue<NSValue *> valueWithRawValue:[NSValue valueWithMGLTextTranslationAnchor:MGLTextTranslationAnchorViewport]];
-        layer.textTranslationAnchor = styleValue;
+        MGLStyleValue<NSValue *> *constantStyleValue = [MGLStyleValue<NSValue *> valueWithRawValue:[NSValue valueWithMGLTextTranslationAnchor:MGLTextTranslationAnchorViewport]];
+        layer.textTranslationAnchor = constantStyleValue;
         mbgl::style::PropertyValue<mbgl::style::TranslateAnchorType> propertyValue = { mbgl::style::TranslateAnchorType::Viewport };
         XCTAssertEqual(rawLayer->getTextTranslateAnchor(), propertyValue,
                        @"Setting textTranslationAnchor to a constant value should update text-translate-anchor.");
-        XCTAssertEqualObjects(layer.textTranslationAnchor, styleValue,
+        XCTAssertEqualObjects(layer.textTranslationAnchor, constantStyleValue,
                               @"textTranslationAnchor should round-trip constant values.");
 
-        styleValue = [MGLStyleValue<NSValue *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
-                                                                                             stops:@{@18: styleValue}
-                                                                                           options:nil];        
-        layer.textTranslationAnchor = styleValue;
+        MGLStyleValue<NSValue *> * functionStyleValue = [MGLStyleValue<NSValue *> cameraFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                                              stops:@{@18: constantStyleValue}
+                                                                                                            options:nil];  
+        layer.textTranslationAnchor = functionStyleValue;
 
         mbgl::style::IntervalStops<mbgl::style::TranslateAnchorType> intervalStops = { {{18, mbgl::style::TranslateAnchorType::Viewport}} };
         propertyValue = mbgl::style::CameraFunction<mbgl::style::TranslateAnchorType> { intervalStops };
         
         XCTAssertEqual(rawLayer->getTextTranslateAnchor(), propertyValue,
                        @"Setting textTranslationAnchor to a function should update text-translate-anchor.");
-        XCTAssertEqualObjects(layer.textTranslationAnchor, styleValue,
+        XCTAssertEqualObjects(layer.textTranslationAnchor, functionStyleValue,
                               @"textTranslationAnchor should round-trip functions.");
 
         layer.textTranslationAnchor = nil;
@@ -1703,6 +1955,18 @@
                       @"Unsetting textTranslationAnchor should return text-translate-anchor to the default value.");
         XCTAssertEqualObjects(layer.textTranslationAnchor, defaultStyleValue,
                               @"textTranslationAnchor should return the default value after being unset.");
+
+        functionStyleValue = [MGLStyleValue<NSValue *> sourceFunctionValueWithStopType:MGLStyleFunctionStopTypeIdentity
+                                                                                                     stops:nil
+                                                                                             attributeName:@""
+                                                                                                   options:nil];
+        XCTAssertThrowsSpecificNamed(layer.textTranslationAnchor = functionStyleValue, NSException, NSInvalidArgumentException, @"MGLStyleValue should raise an exception if it is applied to a property that cannot support it");
+
+        functionStyleValue = [MGLStyleValue<NSValue *> compositeFunctionValueWithStopType:MGLStyleFunctionStopTypeInterval
+                                                                                                        stops:@{@18: constantStyleValue}
+                                                                                                attributeName:@""
+                                                                                                      options:nil];
+        XCTAssertThrowsSpecificNamed(layer.textTranslationAnchor = functionStyleValue, NSException, NSInvalidArgumentException, @"MGLStyleValue should raise an exception if it is applied to a property that cannot support it");        
     }
 }
 
